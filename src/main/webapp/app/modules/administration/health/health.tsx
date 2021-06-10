@@ -34,7 +34,7 @@ export const HealthPage = (props: IHealthPageProps) => {
   const renderModal = () => <HealthModal healthObject={healthObject} handleClose={handleClose} showModal={showModal} />;
 
   const { health, isFetching } = props;
-  const data = (health || {}).components || {};
+  const data = (health || {}).details || {};
 
   return (
     <div>

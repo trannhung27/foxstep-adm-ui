@@ -1,31 +1,28 @@
 import './home.scss';
 
 import React from 'react';
-import {connect} from 'react-redux';
-import {Alert, Col, Row, Space} from "antd";
+import { connect } from 'react-redux';
+import { Alert, Col, Row, Space } from 'antd';
 
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { SERVER_API_URL } from 'app/config/constants';
 
 export type IHomeProp = StateProps;
 
 export const Home = (props: IHomeProp) => {
-  const {account} = props;
-
+  const { account } = props;
   return (
     <Row>
       <Col span={12} className="pad">
-        <span className="hipster rounded"/>
+        <span className="hipster rounded" />
       </Col>
       <Col span={12}>
         <h2>Welcome, Java Hipster!</h2>
         <p className="lead">This is your homepage</p>
-        <p className="lead">Server Url: {SERVER_API_URL}</p>
-        {account && account.firstName ? (
+        {account && account.login ? (
           <div>
-            <Alert type="success"
-                   message={"You are logged in as " + account.firstName + "."}/>
+            <Alert type="success" message={'You are logged in as ' + account.firstName + '.'} />
           </div>
         ) : (
           <div>
@@ -36,7 +33,8 @@ export const Home = (props: IHomeProp) => {
                 <Space>
                   <Link to="/login">Sign in</Link>
                 </Space>
-              }/>
+              }
+            />
 
             <Alert
               type="warning"
@@ -45,7 +43,8 @@ export const Home = (props: IHomeProp) => {
                 <Space>
                   <Link to="/account/register">Sign up</Link>
                 </Space>
-              }/>
+              }
+            />
           </div>
         )}
         <p>If you have any question on JHipster:</p>
@@ -62,8 +61,7 @@ export const Home = (props: IHomeProp) => {
             </a>
           </li>
           <li>
-            <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank"
-               rel="noopener noreferrer">
+            <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer">
               JHipster bug tracker
             </a>
           </li>

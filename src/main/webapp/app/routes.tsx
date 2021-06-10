@@ -9,11 +9,11 @@ import PasswordResetFinish from 'app/modules/account/password-reset/finish/passw
 import Logout from 'app/modules/login/logout';
 import Home from 'app/modules/home/home';
 import PageNotFound from 'app/shared/error/page-not-found';
-import {AUTHORITIES} from 'app/config/constants';
-import ErrorBoundaryRoute from "app/shared/error/error-boundary-route";
-import PrivateRoute from "app/shared/auth/private-route";
-import Entities from "app/entities";
-import {Switch} from "react-router-dom";
+import { AUTHORITIES } from 'app/config/constants';
+import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
+import PrivateRoute from 'app/shared/auth/private-route';
+import Entities from 'app/entities';
+import { Switch } from 'react-router-dom';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
@@ -27,8 +27,8 @@ const Admin = Loadable({
 
 const Routes = () => (
   <div className="view-routes">
-    <ErrorBoundaryRoute path="/login" component={Login} />
     <Switch>
+      <ErrorBoundaryRoute path="/login" component={Login} />
       <ErrorBoundaryRoute path="/logout" component={Logout} />
       <ErrorBoundaryRoute path="/register" component={Register} />
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
@@ -37,7 +37,7 @@ const Routes = () => (
       <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]} />
       <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
       <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-      <ErrorBoundaryRoute path="/" component={Home} exact/>
+      <ErrorBoundaryRoute path="/" component={Home} exact />
       <ErrorBoundaryRoute path="*" component={PageNotFound} />
     </Switch>
   </div>
