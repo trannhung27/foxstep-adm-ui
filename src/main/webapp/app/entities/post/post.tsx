@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-import { Translate, TextFormat, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
+import { getSortState, JhiItemCount, JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './post.reducer';
-import { IPost } from 'app/shared/model/post.model';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import {Layout} from "antd";
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { getEntities as getCategories } from 'app/entities/category/category.reducer';
 
 export interface IPostProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -20,8 +21,19 @@ export const Post = (props: IPostProps) => {
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
 
+  const [criteriaState, setCriteriaState] = useState({
+    'title.equals': null,
+    'userId.equals': null,
+    'categoryId.equals': null,
+  });
+
   const getAllEntities = () => {
-    props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+    props.getEntities(
+      criteriaState,
+      paginationState.activePage - 1,
+      paginationState.itemsPerPage,
+      `${paginationState.sort},${paginationState.order}`
+    );
   };
 
   const sortEntities = () => {
@@ -69,22 +81,90 @@ export const Post = (props: IPostProps) => {
     sortEntities();
   };
 
-  const { postList, match, loading, totalItems } = props;
+  const { users, categories, postList, match, loading, totalItems } = props;
+  useEffect(() => {
+    props.getUsers();
+    props.getCategories();
+  }, []);
+
   return (
     <div>
       <h2 id="post-heading" data-cy="PostHeading">
         Posts
-        <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh List
-          </Button>
-          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp; Create new Post
-          </Link>
-        </div>
       </h2>
-      <div className="table-responsive">
+
+      <AvForm onSubmit={getAllEntities}>
+        <Row>
+          <Col xs="12" sm="4">
+            <AvGroup>
+              <AvField
+                type="text"
+                name="title"
+                label={'Title'}
+                placeholder={'Enter title'}
+                value={criteriaState['title.equals']}
+                onChange={event => (criteriaState['title.equals'] = event.target.value)}
+              />
+            </AvGroup>
+          </Col>
+          <Col xs="12" sm="4">
+            <AvField
+              type="select"
+              name="userId"
+              label="User"
+              value={criteriaState['userId.equals']}
+              onChange={event => (criteriaState['userId.equals'] = event.target.value)}
+            >
+              <option value="" key="0">
+                --Choose an user--
+              </option>
+              {users
+                ? users.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.login}
+                    </option>
+                  ))
+                : null}
+            </AvField>
+          </Col>
+          <Col xs="12" sm="4">
+            <AvField
+              type="select"
+              name="categoryId"
+              label="Category"
+              value={criteriaState['categoryId.equals']}
+              onChange={event => (criteriaState['categoryId.equals'] = event.target.value)}
+            >
+              <option value="" key="0">
+                --Choose a category--
+              </option>
+              {categories
+                ? categories.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.name}
+                    </option>
+                  ))
+                : null}
+            </AvField>
+          </Col>
+        </Row>
+        <Button color="primary" type="submit">
+          <FontAwesomeIcon icon="search" />
+          &nbsp; Search
+        </Button>
+      </AvForm>
+
+      <div className="d-flex justify-content-end">
+        {/*<Button className='mr-2' color='info' onClick={handleSyncList} disabled={loading}>*/}
+        {/*  <FontAwesomeIcon icon='sync' spin={loading} /> Refresh List*/}
+        {/*</Button>*/}
+        <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+          <FontAwesomeIcon icon="plus" />
+          &nbsp; Create new Post
+        </Link>
+      </div>
+
+      <div className="table-responsive mt-1">
         {postList && postList.length > 0 ? (
           <Table responsive>
             <thead>
@@ -178,13 +258,17 @@ export const Post = (props: IPostProps) => {
   );
 };
 
-const mapStateToProps = ({ post }: IRootState) => ({
+const mapStateToProps = ({ post, userManagement, category }: IRootState) => ({
+  users: userManagement.users,
+  categories: category.entities,
   postList: post.entities,
   loading: post.loading,
   totalItems: post.totalItems,
 });
 
 const mapDispatchToProps = {
+  getUsers,
+  getCategories,
   getEntities,
 };
 

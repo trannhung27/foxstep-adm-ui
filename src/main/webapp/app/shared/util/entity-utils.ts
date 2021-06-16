@@ -1,5 +1,6 @@
 import pick from 'lodash/pick';
 import { IPaginationBaseState } from 'react-jhipster';
+import { IPayload } from 'react-jhipster/src/type/redux-action.type';
 
 /**
  * Removes fields with an 'id' field that equals ''.
@@ -35,3 +36,10 @@ export const overridePaginationStateWithQueryParams = (paginationBaseState: IPag
   }
   return paginationBaseState;
 };
+
+export type ICrudGetAllWithCriteriaAction<T> = (
+  criteria?: any,
+  page?: number,
+  size?: number,
+  sort?: string
+) => IPayload<T> | ((dispatch: any) => IPayload<T>);

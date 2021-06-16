@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
-import { cleanEntity } from 'app/shared/util/entity-utils';
+import { cleanEntity, ICrudGetAllWithCriteriaAction } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IPost, defaultValue } from 'app/shared/model/post.model';
+import { IPayload } from 'react-jhipster/src/type/redux-action.type';
 
 export const ACTION_TYPES = {
   FETCH_POST_LIST: 'post/FETCH_POST_LIST',
@@ -104,9 +105,13 @@ export default (state: PostState = initialState, action): PostState => {
 const apiUrl = 'api/posts';
 
 // Actions
+export const getEntities: ICrudGetAllWithCriteriaAction<IPost> = (criteria, page, size, sort) => {
+  let criteriaParams = '?';
+  Object.keys(criteria).forEach(function (key, index) {
+    if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
+  });
 
-export const getEntities: ICrudGetAllAction<IPost> = (page, size, sort) => {
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  const requestUrl = `${apiUrl}${sort ? `${criteriaParams}page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_POST_LIST,
     payload: axios.get<IPost>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),

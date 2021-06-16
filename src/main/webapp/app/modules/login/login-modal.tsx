@@ -68,7 +68,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
               </Link>
             </Alert>
             <Alert color="warning">
-              <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
+              <span>You don&apos;t have an account yet?</span> <Link to="/register">Register a new account</Link>
             </Alert>
           </ModalBody>
           <ModalFooter>

@@ -41,7 +41,7 @@ export const Home = (props: IHomeProp) => {
               message="Register a new account"
               action={
                 <Space>
-                  <Link to="/account/register">Sign up</Link>
+                  <Link to="/register">Sign up</Link>
                 </Space>
               }
             />
