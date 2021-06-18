@@ -23,3 +23,9 @@ npn run webapp:build:stag
 ```
 npn run webapp:build:prod
 ```
+
+# Thu muc build
+
+```
+static/
+```

@@ -18,7 +18,7 @@ module.exports = options =>
     mode: ENV,
     entry: ['./src/main/webapp/app/index'],
     output: {
-      path: utils.root('target/classes/static/'),
+      path: utils.root('static/'),
       filename: 'app/[name].bundle.js',
       chunkFilename: 'app/[id].chunk.js',
     },
@@ -44,7 +44,7 @@ module.exports = options =>
     devServer: {
       stats: options.stats,
       hot: true,
-      contentBase: './target/classes/static/',
+      contentBase: './static/',
       proxy: [
         {
           context: ['/api', '/services', '/management', '/swagger-resources', '/v2/api-docs', '/v3/api-docs', '/h2-console', '/auth'],
