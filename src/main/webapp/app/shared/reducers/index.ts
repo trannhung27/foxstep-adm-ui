@@ -19,6 +19,10 @@ import post, {
 import category, {
   CategoryState
 } from 'app/entities/category/category.reducer';
+// prettier-ignore
+import challenge, {
+  ChallengeState
+} from 'app/entities/challenge/challenge.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -33,6 +37,7 @@ export interface IRootState {
   readonly settings: SettingsState;
   readonly post: PostState;
   readonly category: CategoryState;
+  readonly challenge: ChallengeState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -49,6 +54,7 @@ const rootReducer = combineReducers<IRootState>({
   settings,
   post,
   category,
+  challenge,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });
