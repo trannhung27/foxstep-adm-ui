@@ -4,6 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './challenge.reducer';
@@ -18,6 +19,12 @@ export const Challenge = (props: IChallengeProps) => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
+
+  const [criteriaState, setCriteriaState] = useState({
+    'title.equals': null,
+    'userId.equals': null,
+    'challengeType.equals': null,
+  });
 
   const getAllEntities = () => {
     props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
@@ -83,6 +90,71 @@ export const Challenge = (props: IChallengeProps) => {
           </Link>
         </div>
       </h2>
+
+      <AvForm onSubmit={getAllEntities}>
+        <Row>
+          <Col xs="12" sm="4">
+            <AvGroup>
+              <AvField
+                type="text"
+                name="title"
+                label={'Title'}
+                placeholder={'Enter title'}
+                value={criteriaState['title.equals']}
+                onChange={event => (criteriaState['title.equals'] = event.target.value)}
+              />
+            </AvGroup>
+          </Col>
+          <Col xs="12" sm="4">
+            <AvField
+              type="select"
+              name="userId"
+              label="User"
+              value={criteriaState['userId.equals']}
+              onChange={event => (criteriaState['userId.equals'] = event.target.value)}
+            >
+              <option value="" key="0">
+                --Choose an user--
+              </option>
+
+              {/* {users
+                ? users.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.login}
+                    </option>
+                  ))
+                : null} */}
+            </AvField>
+          </Col>
+          <Col xs="12" sm="4">
+            <AvField
+              type="select"
+              name="challengeType"
+              label="ChallengeType"
+              value={criteriaState['challengeType.equals']}
+              onChange={event => (criteriaState['challengeType.equals'] = event.target.value)}
+            >
+              <option value="" key="0">
+                --Choose a type--
+              </option>
+              <option>User</option>
+              <option>Admin</option>
+              {/* {categories
+                ? categories.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.name}
+                    </option>
+                  ))
+                : null} */}
+            </AvField>
+          </Col>
+        </Row>
+        <Button color="primary" type="submit">
+          <FontAwesomeIcon icon="search" />
+          &nbsp; Search
+        </Button>
+      </AvForm>
+
       <div className="table-responsive">
         {challengeList && challengeList.length > 0 ? (
           <Table responsive>
