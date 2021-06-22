@@ -18,15 +18,15 @@
     },
     {
       "fieldName": "date_regis",
-      "fieldType": "Instant"
+      "fieldType": "String"
     },
     {
       "fieldName": "date_start",
-      "fieldType": "Instant"
+      "fieldType": "String"
     },
     {
       "fieldName": "date_finish",
-      "fieldType": "Instant"
+      "fieldType": "String"
     },
     {
       "fieldName": "num_of_participant",

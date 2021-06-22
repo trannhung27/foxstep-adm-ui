@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { TextFormat } from 'react-jhipster';
+import {} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -41,21 +41,15 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <dt>
             <span id="date_regis">Date Regis</span>
           </dt>
-          <dd>
-            {challengeEntity.date_regis ? <TextFormat value={challengeEntity.date_regis} type="date" format={APP_DATE_FORMAT} /> : null}
-          </dd>
+          <dd>{challengeEntity.date_regis}</dd>
           <dt>
             <span id="date_start">Date Start</span>
           </dt>
-          <dd>
-            {challengeEntity.date_start ? <TextFormat value={challengeEntity.date_start} type="date" format={APP_DATE_FORMAT} /> : null}
-          </dd>
+          <dd>{challengeEntity.date_start}</dd>
           <dt>
             <span id="date_finish">Date Finish</span>
           </dt>
-          <dd>
-            {challengeEntity.date_finish ? <TextFormat value={challengeEntity.date_finish} type="date" format={APP_DATE_FORMAT} /> : null}
-          </dd>
+          <dd>{challengeEntity.date_finish}</dd>
           <dt>
             <span id="num_of_participant">Num Of Participant</span>
           </dt>

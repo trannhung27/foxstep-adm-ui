@@ -38,10 +38,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.date_regis = convertDateTimeToServer(values.date_regis);
-    values.date_start = convertDateTimeToServer(values.date_start);
-    values.date_finish = convertDateTimeToServer(values.date_finish);
-
     if (errors.length === 0) {
       const entity = {
         ...challengeEntity,
@@ -115,43 +111,19 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 <Label id="date_regisLabel" for="challenge-date_regis">
                   Date Regis
                 </Label>
-                <AvInput
-                  id="challenge-date_regis"
-                  data-cy="date_regis"
-                  type="datetime-local"
-                  className="form-control"
-                  name="date_regis"
-                  placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.challengeEntity.date_regis)}
-                />
+                <AvField id="challenge-date_regis" data-cy="date_regis" type="text" name="date_regis" />
               </AvGroup>
               <AvGroup>
                 <Label id="date_startLabel" for="challenge-date_start">
                   Date Start
                 </Label>
-                <AvInput
-                  id="challenge-date_start"
-                  data-cy="date_start"
-                  type="datetime-local"
-                  className="form-control"
-                  name="date_start"
-                  placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.challengeEntity.date_start)}
-                />
+                <AvField id="challenge-date_start" data-cy="date_start" type="text" name="date_start" />
               </AvGroup>
               <AvGroup>
                 <Label id="date_finishLabel" for="challenge-date_finish">
                   Date Finish
                 </Label>
-                <AvInput
-                  id="challenge-date_finish"
-                  data-cy="date_finish"
-                  type="datetime-local"
-                  className="form-control"
-                  name="date_finish"
-                  placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.challengeEntity.date_finish)}
-                />
+                <AvField id="challenge-date_finish" data-cy="date_finish" type="text" name="date_finish" />
               </AvGroup>
               <AvGroup>
                 <Label id="num_of_participantLabel" for="challenge-num_of_participant">

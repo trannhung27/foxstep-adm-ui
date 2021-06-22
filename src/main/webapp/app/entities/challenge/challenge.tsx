@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-import { Translate, TextFormat, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -132,11 +132,9 @@ export const Challenge = (props: IChallengeProps) => {
                   <td>{challenge.title}</td>
                   <td>{challenge.content}</td>
                   <td>{challenge.img_url}</td>
-                  <td>{challenge.date_regis ? <TextFormat type="date" value={challenge.date_regis} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{challenge.date_start ? <TextFormat type="date" value={challenge.date_start} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>
-                    {challenge.date_finish ? <TextFormat type="date" value={challenge.date_finish} format={APP_DATE_FORMAT} /> : null}
-                  </td>
+                  <td>{challenge.date_regis}</td>
+                  <td>{challenge.date_start}</td>
+                  <td>{challenge.date_finish}</td>
                   <td>{challenge.num_of_participant}</td>
                   <td>{challenge.num_of_regis}</td>
                   <td>{challenge.user_id_created}</td>

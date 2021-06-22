@@ -1836,17 +1836,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Row.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Col.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Button.js");
-/* harmony import */ var react_jhipster__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-jhipster */ "./node_modules/react-jhipster/lib/index.js");
-/* harmony import */ var react_jhipster__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jhipster__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "./node_modules/@fortawesome/react-fontawesome/index.es.js");
-/* harmony import */ var _challenge_reducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./challenge.reducer */ "./src/main/webapp/app/entities/challenge/challenge.reducer.ts");
-/* harmony import */ var app_config_constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/config/constants */ "./src/main/webapp/app/config/constants.ts");
-
-
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Row.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Col.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Button.js");
+/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "./node_modules/@fortawesome/react-fontawesome/index.es.js");
+/* harmony import */ var _challenge_reducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./challenge.reducer */ "./src/main/webapp/app/entities/challenge/challenge.reducer.ts");
 
 
 
@@ -1858,8 +1853,8 @@ const ChallengeDetail = (props) => {
         props.getEntity(props.match.params.id);
     }, []);
     const { challengeEntity } = props;
-    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_6__.default, null,
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { md: "8" },
+    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__.default, null,
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_5__.default, { md: "8" },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", { "data-cy": "challengeDetailsHeading" }, "Challenge"),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("dl", { className: "jh-entity-details" },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dt", null,
@@ -1876,13 +1871,13 @@ const ChallengeDetail = (props) => {
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.img_url),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dt", null,
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { id: "date_regis" }, "Date Regis")),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.date_regis ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.TextFormat, { value: challengeEntity.date_regis, type: "date", format: app_config_constants__WEBPACK_IMPORTED_MODULE_5__.APP_DATE_FORMAT }) : null),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.date_regis),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dt", null,
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { id: "date_start" }, "Date Start")),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.date_start ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.TextFormat, { value: challengeEntity.date_start, type: "date", format: app_config_constants__WEBPACK_IMPORTED_MODULE_5__.APP_DATE_FORMAT }) : null),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.date_start),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dt", null,
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { id: "date_finish" }, "Date Finish")),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.date_finish ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.TextFormat, { value: challengeEntity.date_finish, type: "date", format: app_config_constants__WEBPACK_IMPORTED_MODULE_5__.APP_DATE_FORMAT }) : null),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.date_finish),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dt", null,
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { id: "num_of_participant" }, "Num Of Participant")),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.num_of_participant),
@@ -1892,20 +1887,20 @@ const ChallengeDetail = (props) => {
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dt", null,
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { id: "user_id_created" }, "User Id Created")),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("dd", null, challengeEntity.user_id_created)),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, to: "/challenge", replace: true, color: "info", "data-cy": "entityDetailsBackButton" },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "arrow-left" }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_6__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Link, to: "/challenge", replace: true, color: "info", "data-cy": "entityDetailsBackButton" },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__.FontAwesomeIcon, { icon: "arrow-left" }),
                 " ",
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { className: "d-none d-md-inline" }, "Back")),
             "\u00A0",
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, to: `/challenge/${challengeEntity.id}/edit`, replace: true, color: "primary" },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "pencil-alt" }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_6__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Link, to: `/challenge/${challengeEntity.id}/edit`, replace: true, color: "primary" },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__.FontAwesomeIcon, { icon: "pencil-alt" }),
                 " ",
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { className: "d-none d-md-inline" }, "Edit")))));
 };
 const mapStateToProps = ({ challenge }) => ({
     challengeEntity: challenge.entity,
 });
-const mapDispatchToProps = { getEntity: _challenge_reducer__WEBPACK_IMPORTED_MODULE_4__.getEntity };
+const mapDispatchToProps = { getEntity: _challenge_reducer__WEBPACK_IMPORTED_MODULE_3__.getEntity };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapStateToProps, mapDispatchToProps)(ChallengeDetail));
 
  void function register() { /* react-hot-loader/webpack */ var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined; if (!reactHotLoader) { return; } /* eslint-disable camelcase, no-undef */ var webpackExports = typeof __webpack_exports__ !== 'undefined' ? __webpack_exports__ : exports; /* eslint-enable camelcase, no-undef */ if (!webpackExports) { return; } if (typeof webpackExports === 'function') { reactHotLoader.register(webpackExports, 'module.exports', "D:\\foxstep\\foxstep-adm-ui\\src\\main\\webapp\\app\\entities\\challenge\\challenge-detail.tsx"); return; } /* eslint-disable no-restricted-syntax */ for (var key in webpackExports) { /* eslint-enable no-restricted-syntax */ if (!Object.prototype.hasOwnProperty.call(webpackExports, key)) { continue; } var namedExport = void 0; try { namedExport = webpackExports[key]; } catch (err) { continue; } reactHotLoader.register(namedExport, key, "D:\\foxstep\\foxstep-adm-ui\\src\\main\\webapp\\app\\entities\\challenge\\challenge-detail.tsx"); } }(); 
@@ -1926,16 +1921,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Row.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Col.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Label.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Button.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Row.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Col.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Label.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Button.js");
 /* harmony import */ var availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! availity-reactstrap-validation */ "./node_modules/availity-reactstrap-validation/lib/index.js");
 /* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "./node_modules/@fortawesome/react-fontawesome/index.es.js");
 /* harmony import */ var _challenge_reducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./challenge.reducer */ "./src/main/webapp/app/entities/challenge/challenge.reducer.ts");
-/* harmony import */ var app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/shared/util/date-utils */ "./src/main/webapp/app/shared/util/date-utils.ts");
-
 
 
 
@@ -1963,9 +1956,6 @@ const ChallengeUpdate = (props) => {
         }
     }, [props.updateSuccess]);
     const saveEntity = (event, errors, values) => {
-        values.date_regis = (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.convertDateTimeToServer)(values.date_regis);
-        values.date_start = (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.convertDateTimeToServer)(values.date_start);
-        values.date_finish = (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.convertDateTimeToServer)(values.date_finish);
         if (errors.length === 0) {
             const entity = Object.assign(Object.assign({}, challengeEntity), values);
             if (isNew) {
@@ -1977,51 +1967,51 @@ const ChallengeUpdate = (props) => {
         }
     };
     return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_6__.default, { className: "justify-content-center" },
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { md: "8" },
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_5__.default, { className: "justify-content-center" },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_6__.default, { md: "8" },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", { id: "foxstep2AdminWebappApp.challenge.home.createOrEditLabel", "data-cy": "ChallengeCreateUpdateHeading" }, "Create or edit a Challenge"))),
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_6__.default, { className: "justify-content-center" },
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { md: "8" }, loading ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Loading...")) : (react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvForm, { model: isNew ? {} : challengeEntity, onSubmit: saveEntity },
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_5__.default, { className: "justify-content-center" },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_6__.default, { md: "8" }, loading ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Loading...")) : (react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvForm, { model: isNew ? {} : challengeEntity, onSubmit: saveEntity },
                 !isNew ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { for: "challenge-id" }, "ID"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { for: "challenge-id" }, "ID"),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvInput, { id: "challenge-id", type: "text", className: "form-control", name: "id", required: true, readOnly: true }))) : null,
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "titleLabel", for: "challenge-title" }, "Title"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "titleLabel", for: "challenge-title" }, "Title"),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-title", "data-cy": "title", type: "text", name: "title", validate: {
                             maxLength: { value: 200, errorMessage: 'This field cannot be longer than 200 characters.' },
                         } })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "contentLabel", for: "challenge-content" }, "Content"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "contentLabel", for: "challenge-content" }, "Content"),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-content", "data-cy": "content", type: "text", name: "content" })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "img_urlLabel", for: "challenge-img_url" }, "Img Url"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "img_urlLabel", for: "challenge-img_url" }, "Img Url"),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-img_url", "data-cy": "img_url", type: "text", name: "img_url", validate: {
                             maxLength: { value: 200, errorMessage: 'This field cannot be longer than 200 characters.' },
                         } })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "date_regisLabel", for: "challenge-date_regis" }, "Date Regis"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvInput, { id: "challenge-date_regis", "data-cy": "date_regis", type: "datetime-local", className: "form-control", name: "date_regis", placeholder: 'YYYY-MM-DD HH:mm', value: isNew ? (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.displayDefaultDateTime)() : (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.convertDateTimeFromServer)(props.challengeEntity.date_regis) })),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "date_regisLabel", for: "challenge-date_regis" }, "Date Regis"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-date_regis", "data-cy": "date_regis", type: "text", name: "date_regis" })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "date_startLabel", for: "challenge-date_start" }, "Date Start"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvInput, { id: "challenge-date_start", "data-cy": "date_start", type: "datetime-local", className: "form-control", name: "date_start", placeholder: 'YYYY-MM-DD HH:mm', value: isNew ? (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.displayDefaultDateTime)() : (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.convertDateTimeFromServer)(props.challengeEntity.date_start) })),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "date_startLabel", for: "challenge-date_start" }, "Date Start"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-date_start", "data-cy": "date_start", type: "text", name: "date_start" })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "date_finishLabel", for: "challenge-date_finish" }, "Date Finish"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvInput, { id: "challenge-date_finish", "data-cy": "date_finish", type: "datetime-local", className: "form-control", name: "date_finish", placeholder: 'YYYY-MM-DD HH:mm', value: isNew ? (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.displayDefaultDateTime)() : (0,app_shared_util_date_utils__WEBPACK_IMPORTED_MODULE_5__.convertDateTimeFromServer)(props.challengeEntity.date_finish) })),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "date_finishLabel", for: "challenge-date_finish" }, "Date Finish"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-date_finish", "data-cy": "date_finish", type: "text", name: "date_finish" })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "num_of_participantLabel", for: "challenge-num_of_participant" }, "Num Of Participant"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "num_of_participantLabel", for: "challenge-num_of_participant" }, "Num Of Participant"),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-num_of_participant", "data-cy": "num_of_participant", type: "string", className: "form-control", name: "num_of_participant" })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "num_of_regisLabel", for: "challenge-num_of_regis" }, "Num Of Regis"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "num_of_regisLabel", for: "challenge-num_of_regis" }, "Num Of Regis"),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-num_of_regis", "data-cy": "num_of_regis", type: "string", className: "form-control", name: "num_of_regis" })),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvGroup, null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { id: "user_id_createdLabel", for: "challenge-user_id_created" }, "User Id Created"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { id: "user_id_createdLabel", for: "challenge-user_id_created" }, "User Id Created"),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(availity_reactstrap_validation__WEBPACK_IMPORTED_MODULE_2__.AvField, { id: "challenge-user_id_created", "data-cy": "user_id_created", type: "string", className: "form-control", name: "user_id_created" })),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_9__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link, id: "cancel-save", to: "/challenge", replace: true, color: "info" },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, id: "cancel-save", to: "/challenge", replace: true, color: "info" },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "arrow-left" }),
                     "\u00A0",
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { className: "d-none d-md-inline" }, "Back")),
                 "\u00A0",
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_9__.default, { color: "primary", id: "save-entity", "data-cy": "entityCreateSaveButton", type: "submit", disabled: updating },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { color: "primary", id: "save-entity", "data-cy": "entityCreateSaveButton", type: "submit", disabled: updating },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "save" }),
                     "\u00A0 Save")))))));
 };
@@ -2194,18 +2184,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Button.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Table.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Row.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Button.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Table.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/Row.js");
 /* harmony import */ var react_jhipster__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-jhipster */ "./node_modules/react-jhipster/lib/index.js");
 /* harmony import */ var react_jhipster__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jhipster__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "./node_modules/@fortawesome/react-fontawesome/index.es.js");
 /* harmony import */ var _challenge_reducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./challenge.reducer */ "./src/main/webapp/app/entities/challenge/challenge.reducer.ts");
-/* harmony import */ var app_config_constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/config/constants */ "./src/main/webapp/app/config/constants.ts");
-/* harmony import */ var app_shared_util_pagination_constants__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/shared/util/pagination.constants */ "./src/main/webapp/app/shared/util/pagination.constants.ts");
-/* harmony import */ var app_shared_util_entity_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/shared/util/entity-utils */ "./src/main/webapp/app/shared/util/entity-utils.ts");
-
+/* harmony import */ var app_shared_util_pagination_constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/shared/util/pagination.constants */ "./src/main/webapp/app/shared/util/pagination.constants.ts");
+/* harmony import */ var app_shared_util_entity_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/shared/util/entity-utils */ "./src/main/webapp/app/shared/util/entity-utils.ts");
 
 
 
@@ -2216,7 +2204,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const Challenge = (props) => {
-    const [paginationState, setPaginationState] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((0,app_shared_util_entity_utils__WEBPACK_IMPORTED_MODULE_7__.overridePaginationStateWithQueryParams)((0,react_jhipster__WEBPACK_IMPORTED_MODULE_2__.getSortState)(props.location, app_shared_util_pagination_constants__WEBPACK_IMPORTED_MODULE_6__.ITEMS_PER_PAGE, 'id'), props.location.search));
+    const [paginationState, setPaginationState] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((0,app_shared_util_entity_utils__WEBPACK_IMPORTED_MODULE_6__.overridePaginationStateWithQueryParams)((0,react_jhipster__WEBPACK_IMPORTED_MODULE_2__.getSortState)(props.location, app_shared_util_pagination_constants__WEBPACK_IMPORTED_MODULE_5__.ITEMS_PER_PAGE, 'id'), props.location.search));
     const getAllEntities = () => {
         props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
     };
@@ -2251,13 +2239,13 @@ const Challenge = (props) => {
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", { id: "challenge-heading", "data-cy": "ChallengeHeading" },
             "Challenges",
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "d-flex justify-content-end" },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { className: "mr-2", color: "info", onClick: handleSyncList, disabled: loading },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { className: "mr-2", color: "info", onClick: handleSyncList, disabled: loading },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "sync", spin: loading }),
                     " Refresh List"),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, { to: `${match.url}/new`, className: "btn btn-primary jh-create-entity", id: "jh-create-entity", "data-cy": "entityCreateButton" },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Link, { to: `${match.url}/new`, className: "btn btn-primary jh-create-entity", id: "jh-create-entity", "data-cy": "entityCreateButton" },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "plus" }),
                     "\u00A0 Create new Challenge"))),
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "table-responsive" }, challengeList && challengeList.length > 0 ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_10__.default, { responsive: true },
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "table-responsive" }, challengeList && challengeList.length > 0 ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_9__.default, { responsive: true },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { className: "hand", onClick: sort('id') },
@@ -2293,34 +2281,34 @@ const Challenge = (props) => {
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null))),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, challengeList.map((challenge, i) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { key: `entity-${i}`, "data-cy": "entityTable" },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, to: `${match.url}/${challenge.id}`, color: "link", size: "sm" }, challenge.id)),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Link, to: `${match.url}/${challenge.id}`, color: "link", size: "sm" }, challenge.id)),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.title),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.content),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.img_url),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.date_regis ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.TextFormat, { type: "date", value: challenge.date_regis, format: app_config_constants__WEBPACK_IMPORTED_MODULE_5__.APP_DATE_FORMAT }) : null),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.date_start ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.TextFormat, { type: "date", value: challenge.date_start, format: app_config_constants__WEBPACK_IMPORTED_MODULE_5__.APP_DATE_FORMAT }) : null),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.date_finish ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.TextFormat, { type: "date", value: challenge.date_finish, format: app_config_constants__WEBPACK_IMPORTED_MODULE_5__.APP_DATE_FORMAT }) : null),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.date_regis),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.date_start),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.date_finish),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.num_of_participant),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.num_of_regis),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, challenge.user_id_created),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { className: "text-right" },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "btn-group flex-btn-group-container" },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, to: `${match.url}/${challenge.id}`, color: "info", size: "sm", "data-cy": "entityDetailsButton" },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Link, to: `${match.url}/${challenge.id}`, color: "info", size: "sm", "data-cy": "entityDetailsButton" },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "eye" }),
                             " ",
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { className: "d-none d-md-inline" }, "View")),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, to: `${match.url}/${challenge.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`, color: "primary", size: "sm", "data-cy": "entityEditButton" },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Link, to: `${match.url}/${challenge.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`, color: "primary", size: "sm", "data-cy": "entityEditButton" },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "pencil-alt" }),
                             " ",
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { className: "d-none d-md-inline" }, "Edit")),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, to: `${match.url}/${challenge.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`, color: "danger", size: "sm", "data-cy": "entityDeleteButton" },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_7__.default, { tag: react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Link, to: `${match.url}/${challenge.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`, color: "danger", size: "sm", "data-cy": "entityDeleteButton" },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_3__.FontAwesomeIcon, { icon: "trash" }),
                             " ",
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", { className: "d-none d-md-inline" }, "Delete")))))))))) : (!loading && react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "alert alert-warning" }, "No Challenges found"))),
         props.totalItems ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: challengeList && challengeList.length > 0 ? '' : 'd-none' },
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_11__.default, { className: "justify-content-center" },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_10__.default, { className: "justify-content-center" },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.JhiItemCount, { page: paginationState.activePage, total: totalItems, itemsPerPage: paginationState.itemsPerPage })),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_11__.default, { className: "justify-content-center" },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_10__.default, { className: "justify-content-center" },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_jhipster__WEBPACK_IMPORTED_MODULE_2__.JhiPagination, { activePage: paginationState.activePage, onSelect: handlePagination, maxButtons: 5, itemsPerPage: paginationState.itemsPerPage, totalItems: props.totalItems })))) : ('')));
 };
 const mapStateToProps = ({ challenge }) => ({
@@ -4737,80 +4725,80 @@ __webpack_require__.r(__webpack_exports__);
 const menuItems = [
     {
         key: 0,
-        title: "Dashboard",
+        title: 'Dashboard',
         icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_1__.default, null),
-        url: "/"
+        url: '/',
     },
     {
         key: 1,
-        title: "Entities",
+        title: 'Entities',
         icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_2__.default, null),
         isAuthenticated: true,
         child: [
             {
                 key: 101,
-                title: "Category",
+                title: 'Category',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_3__.default, null),
-                url: "/entity/category"
+                url: '/entity/category',
             },
             {
                 key: 102,
-                title: "Post",
+                title: 'Post',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_4__.default, null),
-                url: "/entity/post"
+                url: '/entity/post',
             },
             {
                 key: 103,
-                title: "Challenge",
+                title: 'Challenge',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_4__.default, null),
-                url: "/entity/challenge"
-            }
-        ]
+                url: '/entity/challenge',
+            },
+        ],
     },
     {
         key: 2,
-        title: "Administration",
+        title: 'Administration',
         icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_5__.default, null),
         isAuthenticated: true,
         isAdmin: true,
         child: [
             {
                 key: 201,
-                title: "User management",
+                title: 'User management',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_6__.default, null),
-                url: "/admin/user-management"
+                url: '/admin/user-management',
             },
             {
                 key: 202,
-                title: "Metrics",
+                title: 'Metrics',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_7__.default, null),
-                url: "/admin/metrics"
+                url: '/admin/metrics',
             },
             {
                 key: 203,
-                title: "Health management",
+                title: 'Health management',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_8__.default, null),
-                url: "/admin/health"
+                url: '/admin/health',
             },
             {
                 key: 204,
-                title: "Configuration",
+                title: 'Configuration',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_9__.default, null),
-                url: "/admin/configuration"
+                url: '/admin/configuration',
             },
             {
                 key: 205,
-                title: "Logs",
+                title: 'Logs',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_10__.default, null),
-                url: "/admin/logs"
+                url: '/admin/logs',
             },
             {
                 key: 206,
-                title: "API",
+                title: 'API',
                 icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ant_design_icons__WEBPACK_IMPORTED_MODULE_11__.default, null),
-                url: "/admin/docs"
+                url: '/admin/docs',
             },
-        ]
+        ],
     },
 ];
 
@@ -5250,32 +5238,6 @@ const rootReducer = (0,redux__WEBPACK_IMPORTED_MODULE_13__.combineReducers)({
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (rootReducer);
 
  void function register() { /* react-hot-loader/webpack */ var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined; if (!reactHotLoader) { return; } /* eslint-disable camelcase, no-undef */ var webpackExports = typeof __webpack_exports__ !== 'undefined' ? __webpack_exports__ : exports; /* eslint-enable camelcase, no-undef */ if (!webpackExports) { return; } if (typeof webpackExports === 'function') { reactHotLoader.register(webpackExports, 'module.exports', "D:\\foxstep\\foxstep-adm-ui\\src\\main\\webapp\\app\\shared\\reducers\\index.ts"); return; } /* eslint-disable no-restricted-syntax */ for (var key in webpackExports) { /* eslint-enable no-restricted-syntax */ if (!Object.prototype.hasOwnProperty.call(webpackExports, key)) { continue; } var namedExport = void 0; try { namedExport = webpackExports[key]; } catch (err) { continue; } reactHotLoader.register(namedExport, key, "D:\\foxstep\\foxstep-adm-ui\\src\\main\\webapp\\app\\shared\\reducers\\index.ts"); } }(); 
-
-/***/ }),
-
-/***/ "./src/main/webapp/app/shared/util/date-utils.ts":
-/*!*******************************************************!*\
-  !*** ./src/main/webapp/app/shared/util/date-utils.ts ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "convertDateTimeFromServer": () => (/* binding */ convertDateTimeFromServer),
-/* harmony export */   "convertDateTimeToServer": () => (/* binding */ convertDateTimeToServer),
-/* harmony export */   "displayDefaultDateTime": () => (/* binding */ displayDefaultDateTime)
-/* harmony export */ });
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var app_config_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/config/constants */ "./src/main/webapp/app/config/constants.ts");
-
-
-const convertDateTimeFromServer = date => (date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(date).format(app_config_constants__WEBPACK_IMPORTED_MODULE_1__.APP_LOCAL_DATETIME_FORMAT) : null);
-const convertDateTimeToServer = date => (date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(date).toDate() : null);
-const displayDefaultDateTime = () => dayjs__WEBPACK_IMPORTED_MODULE_0___default()().startOf('day').format(app_config_constants__WEBPACK_IMPORTED_MODULE_1__.APP_LOCAL_DATETIME_FORMAT);
-
- void function register() { /* react-hot-loader/webpack */ var reactHotLoader = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoaderGlobal.default : undefined; if (!reactHotLoader) { return; } /* eslint-disable camelcase, no-undef */ var webpackExports = typeof __webpack_exports__ !== 'undefined' ? __webpack_exports__ : exports; /* eslint-enable camelcase, no-undef */ if (!webpackExports) { return; } if (typeof webpackExports === 'function') { reactHotLoader.register(webpackExports, 'module.exports', "D:\\foxstep\\foxstep-adm-ui\\src\\main\\webapp\\app\\shared\\util\\date-utils.ts"); return; } /* eslint-disable no-restricted-syntax */ for (var key in webpackExports) { /* eslint-enable no-restricted-syntax */ if (!Object.prototype.hasOwnProperty.call(webpackExports, key)) { continue; } var namedExport = void 0; try { namedExport = webpackExports[key]; } catch (err) { continue; } reactHotLoader.register(namedExport, key, "D:\\foxstep\\foxstep-adm-ui\\src\\main\\webapp\\app\\shared\\util\\date-utils.ts"); } }(); 
 
 /***/ }),
 
@@ -5990,7 +5952,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("168b2795e44eb0b8c8dc")
+/******/ 		__webpack_require__.h = () => ("69b7891fbb266922e82b")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
