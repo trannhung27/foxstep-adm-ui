@@ -5,7 +5,7 @@ import { Button, Row, Badge } from 'reactstrap';
 import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, USER_STATUS } from 'app/config/constants';
 
 import { getUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
@@ -29,7 +29,7 @@ export const UserManagementDetail = (props: IUserManagementDetailProps) => {
           <dt>Login</dt>
           <dd>
             <span>{user.login}</span>&nbsp;
-            {user.activated ? <Badge color="success">Activated</Badge> : <Badge color="danger">Deactivated</Badge>}
+            {user.status === USER_STATUS.ACTIVATED ? <Badge color="success">Activated</Badge> : <Badge color="danger">Deactivated</Badge>}
           </dd>
           <dt>First Name</dt>
           <dd>{user.firstName}</dd>
