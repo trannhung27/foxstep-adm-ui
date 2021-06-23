@@ -23,11 +23,25 @@ export const Challenge = (props: IChallengeProps) => {
   const [criteriaState, setCriteriaState] = useState({
     'title.equals': null,
     'userId.equals': null,
+    'status.equals': null,
     'challengeType.equals': null,
+    dateStart: null,
+    dateStartCompare: null,
+    'dateStart.greaterThanOrEqual': null,
+    'dateStart.lessThanOrEqual': null,
+    'dateFinish.greaterThanOrEqual': null,
+    'dateFinish.lessThanOrEqual': null,
+    'dateRegisDeadline.greaterThanOrEqual': null,
+    'dateRegisDeadline.lessThanOrEqual': null,
   });
 
   const getAllEntities = () => {
-    props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+    props.getEntities(
+      criteriaState,
+      paginationState.activePage - 1,
+      paginationState.itemsPerPage,
+      `${paginationState.sort},${paginationState.order}`
+    );
   };
 
   const sortEntities = () => {
@@ -79,10 +93,10 @@ export const Challenge = (props: IChallengeProps) => {
   return (
     <div>
       <h2 id="challenge-heading" data-cy="ChallengeHeading">
-        Challenges
+        Quản lý thử thách
         <div className="d-flex justify-content-end">
           <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh List
+            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh
           </Button>
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
@@ -108,15 +122,16 @@ export const Challenge = (props: IChallengeProps) => {
           <Col xs="12" sm="4">
             <AvField
               type="select"
-              name="userId"
-              label="User"
-              value={criteriaState['userId.equals']}
-              onChange={event => (criteriaState['userId.equals'] = event.target.value)}
+              name="status"
+              label="Status"
+              value={criteriaState['status.equals']}
+              onChange={event => (criteriaState['status.equals'] = event.target.value)}
             >
               <option value="" key="0">
-                --Choose an user--
+                --Choose a status--
               </option>
-
+              <option value="0">Không hoạt động</option>
+              <option value="0">Đang hoạt động</option>
               {/* {users
                 ? users.map(otherEntity => (
                     <option value={otherEntity.id} key={otherEntity.id}>
@@ -137,8 +152,8 @@ export const Challenge = (props: IChallengeProps) => {
               <option value="" key="0">
                 --Choose a type--
               </option>
-              <option>User</option>
-              <option>Admin</option>
+              <option value="1">Cá nhân</option>
+              <option value="0">Ban tổ chức</option>
               {/* {categories
                 ? categories.map(otherEntity => (
                     <option value={otherEntity.id} key={otherEntity.id}>
@@ -147,6 +162,63 @@ export const Challenge = (props: IChallengeProps) => {
                   ))
                 : null} */}
             </AvField>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs="12" sm="4">
+            <Row>
+              <Col xs="12" sm="4">
+                <AvField
+                  type="date"
+                  name="dateStart"
+                  label={'DateStart'}
+                  value={criteriaState['dateStart']}
+                  onChange={event => (criteriaState['dateStart'] = event.target.value)}
+                ></AvField>
+              </Col>
+              <Col xs="12" sm="4">
+                <AvField
+                  type="select"
+                  name="compareType"
+                  label="CompareType"
+                  value={criteriaState['dateStartCompare']}
+                  onChange={event => {
+                    criteriaState['dateStartCompare'] = event.target.value;
+                    if (criteriaState['dateStartCompare'] === '0') {
+                      criteriaState['dateStart.lessThanOrEqual'] = criteriaState['dateStart'];
+                      criteriaState['dateStart.greaterThanOrEqual'] = null;
+                      criteriaState['dateStart'] = null;
+                      criteriaState['dateStartCompare'] = null;
+                    } else if (criteriaState['dateStartCompare'] === '1') {
+                      criteriaState['dateStart.greaterThanOrEqual'] = criteriaState['dateStart'];
+                      criteriaState['dateStart.lessThanOrEqual'] = null;
+                      criteriaState['dateStart'] = null;
+                      criteriaState['dateStartCompare'] = null;
+                    }
+                  }}
+                >
+                  <option value="" key="0">
+                    Compare type
+                  </option>
+                  <option value="1">gte</option>
+                  <option value="0">lte</option>
+                </AvField>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col xs="12" sm="4">
+            <AvGroup>
+              <AvField
+                type="text"
+                name="title"
+                label={'Title'}
+                placeholder={'Enter title'}
+                value={criteriaState['title.equals']}
+                onChange={event => (criteriaState['title.equals'] = event.target.value)}
+              />
+            </AvGroup>
           </Col>
         </Row>
         <Button color="primary" type="submit">

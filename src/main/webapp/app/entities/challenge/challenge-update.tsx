@@ -117,7 +117,16 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 <Label id="date_startLabel" for="challenge-date_start">
                   Date Start
                 </Label>
-                <AvField id="challenge-date_start" data-cy="date_start" type="text" name="date_start" />
+                <AvField
+                  id="challenge-date_start"
+                  data-cy="date_start"
+                  type="date"
+                  className="form-control"
+                  name="date_Start"
+                  validate={{
+                    required: { value: true, errorMessage: 'This field is required.' },
+                  }}
+                />
               </AvGroup>
               <AvGroup>
                 <Label id="date_finishLabel" for="challenge-date_finish">

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
-import { cleanEntity } from 'app/shared/util/entity-utils';
+import { cleanEntity, ICrudGetAllWithCriteriaAction } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IChallenge, defaultValue } from 'app/shared/model/challenge.model';
@@ -105,8 +105,13 @@ const apiUrl = 'api/challenges';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IChallenge> = (page, size, sort) => {
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+export const getEntities: ICrudGetAllWithCriteriaAction<IChallenge> = (criteria, page, size, sort) => {
+  let criteriaParams = '?';
+  Object.keys(criteria).forEach(function (key, index) {
+    if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
+  });
+
+  const requestUrl = `${apiUrl}${sort ? `${criteriaParams}page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_CHALLENGE_LIST,
     payload: axios.get<IChallenge>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
