@@ -27,7 +27,6 @@
     "webapp:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env stats=minimal",
     "webapp:dev-verbose": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --progress=profile --env stats=normal",
     "webapp:stag": "npm run webpack-dev-server -- --config webpack/webpack.stag.js --inline --port=9060 --env stats=minimal",
-    "webapp:stag-verbose": "npm run webpack-dev-server -- --config webpack/webpack.stag.js --inline --port=9060 --progress=profile --env stats=normal",
     "webapp:prod": "npm run clean-www && npm run webapp:build:prod",
     "webapp:test": "npm run test",
     "webpack-dev-server": "npm run webpack -- serve",
