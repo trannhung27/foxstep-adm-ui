@@ -12,6 +12,8 @@ import { IChallenge } from 'app/shared/model/challenge.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { height } from '@fortawesome/free-solid-svg-icons/faCogs';
+import moment from 'moment';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -174,7 +176,7 @@ export const Challenge = (props: IChallengeProps) => {
                   name="dateStart"
                   label={'DateStart'}
                   value={criteriaState['dateStart']}
-                  onChange={event => (criteriaState['dateStart'] = event.target.value)}
+                  onChange={event => (criteriaState['dateStart'] = event.target.value + 'T00:00:00Z')}
                 ></AvField>
               </Col>
               <Col xs="12" sm="4">
@@ -227,6 +229,7 @@ export const Challenge = (props: IChallengeProps) => {
         </Button>
       </AvForm>
 
+      <hr style={{ backgroundColor: 'DodgerBlue', height: '2px' }} />
       <div className="table-responsive">
         {challengeList && challengeList.length > 0 ? (
           <Table responsive>
@@ -238,11 +241,11 @@ export const Challenge = (props: IChallengeProps) => {
                 <th className="hand" onClick={sort('title')}>
                   Tên thử thách <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('img_url')}>
-                  Img Url <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('sport.name')}>
+                  Bộ môn <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('date_regis')}>
-                  Date Regis <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('challenge_type')}>
+                  Loại thử thách <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('dateStart')}>
                   Date Start <FontAwesomeIcon icon="sort" />
@@ -253,11 +256,8 @@ export const Challenge = (props: IChallengeProps) => {
                 <th className="hand" onClick={sort('num_of_participant')}>
                   Num Of Participant <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('num_of_regis')}>
-                  Num Of Regis <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('user_id_created')}>
-                  User Id Created <FontAwesomeIcon icon="sort" />
+                <th className="hand">
+                  <div></div>
                 </th>
                 <th />
               </tr>
@@ -272,12 +272,18 @@ export const Challenge = (props: IChallengeProps) => {
                   </td>
                   <td>{challenge.title}</td>
                   <td>{challenge.sport.name}</td>
-                  <td>{challenge.date_regis}</td>
+                  <td>
+                    {challenge.challenge_type === 0 && <div>Đang diễn ra</div>}
+                    {challenge.challenge_type === 1 && <div>Sắp diễn ra</div>}
+                  </td>
                   <td>{new Date(challenge.date_start).toLocaleString()}</td>
                   <td>{new Date(challenge.date_finish).toLocaleString()}</td>
                   <td>{challenge.num_of_participant}</td>
-                  <td>{challenge.num_of_regis}</td>
-                  <td>{challenge.user_id_created}</td>
+                  <td>
+                    <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                    </Button>
+                  </td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">

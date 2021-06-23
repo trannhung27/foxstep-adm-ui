@@ -54,11 +54,32 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
+      <Row className="justify-content-right">
+        <Col md="6">
           <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
-            Create or edit a Challenge
+            Thêm mới thử thách từ ban tổ chức
           </h2>
+        </Col>
+      </Row>
+
+      <hr
+        style={{
+          backgroundColor: 'DodgerBlue',
+          height: '2px',
+        }}
+      />
+      <Row>
+        <Col sm="4">
+          <Button tag={Link} id="cancel-save" to="/entity/challenge" replace color="info">
+            <FontAwesomeIcon icon="arrow-left" />
+            &nbsp;
+            <span className="d-none d-md-inline">Hủy</span>
+          </Button>
+          &nbsp;
+          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+            <FontAwesomeIcon icon="save" />
+            &nbsp; Lưu
+          </Button>
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -73,66 +94,84 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   <AvInput id="challenge-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
-              <AvGroup>
-                <Label id="titleLabel" for="challenge-title">
-                  Title
-                </Label>
-                <AvField
-                  id="challenge-title"
-                  data-cy="title"
-                  type="text"
-                  name="title"
-                  validate={{
-                    maxLength: { value: 200, errorMessage: 'This field cannot be longer than 200 characters.' },
-                  }}
-                />
-              </AvGroup>
-              <AvGroup>
-                <Label id="contentLabel" for="challenge-content">
-                  Content
-                </Label>
-                <AvField id="challenge-content" data-cy="content" type="text" name="content" />
-              </AvGroup>
-              <AvGroup>
-                <Label id="img_urlLabel" for="challenge-img_url">
-                  Img Url
-                </Label>
-                <AvField
-                  id="challenge-img_url"
-                  data-cy="img_url"
-                  type="text"
-                  name="img_url"
-                  validate={{
-                    maxLength: { value: 200, errorMessage: 'This field cannot be longer than 200 characters.' },
-                  }}
-                />
-              </AvGroup>
+              <Row>
+                <Col xs="12" sm="6">
+                  <AvGroup className="form-group form-inline">
+                    <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
+                      Tên thử thách
+                    </Label>
+                    <AvField
+                      id="challenge-title"
+                      data-cy="title"
+                      type="text"
+                      name="title"
+                      validate={{
+                        maxLength: { value: 200, errorMessage: 'This field cannot be longer than 200 characters.' },
+                      }}
+                    />
+                  </AvGroup>
+                </Col>
+
+                <Col xs="12" sm="6">
+                  <AvGroup className="form-group form-inline">
+                    <Label style={{ marginRight: '10px' }} id="img_urlLabel" for="challenge-img_url">
+                      Img Url
+                    </Label>
+                    <AvField
+                      id="challenge-img_url"
+                      data-cy="img_url"
+                      type="text"
+                      name="img_url"
+                      validate={{
+                        maxLength: { value: 200, errorMessage: 'This field cannot be longer than 200 characters.' },
+                      }}
+                    />
+                  </AvGroup>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col xs="12" sm="6">
+                  <AvGroup>
+                    <Label id="date_startLabel" for="challenge-date_start" className="required">
+                      Date Start
+                    </Label>
+                    <AvField
+                      id="challenge-date_start"
+                      data-cy="date_start"
+                      type="date"
+                      className="form-control"
+                      name="date_start"
+                      validate={{
+                        required: { value: true, errorMessage: 'This field is required.' },
+                      }}
+                    />
+                  </AvGroup>
+                </Col>
+                <Col xs="12" sm="6">
+                  <AvGroup>
+                    <Label id="date_finishLabel" for="challenge-date_finish">
+                      Thời gian kết thúc
+                    </Label>
+                    <AvField
+                      id="challenge-date_finish"
+                      data-cy="date_finish"
+                      type="date"
+                      className="form-control"
+                      name="date_finish"
+                      validate={{
+                        required: { value: true, errorMessage: 'This field is required.' },
+                      }}
+                    />
+                  </AvGroup>
+                </Col>
+              </Row>
+
               <AvGroup>
                 <Label id="date_regisLabel" for="challenge-date_regis">
                   Date Regis
                 </Label>
                 <AvField id="challenge-date_regis" data-cy="date_regis" type="text" name="date_regis" />
-              </AvGroup>
-              <AvGroup>
-                <Label id="date_startLabel" for="challenge-date_start">
-                  Date Start
-                </Label>
-                <AvField
-                  id="challenge-date_start"
-                  data-cy="date_start"
-                  type="date"
-                  className="form-control"
-                  name="date_Start"
-                  validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
-                  }}
-                />
-              </AvGroup>
-              <AvGroup>
-                <Label id="date_finishLabel" for="challenge-date_finish">
-                  Date Finish
-                </Label>
-                <AvField id="challenge-date_finish" data-cy="date_finish" type="text" name="date_finish" />
               </AvGroup>
               <AvGroup>
                 <Label id="num_of_participantLabel" for="challenge-num_of_participant">
@@ -164,16 +203,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   name="user_id_created"
                 />
               </AvGroup>
-              <Button tag={Link} id="cancel-save" to="/challenge" replace color="info">
-                <FontAwesomeIcon icon="arrow-left" />
-                &nbsp;
-                <span className="d-none d-md-inline">Back</span>
-              </Button>
-              &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                <FontAwesomeIcon icon="save" />
-                &nbsp; Save
-              </Button>
             </AvForm>
           )}
         </Col>

@@ -12,6 +12,7 @@ export interface IChallenge {
   num_of_participant?: number | null;
   num_of_regis?: number | null;
   user_id_created?: number | null;
+  challenge_type?: number | null;
   sport?: ISport;
 }
 
