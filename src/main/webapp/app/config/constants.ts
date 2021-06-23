@@ -11,6 +11,11 @@ export const AUTHORITIES = {
   USER: 'ROLE_USER',
 };
 
+export const USER_STATUS = {
+  ACTIVATED: 200,
+  NOT_ACTIVATE: 0,
+};
+
 export const messages = {
   DATA_ERROR_ALERT: 'Internal Error',
 };

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Storage } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { USER_STATUS } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -69,7 +70,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         showModalLogin: true,
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION): {
-      const isAuthenticated = action.payload && action.payload.data && action.payload.data.activated;
+      const isAuthenticated = action.payload && action.payload.data && action.payload.data.status === USER_STATUS.ACTIVATED;
       return {
         ...state,
         isAuthenticated,
