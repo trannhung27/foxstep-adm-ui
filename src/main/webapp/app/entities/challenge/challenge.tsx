@@ -236,10 +236,7 @@ export const Challenge = (props: IChallengeProps) => {
                   ID <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('title')}>
-                  Title <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('content')}>
-                  Content <FontAwesomeIcon icon="sort" />
+                  Tên thử thách <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('img_url')}>
                   Img Url <FontAwesomeIcon icon="sort" />
@@ -247,7 +244,7 @@ export const Challenge = (props: IChallengeProps) => {
                 <th className="hand" onClick={sort('date_regis')}>
                   Date Regis <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('date_start')}>
+                <th className="hand" onClick={sort('dateStart')}>
                   Date Start <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('date_finish')}>
@@ -274,11 +271,10 @@ export const Challenge = (props: IChallengeProps) => {
                     </Button>
                   </td>
                   <td>{challenge.title}</td>
-                  <td>{challenge.content}</td>
-                  <td>{challenge.img_url}</td>
+                  <td>{challenge.sport.name}</td>
                   <td>{challenge.date_regis}</td>
-                  <td>{challenge.date_start}</td>
-                  <td>{challenge.date_finish}</td>
+                  <td>{new Date(challenge.date_start).toLocaleString()}</td>
+                  <td>{new Date(challenge.date_finish).toLocaleString()}</td>
                   <td>{challenge.num_of_participant}</td>
                   <td>{challenge.num_of_regis}</td>
                   <td>{challenge.user_id_created}</td>
