@@ -99,7 +99,7 @@ module.exports = options =>
             VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV'}'`,
             DEBUG_INFO_ENABLED: options.env === 'development',
             // The root URL for API calls, ending with a '/'
-            SERVER_API_URL: `'${options.api_url}'`,
+            SERVER_API_URL: `'${options.api_url}/'`,
           },
         }),
         new ESLintPlugin({

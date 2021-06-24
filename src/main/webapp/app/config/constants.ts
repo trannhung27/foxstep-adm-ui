@@ -12,7 +12,7 @@ export const AUTHORITIES = {
 };
 
 export const USER_STATUS = {
-  ACTIVATED: 200,
+  ACTIVATED: 1,
   NOT_ACTIVATE: 0,
 };
 
