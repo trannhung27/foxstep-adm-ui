@@ -8,13 +8,13 @@ import { FormOutlined, LockOutlined, LoginOutlined, LogoutOutlined, SettingOutli
 const accountMenuItemsAuthenticated = (
   <Menu>
     <Menu.Item key={0} icon={<SettingOutlined />}>
-      <Link to="/account/settings">Settings</Link>
+      <Link to="/account/settings">Cài đặt tài khoản</Link>
     </Menu.Item>
     <Menu.Item key={1} icon={<LockOutlined />}>
-      <Link to="/account/password">Password</Link>
+      <Link to="/account/password">Mật khẩu</Link>
     </Menu.Item>
     <Menu.Item key={2} icon={<LogoutOutlined />}>
-      <Link to="/logout">Sign out</Link>
+      <Link to="/logout">Đăng xuất</Link>
     </Menu.Item>
   </Menu>
 );
@@ -22,10 +22,10 @@ const accountMenuItemsAuthenticated = (
 const accountMenuItems = (
   <Menu>
     <Menu.Item key={0} icon={<LoginOutlined />}>
-      <Link to="/login">Sign in</Link>
+      <Link to="/login">Đăng nhập</Link>
     </Menu.Item>
     <Menu.Item key={1} icon={<FormOutlined />}>
-      <Link to="/register">Register</Link>
+      <Link to="/register">Đăng ký</Link>
     </Menu.Item>
   </Menu>
 );
@@ -33,7 +33,7 @@ const accountMenuItems = (
 export const AccountMenu = ({ isAuthenticated = false, name = 'Account' }) => (
   <Dropdown overlay={isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}>
     <a style={{ textDecoration: 'none' }}>
-      <Avatar shape="square" style={{ backgroundColor: 'orange' }}>
+      <Avatar shape="square" style={{ backgroundColor: 'lightskyblue' }}>
         {name}
       </Avatar>
     </a>

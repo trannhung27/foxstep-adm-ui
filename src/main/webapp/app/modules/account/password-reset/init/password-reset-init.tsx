@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
-import { Button, Alert, Col, Row } from 'reactstrap';
+import { AvField, AvForm } from 'availity-reactstrap-validation';
+import { Alert, Button, Col, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 
 import { handlePasswordResetInit, reset } from '../password-reset.reducer';
+import { Link } from 'react-router-dom';
 
 export type IPasswordResetInitProps = DispatchProps;
 
@@ -20,33 +21,42 @@ export class PasswordResetInit extends React.Component<IPasswordResetInitProps> 
 
   render() {
     return (
-      <div>
-        <Row className="justify-content-center">
-          <Col md="8">
-            <h1>Reset your password</h1>
-            <Alert color="warning">
-              <p>Enter the email address you used to register</p>
-            </Alert>
-            <AvForm onValidSubmit={this.handleValidSubmit}>
+      <Row>
+        <Col sm="12" md={{ size: 6, offset: 3 }}>
+          <AvForm onValidSubmit={this.handleValidSubmit} className="rounded bg-white">
+            <ModalHeader>
+              <h4>Quên mật khẩu</h4>
+            </ModalHeader>
+            <ModalBody>
+              <Alert color="warning">
+                <p>Nhập địa chỉ email đã đăng ký</p>
+              </Alert>
               <AvField
                 name="email"
                 label="Email"
-                placeholder={'Your email'}
+                placeholder={'Nhập email'}
                 type="email"
                 validate={{
-                  required: { value: true, errorMessage: 'Your email is required.' },
-                  minLength: { value: 5, errorMessage: 'Your email is required to be at least 5 characters.' },
-                  maxLength: { value: 254, errorMessage: 'Your email cannot be longer than 50 characters.' },
+                  required: { value: true, errorMessage: 'Chưa nhập email.' },
+                  minLength: { value: 5, errorMessage: 'Ít nhất 5 ký tự.' },
+                  maxLength: { value: 254, errorMessage: 'Tối đa 50 ký tự.' },
                 }}
                 data-cy="emailResetPassword"
               />
+            </ModalBody>
+            <ModalFooter>
               <Button color="primary" type="submit" data-cy="submit">
-                Reset password
+                Đối mới mật khẩu
               </Button>
-            </AvForm>
-          </Col>
-        </Row>
-      </div>
+            </ModalFooter>
+          </AvForm>
+          <p>&nbsp;</p>
+          <Alert color="warning">
+            <span>Quay lại trang </span>
+            <Link to="/login">Đăng nhập</Link>
+          </Alert>
+        </Col>
+      </Row>
     );
   }
 }

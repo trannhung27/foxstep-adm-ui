@@ -12,7 +12,6 @@ import { Layout } from 'antd';
 import LayoutHeader from 'app/shared/layout/header/header';
 import LayoutFooter from 'app/shared/layout/footer/footer';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
-import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
 import Sidebar from 'app/shared/layout/sidebar/sidebar';
 
@@ -38,19 +37,21 @@ export const App = (props: IAppProps) => {
   return (
     <Router basename={baseHref}>
       <Layout style={{ minHeight: '100vh' }}>
-        <Sidebar
-          isAuthenticated={props.isAuthenticated}
-          isAdmin={props.isAdmin}
-          // ribbonEnv={props.ribbonEnv}
-          isInProduction={props.isInProduction}
-          isOpenAPIEnabled={props.isOpenAPIEnabled}
-        />
-        <Layout className="site-layout">
+        {props.isAuthenticated && (
+          <Sidebar
+            isAuthenticated={props.isAuthenticated}
+            isAdmin={props.isAdmin}
+            // ribbonEnv={props.ribbonEnv}
+            isInProduction={props.isInProduction}
+            isOpenAPIEnabled={props.isOpenAPIEnabled}
+          />
+        )}
+        <Layout>
           <LoadingBar />
           <ToastContainer position={toast.POSITION.TOP_RIGHT} className="toastify-container" toastClassName="toastify-toast" />
-          <LayoutHeader isAuthenticated={props.isAuthenticated} username={props.login} />
-          <NavPath />
-          <Content style={{ background: '#fff', margin: '0px 16px', padding: 24, minHeight: 280 }}>
+          {props.isAuthenticated && <LayoutHeader isAuthenticated={props.isAuthenticated} username={props.login} />}
+          {props.isAuthenticated && <NavPath />}
+          <Content className={props.isAuthenticated ? 'bg-white' : 'bg-light-gray'} style={{ padding: 24, margin: '0 16px' }}>
             <AppRoutes />
           </Content>
           <LayoutFooter />
