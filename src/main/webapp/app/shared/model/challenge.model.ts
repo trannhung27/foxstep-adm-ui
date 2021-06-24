@@ -1,4 +1,5 @@
 import { ISport } from 'app/shared/model/sport.model';
+import { IChallengeValidity } from './challengeValidity,model';
 export interface IChallenge {
   id?: number;
   title?: string | null;
@@ -14,6 +15,7 @@ export interface IChallenge {
   user_id_created?: number | null;
   challenge_type?: number | null;
   sport?: ISport;
+  challenge_validity?: IChallengeValidity;
 }
 
 export const defaultValue: Readonly<IChallenge> = {};
