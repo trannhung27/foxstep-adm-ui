@@ -102,7 +102,7 @@ export const Challenge = (props: IChallengeProps) => {
           </Button>
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
-            &nbsp; Create new Challenge
+            &nbsp; Tạo thử thách
           </Link>
         </div>
       </h2>

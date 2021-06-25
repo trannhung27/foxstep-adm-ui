@@ -42,7 +42,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     }
   }
   const handleClose = () => {
-    props.history.push('/challenge' + props.location.search);
+    props.history.push('entity/challenge' + props.location.search);
   };
 
   useEffect(() => {
