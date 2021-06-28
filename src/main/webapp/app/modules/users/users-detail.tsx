@@ -21,7 +21,7 @@ export const UsersDetail = (props: IUsersDetailProps) => {
     <Row>
       <Col md="8">
         <h2 data-cy="usersDetailsHeading">Users</h2>
-        <dl className="jh-entity-details">
+        <dl>
           <dt>
             <span id="id">ID</span>
           </dt>
@@ -117,9 +117,9 @@ export const UsersDetail = (props: IUsersDetailProps) => {
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/users/${usersEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-        </Button>
+        {/*<Button tag={Link} to={`/users/${usersEntity.id}/edit`} replace color="primary">*/}
+        {/*  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>*/}
+        {/*</Button>*/}
       </Col>
     </Row>
   );

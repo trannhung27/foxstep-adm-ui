@@ -8,7 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './users.reducer';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, USER_STATUS } from 'app/config/constants';
+import {
+  APP_DATE_FORMAT,
+  APP_LOCAL_DATE_FORMAT,
+  APP_LOCAL_DATETIME_FORMAT_Z,
+  APP_TIMESTAMP_FORMAT,
+  USER_STATUS,
+} from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import DateTime from 'react-datetime';
@@ -27,8 +33,8 @@ export const Users = (props: IUsersProps) => {
     'mobilePhone.contains': null,
     'nationalIdNumber.contains': null,
     'status.equals': null,
-    'dateCreated.greaterOrEqualThan': null,
-    'dateCreated.lessOrEqualThan': null,
+    'dateCreated.greaterThanOrEqual': null,
+    'dateCreated.lessThanOrEqual': null,
   });
 
   const getAllEntities = () => {
@@ -167,8 +173,8 @@ export const Users = (props: IUsersProps) => {
             <AvGroup>
               <Label>Ngày tạo từ</Label>
               <DateTime
-                value={criteriaState['dateCreated.greaterOrEqualThan']}
-                onChange={date => (criteriaState['dateCreated.greaterOrEqualThan'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
+                value={criteriaState['dateCreated.greaterThanOrEqual']}
+                onChange={date => (criteriaState['dateCreated.greaterThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
                 inputProps={{ placeholder: 'Chọn ngày tạo tài khoản' }}
                 dateFormat="DD/MM/YYYY"
                 timeFormat="HH:mm:ss"
@@ -180,8 +186,8 @@ export const Users = (props: IUsersProps) => {
             <AvGroup>
               <Label>Ngày tạo đến</Label>
               <DateTime
-                value={criteriaState['dateCreated.lessOrEqualThan']}
-                onChange={date => (criteriaState['dateCreated.lessOrEqualThan'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
+                value={criteriaState['dateCreated.lessThanOrEqual']}
+                onChange={date => (criteriaState['dateCreated.lessThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
                 inputProps={{ placeholder: 'Chọn ngày tạo tài khoản' }}
                 dateFormat="DD/MM/YYYY"
                 timeFormat="HH:mm:ss"
@@ -274,8 +280,16 @@ export const Users = (props: IUsersProps) => {
                   <td>{users.weight}</td>
                   <td>{users.strAddress}</td>
                   <td>{users.status}</td>
-                  <td>{users.dateCreated ? <TextFormat type="date" value={users.dateCreated} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>{users.dateUpdated ? <TextFormat type="date" value={users.dateUpdated} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
+                  <td>
+                    {users.dateCreated ? (
+                      <TextFormat type="date" value={new Date(users.dateCreated * 1000)} format={APP_TIMESTAMP_FORMAT} />
+                    ) : null}
+                  </td>
+                  <td>
+                    {users.dateUpdated ? (
+                      <TextFormat type="date" value={new Date(users.dateUpdated * 1000)} format={APP_TIMESTAMP_FORMAT} />
+                    ) : null}
+                  </td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${users.id}`} color="info" size="sm" data-cy="entityDetailsButton">

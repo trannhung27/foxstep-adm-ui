@@ -12,7 +12,7 @@ export interface IUsers {
   mobilePhone?: string | null;
   gender?: number | null;
   birthday?: string | null;
-  shirtSize?: number | null;
+  shirtSize?: string | null;
   height?: number | null;
   weight?: number | null;
   idProvince?: number | null;
@@ -22,8 +22,8 @@ export interface IUsers {
   bib?: string | null;
   imageUrl?: string | null;
   status?: number | null;
-  dateCreated?: string | null;
-  dateUpdated?: string | null;
+  dateCreated?: number | null;
+  dateUpdated?: number | null;
   userPosition?: IUsersPosition | null;
 }
 

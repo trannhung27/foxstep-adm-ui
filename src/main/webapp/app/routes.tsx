@@ -12,9 +12,8 @@ import PasswordResetInit from 'app/modules/account/password-reset/init/password-
 import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
 import Logout from 'app/modules/login/logout';
 import Home from 'app/modules/home/home';
-import Users from 'app/modules/users/users';
 import PageNotFound from 'app/shared/error/page-not-found';
-import Entities from 'app/entities';
+import Users from 'app/modules/users';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
