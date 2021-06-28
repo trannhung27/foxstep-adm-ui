@@ -1,6 +1,7 @@
 import 'app/config/dayjs.ts';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../../../node_modules/antd/dist/antd.css';
+import '../../../../node_modules/react-datetime/css/react-datetime.css';
 import './app.scss';
 
 import React, { useEffect } from 'react';

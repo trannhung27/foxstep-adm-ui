@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Storage } from 'react-jhipster';
 
 import { SERVER_API_URL } from 'app/config/constants';
+import camelcaseKeys from 'camelcase-keys';
 
 const TIMEOUT = 1 * 60 * 1000;
 axios.defaults.timeout = TIMEOUT;
@@ -15,7 +16,7 @@ const setupAxiosInterceptors = onUnauthenticated => {
     }
     return config;
   };
-  const onResponseSuccess = response => response;
+  const onResponseSuccess = response => camelcaseKeys(response, { deep: true });
   const onResponseError = err => {
     const status = err.status || (err.response ? err.response.status : 0);
     if (status === 403 || status === 401) {
