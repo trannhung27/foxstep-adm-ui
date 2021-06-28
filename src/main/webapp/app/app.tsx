@@ -2,6 +2,7 @@ import 'app/config/dayjs.ts';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../../../node_modules/antd/dist/antd.css';
 import './app.scss';
+import 'react-datetime/css/react-datetime.css';
 
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';

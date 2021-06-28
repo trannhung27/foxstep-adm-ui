@@ -11,8 +11,9 @@ import { getEntity, updateEntity, createEntity, reset } from './challenge.reduce
 import { IChallenge } from 'app/shared/model/challenge.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
-import DateTimePicker from 'react-datetime-picker';
 import { render } from '@testing-library/react';
+import moment from 'moment';
+import DateTime from 'react-datetime';
 
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -23,6 +24,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+  const [isOpen3, setIsOpen3] = useState(false);
 
   const [isGps, setIsGps] = useState(0);
 
@@ -30,6 +32,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   const toggle = () => setIsOpen(!isOpen);
   const toggle2 = () => setIsOpen2(!isOpen2);
+  const toggle3 = () => setIsOpen3(!isOpen3);
+
+  const [objectType, setObjectType] = useState('0');
 
   const [localState, setLocalState] = useState({
     dateStart: null,
@@ -78,9 +83,15 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     <div>
       <Row className="justify-content-right">
         <Col md="6">
-          <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
-            Thêm mới thử thách từ ban tổ chức
-          </h2>
+          {!isNew ? (
+            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+              Thay đổi thử thách
+            </h2>
+          ) : (
+            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+              Thêm mới thử thách
+            </h2>
+          )}
         </Col>
       </Row>
 
@@ -125,7 +136,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 <Card>
                   <CardBody>
                     <Row>
-                      <Col xs="12" sm="4">
+                      <Col xs="12" sm="5">
                         <AvGroup className="form-group form-inline">
                           <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
                             Tên thử thách <RedAsterisk />
@@ -146,21 +157,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
                       <Col xs="12" sm="5">
                         <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
-                            Số người tham gia <RedAsterisk />
-                          </Label>
-                          <AvField
-                            id="challenge-num_of_participant"
-                            data-cy="num_of_participant"
-                            type="string"
-                            className="form-control"
-                            name="num_of_participant"
-                          />
-                        </AvGroup>
-                      </Col>
-
-                      <Col xs="12" sm="3">
-                        <AvGroup className="form-group form-inline">
                           <Label style={{ marginRight: '10px' }} id="img_urlLabel" for="challenge-img_url">
                             Ban tổ chức khởi tạo
                           </Label>
@@ -180,73 +176,39 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
                     <Row>
                       <Col xs="12" sm="4">
-                        <AvGroup id="challenge-date_start">
-                          <Label id="date_startLabel" for="challenge-date_start" className="required" inline>
+                        <AvGroup>
+                          <Label>
                             Thời gian bắt đầu
                             <RedAsterisk />
                           </Label>
-
-                          <AvField
-                            id="date_start"
-                            data-cy="date_start"
-                            type="date"
-                            className="form-control"
-                            name="date_start_date"
-                            validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
-                            }}
-                          />
-                          <AvField
-                            id="time_start"
-                            data-cy="time_start"
-                            type="time"
-                            className="form-control"
-                            name="date_start_time"
-                            validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
-                            }}
+                          <DateTime
+                            data-cy="num_of_participant"
+                            value={localState['dateStart']}
+                            onChange={date => (localState['date_start'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
+                            initialValue={!isNew ? new Date(props.challengeEntity.date_start).toLocaleString() : null}
+                            inputProps={{ name: 'dateStart', id: 'challenge-num_of_participant', required: true }}
+                            dateFormat="DD/MM/YYYY"
+                            timeFormat="HH:mm:ss"
+                            closeOnSelect={true}
                           />
                         </AvGroup>
                       </Col>
                       <Col xs="12" sm="4">
                         <AvGroup>
-                          <Label id="date_finishLabel" for="challenge-date_finish">
+                          <Label>
                             Thời gian kết thúc
                             <RedAsterisk />
                           </Label>
-
-                          <AvField
-                            id="date_finish"
-                            data-cy="date_finish"
-                            type="date"
-                            className="form-control"
-                            name="date_finish_date"
-                            validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
-                            }}
+                          <DateTime
+                            data-cy="num_of_participant"
+                            value={localState['dateStart']}
+                            onChange={date => (localState['date_start'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
+                            initialValue={!isNew ? new Date(props.challengeEntity.date_start).toLocaleString() : null}
+                            inputProps={{ name: 'dateFinish', id: 'challenge-date_finíh', required: true }}
+                            dateFormat="DD/MM/YYYY"
+                            timeFormat="HH:mm:ss"
+                            closeOnSelect={true}
                           />
-                          <AvField
-                            id="time_finish"
-                            data-cy="time_finish"
-                            type="time"
-                            className="form-control"
-                            name="date_finish_time"
-                            validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
-                            }}
-                          />
-                        </AvGroup>
-                      </Col>
-                    </Row>
-
-                    <Row>
-                      <Col xs="12" sm="4">
-                        <AvGroup>
-                          <AvField id="challenge_object_type" type="select" name="object_type" label="Phạm vi đối tượng tham gia">
-                            <option value="1">Public</option>
-                            <option value="2">Có mã</option>
-                            <option value="3">Team được tham gia</option>
-                          </AvField>
                         </AvGroup>
                       </Col>
                     </Row>
@@ -529,6 +491,58 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             name="challenge_validity.rank_criteria3"
                           />
                         </AvGroup>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Collapse>
+
+              <Row></Row>
+              <div>
+                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>3. Cài đặt thành viên</h4>
+              </div>
+              <Button color="primary" onClick={toggle3} style={{ marginBottom: '1rem' }}>
+                <FontAwesomeIcon icon="plus" />
+              </Button>
+              <Collapse isOpen={isOpen3}>
+                <Card>
+                  <CardBody>
+                    <Row>
+                      <Col xs="12" sm="5">
+                        <AvGroup className="form-group form-inline">
+                          <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
+                            Số người tham gia <RedAsterisk />
+                          </Label>
+                          <AvField
+                            id="challenge-num_of_participant"
+                            data-cy="num_of_participant"
+                            type="string"
+                            className="form-control"
+                            name="num_of_participant"
+                          />
+                        </AvGroup>
+                      </Col>
+                    </Row>
+
+                    <Row>
+                      <Col xs="12" sm="8">
+                        <Row className="form-inline form-group">
+                          <Label>
+                            Phạm vi tham gia:
+                            <RedAsterisk /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                          </Label>
+                          <AvRadioGroup name="object_type" required>
+                            <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
+                            <AvRadio
+                              label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia"
+                              value="2"
+                              onChange={event => {
+                                setObjectType(event.target.value);
+                              }}
+                            />
+                            {objectType === '2' ? <AvField type="text" name="code" label="Mã đăng ký: " /> : null}
+                          </AvRadioGroup>
+                        </Row>
                       </Col>
                     </Row>
                   </CardBody>

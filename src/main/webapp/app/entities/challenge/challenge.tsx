@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Row, Table } from 'reactstrap';
+import { Button, Col, Row, Table, Label } from 'reactstrap';
 import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
@@ -14,6 +14,7 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { height } from '@fortawesome/free-solid-svg-icons/faCogs';
 import moment from 'moment';
+import DateTime from 'react-datetime';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -23,7 +24,7 @@ export const Challenge = (props: IChallengeProps) => {
   );
 
   const [criteriaState, setCriteriaState] = useState({
-    'title.equals': null,
+    'title.contains': null,
     'userId.equals': null,
     'status.equals': null,
     'challengeType.equals': null,
@@ -114,10 +115,10 @@ export const Challenge = (props: IChallengeProps) => {
               <AvField
                 type="text"
                 name="title"
-                label={'Title'}
-                placeholder={'Enter title'}
-                value={criteriaState['title.equals']}
-                onChange={event => (criteriaState['title.equals'] = event.target.value)}
+                label="Tên thử thách"
+                placeholder="Điền tên thử thách"
+                value={criteriaState['title.contains']}
+                onChange={event => (criteriaState['title.contains'] = event.target.value)}
               />
             </AvGroup>
           </Col>
@@ -125,15 +126,15 @@ export const Challenge = (props: IChallengeProps) => {
             <AvField
               type="select"
               name="status"
-              label="Status"
+              label="Trạng thái"
               value={criteriaState['status.equals']}
               onChange={event => (criteriaState['status.equals'] = event.target.value)}
             >
               <option value="" key="0">
-                --Choose a status--
+                --Chọn trạng thái--
               </option>
               <option value="0">Không hoạt động</option>
-              <option value="0">Đang hoạt động</option>
+              <option value="1">Đang hoạt động</option>
               {/* {users
                 ? users.map(otherEntity => (
                     <option value={otherEntity.id} key={otherEntity.id}>
@@ -147,12 +148,12 @@ export const Challenge = (props: IChallengeProps) => {
             <AvField
               type="select"
               name="challengeType"
-              label="ChallengeType"
+              label="Loại thử thách"
               value={criteriaState['challengeType.equals']}
               onChange={event => (criteriaState['challengeType.equals'] = event.target.value)}
             >
               <option value="" key="0">
-                --Choose a type--
+                --Chọn loại--
               </option>
               <option value="1">Cá nhân</option>
               <option value="0">Ban tổ chức</option>
@@ -170,57 +171,38 @@ export const Challenge = (props: IChallengeProps) => {
         <Row>
           <Col xs="12" sm="4">
             <Row>
-              <Col xs="12" sm="4">
-                <AvField
-                  type="date"
-                  name="dateStart"
-                  label={'DateStart'}
-                  value={criteriaState['dateStart']}
-                  onChange={event => (criteriaState['dateStart'] = event.target.value + 'T00:00:00Z')}
-                ></AvField>
-              </Col>
-              <Col xs="12" sm="4">
-                <AvField
-                  type="select"
-                  name="compareType"
-                  label="CompareType"
-                  value={criteriaState['dateStartCompare']}
-                  onChange={event => {
-                    criteriaState['dateStartCompare'] = event.target.value;
-                    if (criteriaState['dateStartCompare'] === '0') {
-                      criteriaState['dateStart.lessThanOrEqual'] = criteriaState['dateStart'];
-                      criteriaState['dateStart.greaterThanOrEqual'] = null;
-                      criteriaState['dateStart'] = null;
-                      criteriaState['dateStartCompare'] = null;
-                    } else if (criteriaState['dateStartCompare'] === '1') {
-                      criteriaState['dateStart.greaterThanOrEqual'] = criteriaState['dateStart'];
-                      criteriaState['dateStart.lessThanOrEqual'] = null;
-                      criteriaState['dateStart'] = null;
-                      criteriaState['dateStartCompare'] = null;
-                    }
-                  }}
-                >
-                  <option value="" key="0">
-                    Compare type
-                  </option>
-                  <option value="1">gte</option>
-                  <option value="0">lte</option>
-                </AvField>
+              <Col xs="12" sm="8">
+                <AvGroup>
+                  <Label>Ngày bắt đầu</Label>
+                  <DateTime
+                    value={criteriaState['dateStart.greaterThanOrEqual']}
+                    onChange={date => (criteriaState['dateStart.greaterThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
+                    inputProps={{ placeholder: 'Chọn ngày bắt đầu' }}
+                    dateFormat="DD/MM/YYYY"
+                    timeFormat="HH:mm:ss"
+                    closeOnSelect={true}
+                  />
+                </AvGroup>
               </Col>
             </Row>
           </Col>
 
           <Col xs="12" sm="4">
-            <AvGroup>
-              <AvField
-                type="text"
-                name="title"
-                label={'Title'}
-                placeholder={'Enter title'}
-                value={criteriaState['title.equals']}
-                onChange={event => (criteriaState['title.equals'] = event.target.value)}
-              />
-            </AvGroup>
+            <Row>
+              <Col xs="12" sm="8">
+                <AvGroup>
+                  <Label>Ngày kết thúc</Label>
+                  <DateTime
+                    value={criteriaState['dateFinish.greaterThanOrEqual']}
+                    onChange={date => (criteriaState['dateFinish.lessThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
+                    inputProps={{ placeholder: 'Chọn ngày kết thúc' }}
+                    dateFormat="DD/MM/YYYY"
+                    timeFormat="HH:mm:ss"
+                    closeOnSelect={true}
+                  />
+                </AvGroup>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Button color="primary" type="submit">
@@ -279,15 +261,10 @@ export const Challenge = (props: IChallengeProps) => {
                   <td>{new Date(challenge.date_start).toLocaleString()}</td>
                   <td>{new Date(challenge.date_finish).toLocaleString()}</td>
                   <td>{challenge.num_of_participant}</td>
-                  <td>
-                    <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                      <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                    </Button>
-                  </td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Xem</span>
                       </Button>
                       <Button
                         tag={Link}
@@ -296,7 +273,7 @@ export const Challenge = (props: IChallengeProps) => {
                         size="sm"
                         data-cy="entityEditButton"
                       >
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
                       </Button>
                       <Button
                         tag={Link}
@@ -305,7 +282,7 @@ export const Challenge = (props: IChallengeProps) => {
                         size="sm"
                         data-cy="entityDeleteButton"
                       >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xóa</span>
                       </Button>
                     </div>
                   </td>
