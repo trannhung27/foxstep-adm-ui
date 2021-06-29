@@ -14,6 +14,8 @@ import Logout from 'app/modules/login/logout';
 import Home from 'app/modules/home/home';
 import PageNotFound from 'app/shared/error/page-not-found';
 import Users from 'app/modules/users';
+import NewsCategory from 'app/modules/news-category';
+import News from 'app/modules/news';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
@@ -38,6 +40,8 @@ const Routes = () => (
       <PrivateRoute path="/" component={Home} exact hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
       <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
       <PrivateRoute path="/users" component={Users} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
+      <PrivateRoute path="/news-category" component={NewsCategory} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
+      <PrivateRoute path="/news" component={News} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
       {/*<PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />*/}
       <ErrorBoundaryRoute path="*" component={PageNotFound} />
     </Switch>

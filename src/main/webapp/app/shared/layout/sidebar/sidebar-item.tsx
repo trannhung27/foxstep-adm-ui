@@ -8,9 +8,9 @@ import {
   MonitorOutlined,
   RobotOutlined,
   TeamOutlined,
-  UnorderedListOutlined,
-  DatabaseOutlined,
-  FileTextOutlined,
+  AppstoreOutlined,
+  EditOutlined,
+  ReadOutlined,
 } from '@ant-design/icons';
 
 export const menuItems = [
@@ -18,6 +18,7 @@ export const menuItems = [
     key: 0,
     title: 'Trang chủ',
     icon: <DashboardOutlined />,
+    isAuthenticated: true,
     url: '/',
   },
   {
@@ -70,5 +71,25 @@ export const menuItems = [
     title: 'Quản lý khách hàng',
     icon: <TeamOutlined />,
     url: '/users',
+  },
+  {
+    key: 3,
+    title: 'Tin tức',
+    icon: <ReadOutlined />,
+    isAuthenticated: true,
+    child: [
+      {
+        key: 301,
+        title: 'Phân loại tin tức',
+        icon: <AppstoreOutlined />,
+        url: '/news-category',
+      },
+      {
+        key: 302,
+        title: 'Quản lý tin tức',
+        icon: <EditOutlined />,
+        url: '/news',
+      },
+    ],
   },
 ];

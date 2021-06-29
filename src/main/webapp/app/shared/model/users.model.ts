@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { IUsersPosition } from 'app/shared/model/users-position.model';
 
+/*App User model*/
 export interface IUsers {
   id?: number;
   email?: string | null;

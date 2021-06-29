@@ -17,6 +17,10 @@ import post, { PostState } from 'app/entities/post/post.reducer';
 import category, { CategoryState } from 'app/entities/category/category.reducer';
 // prettier-ignore
 import users, { UsersState } from 'app/modules/users/users.reducer';
+// prettier-ignore
+import newsCategory, { NewsCategoryState } from 'app/modules/news-category/news-category.reducer';
+// prettier-ignore
+import news, { NewsState } from 'app/modules/news/news.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -32,6 +36,8 @@ export interface IRootState {
   readonly post: PostState;
   readonly category: CategoryState;
   readonly users: UsersState;
+  readonly newsCategory: NewsCategoryState;
+  readonly news: NewsState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -49,6 +55,8 @@ const rootReducer = combineReducers<IRootState>({
   post,
   category,
   users,
+  newsCategory,
+  news,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

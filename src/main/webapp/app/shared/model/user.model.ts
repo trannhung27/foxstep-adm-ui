@@ -1,5 +1,6 @@
 import { USER_STATUS } from 'app/config/constants';
 
+/*AdminUser model*/
 export interface IUser {
   id?: any;
   login?: string;
