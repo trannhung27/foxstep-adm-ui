@@ -2,9 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label, Collapse, CardBody, Card } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
+import {
+  AvFeedback,
+  AvForm,
+  AvGroup,
+  AvInput,
+  AvField,
+  AvRadioGroup,
+  AvRadio,
+  AvCheckboxGroup,
+  AvCheckbox,
+} from 'availity-reactstrap-validation';
 import { translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { IRootState } from 'app/shared/reducers';
 
 import { getEntity, updateEntity, createEntity, reset } from './challenge.reducer';
@@ -14,6 +25,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { render } from '@testing-library/react';
 import moment from 'moment';
 import DateTime from 'react-datetime';
+import CreatableSelect from 'react-select/creatable';
 
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -41,11 +53,73 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     dateFinish: null,
   });
 
+  const [teamAllow, setTeamAllow] = useState(false);
+  const changeTeamAllow = () => setTeamAllow(!teamAllow);
+
+  const [teamList, setTeamList] = useState([{ name: '' }]);
+
   class RedAsterisk extends React.Component {
     render() {
       return <text style={{ color: 'red' }}>&nbsp; *</text>;
     }
   }
+
+  const defaultOptions = [
+    { label: '100', value: '100' },
+    { label: '200', value: '200' },
+    { label: '300', value: '300' },
+  ];
+  class CreatableAdvanced extends React.Component {
+    state = {
+      options: defaultOptions,
+      value: undefined,
+    };
+    handleChange = (newValue: any, actionMeta: any) => {
+      this.setState({ value: newValue });
+    };
+    handleCreate = (inputValue: any) => {
+      const { options } = this.state;
+      const newOption = { label: inputValue, value: inputValue };
+      this.setState({
+        options: [...options, newOption],
+        value: newOption,
+      });
+    };
+    render() {
+      const { options, value } = this.state;
+      return (
+        <CreatableSelect
+          isClearable
+          placeholder="Chọn hoặc tự nhập"
+          formatCreateLabel={input => input}
+          onChange={this.handleChange}
+          name={'challenge_distance.distance'}
+          onCreateOption={this.handleCreate}
+          options={options}
+          value={value}
+          isValidNewOption={inputValue => inputValue > 400}
+        />
+      );
+    }
+  }
+
+  const handleInputChange = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...teamList];
+    list[index][name] = value;
+    setTeamList(list);
+  };
+
+  const handleRemoveClick = index => {
+    const list = [...teamList];
+    list.splice(index, 1);
+    setTeamList(list);
+  };
+
+  const handleAddClick = () => {
+    setTeamList([...teamList, { name: '' }]);
+  };
+
   const handleClose = () => {
     props.history.push('entity/challenge' + props.location.search);
   };
@@ -130,7 +204,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               </Row>
               <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
               <Button color="primary" onClick={toggle} style={{ marginBottom: '1rem' }}>
-                <FontAwesomeIcon icon="plus" />
+                <FontAwesomeIcon icon="plus" swapOpacity />
               </Button>
               <Collapse isOpen={isOpen}>
                 <Card>
@@ -251,12 +325,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         <Label style={{ marginRight: '10px' }} id="img_urlLabel" for="challenge-validity_checkTime">
                           Hạng mục 1<RedAsterisk />
                         </Label>
-                        <AvGroup>
-                          <AvField id="challenge-validity_checkTime" type="select" name="challenge_validity.check_time">
+
+                        {/* <AvField type="select" id="challenge-validity_checkTime" name="challenge_validity.check_time">
                             <option value="100">100</option>
                             <option value="200">200</option>
-                          </AvField>
-                        </AvGroup>
+                          </AvField> */}
+                        <CreatableSelect name="challenge_distance.distance" value="abc" />
                       </Col>
 
                       <Col xs="12" sm="4">
@@ -509,24 +583,26 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   <CardBody>
                     <Row>
                       <Col xs="12" sm="5">
-                        <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
-                            Số người tham gia <RedAsterisk />
-                          </Label>
-                          <AvField
-                            id="challenge-num_of_participant"
-                            data-cy="num_of_participant"
-                            type="string"
-                            className="form-control"
-                            name="num_of_participant"
-                          />
-                        </AvGroup>
+                        <Row>
+                          <AvGroup className="form-group">
+                            <Label id="titleLabel" for="challenge-title">
+                              Số người tham gia <RedAsterisk />
+                            </Label>
+                            <AvField
+                              id="challenge-num_of_participant"
+                              data-cy="num_of_participant"
+                              type="string"
+                              className="form-control"
+                              name="num_of_participant"
+                            />
+                          </AvGroup>
+                        </Row>
                       </Col>
                     </Row>
 
                     <Row>
                       <Col xs="12" sm="8">
-                        <Row className="form-inline form-group">
+                        <Row className="form-group">
                           <Label>
                             Phạm vi tham gia:
                             <RedAsterisk /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -540,11 +616,124 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                 setObjectType(event.target.value);
                               }}
                             />
-                            {objectType === '2' ? <AvField type="text" name="code" label="Mã đăng ký: " /> : null}
+                            {objectType === '2' ? (
+                              <Col xs="12" sm="8">
+                                <Row style={{ paddingTop: '6px' }}>
+                                  <label>
+                                    Mã đăng kí
+                                    <RedAsterisk /> &nbsp;
+                                  </label>
+                                  <AvField type="text" name="code" />
+                                </Row>
+                              </Col>
+                            ) : null}
                           </AvRadioGroup>
                         </Row>
                       </Col>
                     </Row>
+                    <Row>
+                      <AvCheckboxGroup name="teamAllow">
+                        <AvCheckbox label="Thi đấu theo nhóm" onChange={changeTeamAllow}></AvCheckbox>
+                      </AvCheckboxGroup>
+                    </Row>
+
+                    {/* {teamAllow === true
+                        ?
+                        
+                        : null
+                      } */}
+
+                    {/* <AvGroup>
+                      <Label id="datePublishedLabel" for="news-datePublished">
+                        Date Published
+                      </Label>
+                      <AvInput
+                        id="news-datePublished"
+                        data-cy="datePublished"
+                        type="datetime-local"
+                        className="form-control"
+                        name="datePublished"
+                        placeholder={'YYYY-MM-DD HH:mm'}
+                        value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.newsEntity.datePublished)}
+                        validate={{
+                          required: { value: true, errorMessage: 'This field is required.' },
+                        }}
+                      />
+                    </AvGroup> */}
+
+                    {teamAllow === true ? (
+                      <AvGroup className="form-group">
+                        <Row>
+                          <Col xs="12" sm="2">
+                            <Label for="team_size">
+                              Giới hạn thành viên:
+                              <RedAsterisk />
+                            </Label>
+                          </Col>
+                          <Col xs="12" sm="2">
+                            <AvInput style={{ paddingLeft: '6px' }} type="number" name="team_size" step="1" min="1" />
+                          </Col>
+                        </Row>
+
+                        <Row style={{ marginTop: '30px' }}>
+                          <Col xs="12" sm="2">
+                            <Label for="teams">
+                              Tên nhóm:
+                              <RedAsterisk />
+                            </Label>
+                          </Col>
+                          <Col xs="12" sm="4">
+                            {teamList.map((team, i) => (
+                              <AvGroup key={i} className="form-inline">
+                                <AvInput
+                                  type="string"
+                                  className="form-control"
+                                  name={'teams' + '[' + i + ']' + '.name'}
+                                  placeholder={'Nhóm' + ' ' + (+i + +1)}
+                                  value={team.name}
+                                  required
+                                  onChange={event => handleInputChange(event, i)}
+                                >
+                                  team.name{' '}
+                                </AvInput>
+                                {teamList.length !== 1 && (
+                                  <Button onClick={() => handleRemoveClick(i)}>
+                                    {' '}
+                                    <FontAwesomeIcon icon={faTimes} />
+                                  </Button>
+                                )}
+                              </AvGroup>
+                            ))}
+                            <Button onClick={handleAddClick} style={{ fontSize: '16px' }}>
+                              <FontAwesomeIcon icon="plus" size="1x" />
+                              &nbsp; Thêm nhóm
+                            </Button>
+                          </Col>
+                        </Row>
+                      </AvGroup>
+                    ) : null}
+
+                    {/* {inputList.map((x, i) => {
+                        return (
+                          <div className="box" key={i}>
+                            <input
+                             name="name"
+                             type = "string"
+                             value={x.name}
+                             onChange={ event=> handleInputChange(event,i)}>
+                            </input>
+                             
+                            <div className="btn-box">
+                              {inputList.length !== 1 && <button className="mr10" onClick={() => handleRemoveClick(i)}>Remove index: {i}</button>}
+                            </div>
+                          </div>
+                        );
+                      })
+                    }
+                    </AvInput>
+                    </AvGroup>
+                    {<Button  onClick={handleAddClick}>Thêm</Button>}
+                     <div style={{ marginTop: 20 }}>{JSON.stringify(inputList)}</div> */}
                   </CardBody>
                 </Card>
               </Collapse>

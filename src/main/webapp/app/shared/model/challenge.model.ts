@@ -1,11 +1,16 @@
 import { ISport } from 'app/shared/model/sport.model';
 import { IChallengeValidity } from './challengeValidity,model';
+import { IChallengeDistance } from './challengeDistance.model';
+import { ITeam } from './team.model';
 export interface IChallenge {
   id?: number;
   title?: string | null;
+  cal_type?: number | null;
+  object_type?: number | null;
   content?: string | null;
   status?: number | null;
   img_url?: string | null;
+  price?: number | null;
   date_regis?: string | null;
   date_regis_dead_line?: string | null;
   date_start?: string | null;

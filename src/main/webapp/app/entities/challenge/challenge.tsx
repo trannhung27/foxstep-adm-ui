@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table, Label } from 'reactstrap';
-import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './challenge.reducer';
 import { IChallenge } from 'app/shared/model/challenge.model';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { height } from '@fortawesome/free-solid-svg-icons/faCogs';
 import moment from 'moment';
 import DateTime from 'react-datetime';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -258,8 +258,8 @@ export const Challenge = (props: IChallengeProps) => {
                     {challenge.challenge_type === 0 && <div>Đang diễn ra</div>}
                     {challenge.challenge_type === 1 && <div>Sắp diễn ra</div>}
                   </td>
-                  <td>{new Date(challenge.date_start).toLocaleString()}</td>
-                  <td>{new Date(challenge.date_finish).toLocaleString()}</td>
+                  <td>{moment.utc(challenge.date_start).format(APP_TIMESTAMP_FORMAT)}</td>
+                  <td>{moment.utc(challenge.date_finish).format(APP_TIMESTAMP_FORMAT)}</td>
                   <td>{challenge.num_of_participant}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
