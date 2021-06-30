@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { INewsCategory } from 'app/shared/model/news-category.model';
 import { IUser } from 'app/shared/model/user.model';
 

@@ -163,7 +163,7 @@ export const Users = (props: IUsersProps) => {
                 <option value={USER_STATUS.ACTIVATED} key="1">
                   Đã kích hoạt
                 </option>
-                <option value={USER_STATUS.NOT_ACTIVATE} key="2">
+                <option value={USER_STATUS.INACTIVE} key="2">
                   Chưa kích hoạt
                 </option>
               </AvField>

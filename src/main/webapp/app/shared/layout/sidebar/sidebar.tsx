@@ -60,7 +60,8 @@ const Sidebar = (props: ISidebarProps) => {
     return (
       Array.isArray(nodes) &&
       nodes.map((item, i) => {
-        if ((item.isAuthenticated && !isAuthenticated) || (item.isAdmin && !isAdmin) || (item.key === 206 && !isOpenAPIEnabled)) return;
+        if ((item.isAuthenticated && !isAuthenticated) || (item.isAdmin && !isAdmin) || (item.url === '/admin/docs' && !isOpenAPIEnabled))
+          return;
 
         const menu = _menuProcess(item.child);
 

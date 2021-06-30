@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Label, Row } from 'reactstrap';
 import { AvFeedback, AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IRootState } from 'app/shared/reducers';
-import { getEntities as getNewsCategories } from 'app/modules/news-category/news-category.reducer';
-import { createEntity, getEntity, reset, updateEntity } from './news.reducer';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
+import { IRootState } from 'app/shared/reducers';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { createEntity, getEntity, reset, updateEntity } from 'app/modules/faq/faq.reducer';
+import { getEntities as getNewsCategories } from 'app/modules/news-category/news-category.reducer';
+import { connect } from 'react-redux';
 
-export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export interface IFaqUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export const NewsUpdate = (props: INewsUpdateProps) => {
+export const FaqUpdate = (props: IFaqUpdateProps) => {
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { newsEntity, newsCategories, users, loading, updating } = props;
+  const { faqEntity, newsCategories, users, loading, updating } = props;
 
   const handleClose = () => {
-    props.history.push('/news' + props.location.search);
+    props.history.push('/faqs' + props.location.search);
   };
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
 
     if (errors.length === 0) {
       const entity = {
-        ...newsEntity,
+        ...faqEntity,
         ...values,
         user: users.find(it => it.id.toString() === values.userId.toString()),
         newsCategory: newsCategories.find(it => it.id.toString() === values.newsCategoryId.toString()),
@@ -64,8 +64,8 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="foxstep2AdminUiApp.news.home.createOrEditLabel" data-cy="NewsCreateUpdateHeading">
-            Tạo hoặc sửa tin tức
+          <h2 id="faqcreateOrEditLabel" data-cy="FaqsCreateUpdateHeading">
+            Tạo hoặc sửa Faq, hướng dẫn
           </h2>
         </Col>
       </Row>
@@ -74,19 +74,19 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <AvForm model={isNew ? {} : newsEntity} onSubmit={saveEntity}>
+            <AvForm model={isNew ? {} : faqEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup>
-                  <Label for="news-id">ID</Label>
-                  <AvInput id="news-id" type="text" className="form-control" name="id" required readOnly />
+                  <Label for="faqs-id">ID</Label>
+                  <AvInput id="faqs-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <AvGroup>
-                <Label id="contentLabel" for="news-content">
+                <Label id="contentLabel" for="faqs-content">
                   Nội dung
                 </Label>
                 <AvField
-                  id="news-content"
+                  id="faqs-content"
                   data-cy="content"
                   type="text"
                   name="content"
@@ -96,26 +96,11 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="descriptionLabel" for="news-description">
-                  Tóm tắt
-                </Label>
-                <AvField
-                  id="news-description"
-                  data-cy="description"
-                  type="text"
-                  name="description"
-                  validate={{
-                    required: { value: true, errorMessage: 'Không được để trống.' },
-                    maxLength: { value: 1000, errorMessage: 'Tối đa 1000 ký tự.' },
-                  }}
-                />
-              </AvGroup>
-              <AvGroup>
-                <Label id="titleLabel" for="news-title">
+                <Label id="titleLabel" for="faqs-title">
                   Tiêu đề
                 </Label>
                 <AvField
-                  id="news-title"
+                  id="faqs-title"
                   data-cy="title"
                   type="text"
                   name="title"
@@ -126,33 +111,33 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="imgUrlLabel" for="news-imgUrl">
+                <Label id="imgUrlLabel" for="faqs-imgUrl">
                   Ảnh
                 </Label>
-                <AvField id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" />
+                <AvField id="faqs-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" />
               </AvGroup>
               <AvGroup>
-                <Label id="datePublishedLabel" for="news-datePublished">
+                <Label id="datePublishedLabel" for="faqs-datePublished">
                   Thời gian đăng bài
                 </Label>
                 <AvInput
-                  id="news-datePublished"
+                  id="faqs-datePublished"
                   data-cy="datePublished"
                   type="datetime-local"
                   className="form-control"
                   name="datePublished"
                   placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.newsEntity.datePublished)}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.faqEntity.datePublished)}
                   validate={{
                     required: { value: true, errorMessage: 'Không được để trống.' },
                   }}
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="statusLabel" for="news-status">
+                <Label id="statusLabel" for="faqs-status">
                   Trạng thái
                 </Label>
-                <AvInput id="news-status" data-cy="status" type="select" className="form-control" name="status">
+                <AvInput id="faqs-status" data-cy="status" type="select" className="form-control" name="status">
                   <option value={NEWS_STATUSES.ACTIVE} key="1">
                     Hoạt động
                   </option>
@@ -164,7 +149,6 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
               <AvGroup>
                 <Label for="post-user">Người tạo</Label>
                 <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" required>
-                  <option value="" key="0" />
                   {users
                     ? users.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
@@ -185,13 +169,20 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   name="newsCategoryId"
                   required
                 >
-                  <option value={NEWS_CATEGORY_TYPES.NEWS.id} key="0">
-                    {NEWS_CATEGORY_TYPES.NEWS.name}
-                  </option>
+                  {newsCategories
+                    ? newsCategories.map(
+                        otherEntity =>
+                          otherEntity.id !== NEWS_CATEGORY_TYPES.NEWS.id && (
+                            <option value={otherEntity.id} key={otherEntity.id}>
+                              {otherEntity.name}
+                            </option>
+                          )
+                      )
+                    : null}
                 </AvInput>
                 <AvFeedback>Không được để trống.</AvFeedback>
               </AvGroup>
-              <Button tag={Link} id="cancel-save" to="/news" replace color="info">
+              <Button tag={Link} id="cancel-save" to="/faqs" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Quay lại</span>
@@ -212,7 +203,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
 const mapStateToProps = (storeState: IRootState) => ({
   users: storeState.userManagement.users,
   newsCategories: storeState.newsCategory.entities,
-  newsEntity: storeState.news.entity,
+  faqEntity: storeState.news.entity,
   loading: storeState.news.loading,
   updating: storeState.news.updating,
   updateSuccess: storeState.news.updateSuccess,
@@ -230,4 +221,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewsUpdate);
+export default connect(mapStateToProps, mapDispatchToProps)(FaqUpdate);

@@ -154,7 +154,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
                     value={user.status}
                     checked={user.status === USER_STATUS.ACTIVATED}
                     trueValue={USER_STATUS.ACTIVATED}
-                    falseValue={USER_STATUS.NOT_ACTIVATE}
+                    falseValue={USER_STATUS.INACTIVE}
                     disabled={!user.id}
                   />{' '}
                   Activated

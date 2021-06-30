@@ -126,7 +126,7 @@ export const UserManagement = (props: IUserManagementProps) => {
               <td>{user.email}</td>
               <td>
                 {user.status === USER_STATUS.ACTIVATED ? (
-                  <Button color="success" onClick={toggleActive(user, USER_STATUS.NOT_ACTIVATE)}>
+                  <Button color="success" onClick={toggleActive(user, USER_STATUS.INACTIVE)}>
                     Activated
                   </Button>
                 ) : (

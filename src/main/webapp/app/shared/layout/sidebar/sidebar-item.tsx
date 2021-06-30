@@ -8,19 +8,12 @@ import {
   MonitorOutlined,
   RobotOutlined,
   TeamOutlined,
-  AppstoreOutlined,
+  QuestionCircleOutlined,
   EditOutlined,
   ReadOutlined,
 } from '@ant-design/icons';
 
 export const menuItems = [
-  {
-    key: 0,
-    title: 'Trang chủ',
-    icon: <DashboardOutlined />,
-    isAuthenticated: true,
-    url: '/',
-  },
   {
     key: 1,
     title: 'Admin',
@@ -30,7 +23,7 @@ export const menuItems = [
     child: [
       {
         key: 101,
-        title: 'User management',
+        title: 'User Management',
         icon: <TeamOutlined />,
         url: '/admin/user-management',
       },
@@ -42,7 +35,7 @@ export const menuItems = [
       },
       {
         key: 103,
-        title: 'Health management',
+        title: 'Health',
         icon: <HeartOutlined />,
         url: '/admin/health',
       },
@@ -60,36 +53,46 @@ export const menuItems = [
       },
       {
         key: 106,
-        title: 'API',
+        title: 'API docs',
         icon: <ApiOutlined />,
         url: '/admin/docs',
+      },
+      {
+        key: 107,
+        title: 'News Category',
+        icon: <ReadOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
+        url: '/news-category',
       },
     ],
   },
   {
     key: 2,
-    title: 'Quản lý khách hàng',
-    icon: <TeamOutlined />,
-    url: '/users',
+    title: 'Trang chủ',
+    icon: <DashboardOutlined />,
+    isAuthenticated: true,
+    url: '/',
   },
   {
     key: 3,
-    title: 'Tin tức',
-    icon: <ReadOutlined />,
+    title: 'Quản lý khách hàng',
+    icon: <TeamOutlined />,
     isAuthenticated: true,
-    child: [
-      {
-        key: 301,
-        title: 'Phân loại tin tức',
-        icon: <AppstoreOutlined />,
-        url: '/news-category',
-      },
-      {
-        key: 302,
-        title: 'Quản lý tin tức',
-        icon: <EditOutlined />,
-        url: '/news',
-      },
-    ],
+    url: '/users',
+  },
+  {
+    key: 4,
+    title: 'Quản lý tin tức',
+    icon: <EditOutlined />,
+    url: '/news',
+    isAuthenticated: true,
+  },
+  {
+    key: 5,
+    title: 'FAQ, Hướng dẫn',
+    icon: <QuestionCircleOutlined />,
+    url: '/faqs',
+    isAuthenticated: true,
   },
 ];

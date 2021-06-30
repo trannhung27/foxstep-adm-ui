@@ -6,21 +6,22 @@ import { getSortState, JhiItemCount, JhiPagination, TextFormat } from 'react-jhi
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './news.reducer';
+import { getEntities } from './faq.reducer';
 import { APP_DATE_FORMAT, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import NewsFilterForm from 'app/modules/news/news-filter';
 import { convertDateTimeToServer } from 'app/shared/util/date-utils';
+import FaqFilterForm from 'app/modules/faq/faq-filter';
 
 export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export const News = (props: INewsProps) => {
+export const Faq = (props: INewsProps) => {
   const overrideNewsCriteriaWithQueryParams = () => {
     const params = new URLSearchParams(props.location.search);
     return {
       'title.contains': params.get('title.contains'),
       'status.equals': params.get('status.equals'),
+      'newsCategoryId.equals': params.get('newsCategoryId.equals'),
       'datePublished.greaterThanOrEqual': params.get('datePublished.greaterThanOrEqual'),
       'datePublished.lessThanOrEqual': params.get('datePublished.lessThanOrEqual'),
     };
@@ -31,6 +32,7 @@ export const News = (props: INewsProps) => {
     setCriteriaState({
       'title.contains': criteria.title.contains,
       'status.equals': criteria.status.equals,
+      'newsCategoryId.equals': criteria.newsCategoryId.equals,
       'datePublished.greaterThanOrEqual': convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString(),
       'datePublished.lessThanOrEqual': convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString(),
     });
@@ -102,14 +104,14 @@ export const News = (props: INewsProps) => {
     sortEntities();
   };
 
-  const { newsList, match, loading, totalItems } = props;
+  const { faqsList, match, loading, totalItems } = props;
   return (
     <div>
       <h2 id="news-heading" data-cy="NewsHeading">
-        Quản lý tin tức
+        Quản lý FAQ, Hướng dẫn
       </h2>
 
-      <NewsFilterForm newsCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
+      <FaqFilterForm faqCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
 
       <div className="d-flex justify-content-end">
         <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
@@ -122,7 +124,7 @@ export const News = (props: INewsProps) => {
       </div>
 
       <div className="table-responsive">
-        {newsList && newsList.length > 0 ? (
+        {faqsList && faqsList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
@@ -133,7 +135,7 @@ export const News = (props: INewsProps) => {
                   Tiêu đề <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  Phân loại <FontAwesomeIcon icon="sort" />
+                  Loại <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   Người tạo <FontAwesomeIcon icon="sort" />
@@ -148,26 +150,26 @@ export const News = (props: INewsProps) => {
               </tr>
             </thead>
             <tbody>
-              {newsList.map((news, i) => (
+              {faqsList.map((faq, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`${match.url}/${news.id}`} color="link" size="sm">
-                      {news.id}
+                    <Button tag={Link} to={`${match.url}/${faq.id}`} color="link" size="sm">
+                      {faq.id}
                     </Button>
                   </td>
-                  <td>{news.title}</td>
-                  <td>{news.newsCategory ? <Link to={`news-category/${news.newsCategory.id}`}>{news.newsCategory.name}</Link> : ''}</td>
-                  <td>{news.newsCategory ? news.user.email : ''}</td>
-                  <td>{news.status}</td>
-                  <td>{news.datePublished ? <TextFormat type="date" value={news.datePublished} format={APP_TIMESTAMP_FORMAT} /> : null}</td>
+                  <td>{faq.title}</td>
+                  <td>{faq.newsCategory ? <Link to={`news-category/${faq.newsCategory.id}`}>{faq.newsCategory.name}</Link> : ''}</td>
+                  <td>{faq.newsCategory ? faq.user.email : ''}</td>
+                  <td>{faq.status}</td>
+                  <td>{faq.datePublished ? <TextFormat type="date" value={faq.datePublished} format={APP_TIMESTAMP_FORMAT} /> : null}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${news.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      <Button tag={Link} to={`${match.url}/${faq.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Chi tiết</span>
                       </Button>
                       <Button
                         tag={Link}
-                        to={`${match.url}/${news.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        to={`${match.url}/${faq.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="primary"
                         size="sm"
                         data-cy="entityEditButton"
@@ -176,7 +178,7 @@ export const News = (props: INewsProps) => {
                       </Button>
                       <Button
                         tag={Link}
-                        to={`${match.url}/${news.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        to={`${match.url}/${faq.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="danger"
                         size="sm"
                         data-cy="entityDeleteButton"
@@ -190,11 +192,11 @@ export const News = (props: INewsProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">No News found</div>
+          !loading && <div className="alert alert-warning">Không tìm thấy</div>
         )}
       </div>
       {props.totalItems ? (
-        <div className={newsList && newsList.length > 0 ? '' : 'd-none'}>
+        <div className={faqsList && faqsList.length > 0 ? '' : 'd-none'}>
           <Row className="justify-content-center">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
           </Row>
@@ -216,7 +218,7 @@ export const News = (props: INewsProps) => {
 };
 
 const mapStateToProps = ({ news }: IRootState) => ({
-  newsList: news.entities,
+  faqsList: news.entities,
   loading: news.loading,
   totalItems: news.totalItems,
 });
@@ -228,4 +230,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(News);
+export default connect(mapStateToProps, mapDispatchToProps)(Faq);

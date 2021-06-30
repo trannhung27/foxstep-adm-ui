@@ -13,7 +13,7 @@ export const AUTHORITIES = {
 
 export const USER_STATUS = {
   ACTIVATED: 1,
-  NOT_ACTIVATE: 0,
+  INACTIVE: 0,
 };
 
 export const messages = {
@@ -27,3 +27,14 @@ export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm Z';
 export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
+
+export const NEWS_CATEGORY_TYPES = {
+  NEWS: { id: 1, name: 'Tin tức' },
+  FAQ: { id: 2, name: 'Câu hỏi thường gặp' },
+  TUTORIAL: { id: 3, name: 'Hướng dẫn' },
+};
+
+export const NEWS_STATUSES = {
+  ACTIVE: 1,
+  INACTIVE: 0,
+};
