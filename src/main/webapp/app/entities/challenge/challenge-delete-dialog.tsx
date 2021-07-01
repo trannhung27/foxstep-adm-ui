@@ -16,7 +16,7 @@ export const ChallengeDeleteDialog = (props: IChallengeDeleteDialogProps) => {
   }, []);
 
   const handleClose = () => {
-    props.history.push('/challenge' + props.location.search);
+    props.history.push('/entity/challenge' + props.location.search);
   };
 
   useEffect(() => {

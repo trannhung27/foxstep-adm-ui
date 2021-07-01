@@ -12,6 +12,7 @@ import {
   AvRadio,
   AvCheckboxGroup,
   AvCheckbox,
+  AvInputContainer,
 } from 'availity-reactstrap-validation';
 import { translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,7 +27,8 @@ import { render } from '@testing-library/react';
 import moment from 'moment';
 import DateTime from 'react-datetime';
 import CreatableSelect from 'react-select/creatable';
-
+import AvSelect from '@availity/reactstrap-validation-select';
+import '@availity/reactstrap-validation-select/styles.scss';
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
@@ -57,6 +59,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const changeTeamAllow = () => setTeamAllow(!teamAllow);
 
   const [teamList, setTeamList] = useState([{ name: '' }]);
+  const [challengeDistanceList, setChallengeDistanceList] = useState([]);
 
   class RedAsterisk extends React.Component {
     render() {
@@ -64,44 +67,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     }
   }
 
-  const defaultOptions = [
+  const [defaultOptions, setDefaultOptions] = useState([
     { label: '100', value: '100' },
     { label: '200', value: '200' },
     { label: '300', value: '300' },
-  ];
-  class CreatableAdvanced extends React.Component {
-    state = {
-      options: defaultOptions,
-      value: undefined,
-    };
-    handleChange = (newValue: any, actionMeta: any) => {
-      this.setState({ value: newValue });
-    };
-    handleCreate = (inputValue: any) => {
-      const { options } = this.state;
-      const newOption = { label: inputValue, value: inputValue };
-      this.setState({
-        options: [...options, newOption],
-        value: newOption,
-      });
-    };
-    render() {
-      const { options, value } = this.state;
-      return (
-        <CreatableSelect
-          isClearable
-          placeholder="Chọn hoặc tự nhập"
-          formatCreateLabel={input => input}
-          onChange={this.handleChange}
-          name={'challenge_distance.distance'}
-          onCreateOption={this.handleCreate}
-          options={options}
-          value={value}
-          isValidNewOption={inputValue => inputValue > 400}
-        />
-      );
-    }
-  }
+  ]);
+
+  const [distanceValue, setDistanceValue] = useState({ label: '', value: '' });
+
+  const handleChange = (newValue: any, actionMeta: any) => {
+    setDistanceValue(newValue);
+  };
+  const handleCreate = (inputValue: any) => {
+    const options = defaultOptions;
+    const newOption = { label: inputValue, value: inputValue };
+    setDefaultOptions([...options, newOption]);
+    setDistanceValue(newOption);
+  };
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -326,11 +308,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           Hạng mục 1<RedAsterisk />
                         </Label>
 
-                        {/* <AvField type="select" id="challenge-validity_checkTime" name="challenge_validity.check_time">
-                            <option value="100">100</option>
-                            <option value="200">200</option>
+                        {/* <AvField type="select" id="challenge-validity_checkTime" name="challenge_validity.check_time" >
+                        <option>100</option>
+                            <option>200</option>
                           </AvField> */}
-                        <CreatableSelect name="challenge_distance.distance" value="abc" />
+                        <CreatableSelect
+                          isClearable
+                          placeholder="Chọn hoặc tự nhập"
+                          formatCreateLabel={input => input}
+                          onChange={handleChange}
+                          onCreateOption={handleCreate}
+                          options={defaultOptions}
+                          value={distanceValue}
+                          // value={challengeDistanceList[challengeDistanceList.length-1].name}
+                          isValidNewOption={inputValue => inputValue > 100}
+                        />
+
+                        <AvField type="text" name="challenge_distance" value={distanceValue} />
                       </Col>
 
                       <Col xs="12" sm="4">
@@ -338,7 +332,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           Hạng mục 2
                         </Label>
                         <AvGroup>
-                          <AvField id="challenge-validity_checkTime2" type="select" name="challenge_validity.check_time2" disabled>
+                          <AvField id="challenge-validity_checkTime2" type="select" name="challenge_validity.check_time2" creatable>
                             <option>100</option>
                             <option>200</option>
                           </AvField>
