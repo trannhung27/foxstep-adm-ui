@@ -21,6 +21,8 @@ import users, { UsersState } from 'app/modules/users/users.reducer';
 import newsCategory, { NewsCategoryState } from 'app/modules/news-category/news-category.reducer';
 // prettier-ignore
 import news, { NewsState } from 'app/modules/news/news.reducer';
+// prettier-ignore
+import faqs, { FaqState } from 'app/modules/faq/faq.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -38,6 +40,7 @@ export interface IRootState {
   readonly users: UsersState;
   readonly newsCategory: NewsCategoryState;
   readonly news: NewsState;
+  readonly faqs: FaqState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -57,6 +60,7 @@ const rootReducer = combineReducers<IRootState>({
   users,
   newsCategory,
   news,
+  faqs,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

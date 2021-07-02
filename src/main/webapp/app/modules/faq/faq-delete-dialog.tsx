@@ -50,9 +50,9 @@ export const FaqDeleteDialog = (props: IFaqDeleteDialogProps) => {
   );
 };
 
-const mapStateToProps = ({ news }: IRootState) => ({
-  faqEntity: news.entity,
-  updateSuccess: news.updateSuccess,
+const mapStateToProps = ({ faqs }: IRootState) => ({
+  faqEntity: faqs.entity,
+  updateSuccess: faqs.updateSuccess,
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };

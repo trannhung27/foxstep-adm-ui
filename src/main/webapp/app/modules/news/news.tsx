@@ -31,8 +31,12 @@ export const News = (props: INewsProps) => {
     setCriteriaState({
       'title.contains': criteria.title.contains,
       'status.equals': criteria.status.equals,
-      'datePublished.greaterThanOrEqual': convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString(),
-      'datePublished.lessThanOrEqual': convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString(),
+      'datePublished.greaterThanOrEqual': criteria.datePublished.greaterThanOrEqual
+        ? convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString()
+        : null,
+      'datePublished.lessThanOrEqual': criteria.datePublished.lessThanOrEqual
+        ? convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString()
+        : null,
     });
   };
 
@@ -98,10 +102,6 @@ export const News = (props: INewsProps) => {
       activePage: currentPage,
     });
 
-  const handleSyncList = () => {
-    sortEntities();
-  };
-
   const { newsList, match, loading, totalItems } = props;
   return (
     <div>
@@ -111,10 +111,7 @@ export const News = (props: INewsProps) => {
 
       <NewsFilterForm newsCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
 
-      <div className="d-flex justify-content-end">
-        <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-          <FontAwesomeIcon icon="sync" spin={loading} /> Làm mới
-        </Button>
+      <div className="d-flex justify-content-end mb-1">
         <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
           <FontAwesomeIcon icon="plus" />
           &nbsp; Tạo mới
@@ -126,14 +123,9 @@ export const News = (props: INewsProps) => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon="sort" />
-                </th>
+                <th className="hand">STT</th>
                 <th className="hand" onClick={sort('title')}>
                   Tiêu đề <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  Phân loại <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   Người tạo <FontAwesomeIcon icon="sort" />
@@ -151,13 +143,12 @@ export const News = (props: INewsProps) => {
               {newsList.map((news, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`${match.url}/${news.id}`} color="link" size="sm">
-                      {news.id}
-                    </Button>
+                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                      ? 1 + i
+                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
                   </td>
                   <td>{news.title}</td>
-                  <td>{news.newsCategory ? <Link to={`news-category/${news.newsCategory.id}`}>{news.newsCategory.name}</Link> : ''}</td>
-                  <td>{news.newsCategory ? news.user.email : ''}</td>
+                  <td>{news.user ? news.user.email : ''}</td>
                   <td>{news.status}</td>
                   <td>{news.datePublished ? <TextFormat type="date" value={news.datePublished} format={APP_TIMESTAMP_FORMAT} /> : null}</td>
                   <td className="text-right">
@@ -190,7 +181,7 @@ export const News = (props: INewsProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">No News found</div>
+          !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
         )}
       </div>
       {props.totalItems ? (

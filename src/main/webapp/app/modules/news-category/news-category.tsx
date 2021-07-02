@@ -88,9 +88,7 @@ export const NewsCategory = (props: INewsCategoryProps) => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon="sort" />
-                </th>
+                <th className="hand">STT</th>
                 <th className="hand" onClick={sort('name')}>
                   Tên <FontAwesomeIcon icon="sort" />
                 </th>
@@ -104,9 +102,9 @@ export const NewsCategory = (props: INewsCategoryProps) => {
               {newsCategoryList.map((newsCategory, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`${match.url}/${newsCategory.id}`} color="link" size="sm">
-                      {newsCategory.id}
-                    </Button>
+                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                      ? 1 + i
+                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
                   </td>
                   <td>{newsCategory.name}</td>
                   <td>

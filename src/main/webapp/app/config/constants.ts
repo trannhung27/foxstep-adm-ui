@@ -16,6 +16,16 @@ export const USER_STATUS = {
   INACTIVE: 0,
 };
 
+export const APP_USER_STATUS = [
+  { id: 1, name: 'Hoạt động' },
+  { id: 0, name: 'Chưa kích hoạt' },
+];
+
+export const APP_USER_GENDER = [
+  { id: 1, name: 'Nam' },
+  { id: 0, name: 'Nữ' },
+];
+
 export const messages = {
   DATA_ERROR_ALERT: 'Internal Error',
 };

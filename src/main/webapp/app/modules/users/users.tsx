@@ -13,29 +13,46 @@ import {
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT_Z,
   APP_TIMESTAMP_FORMAT,
+  APP_USER_STATUS,
   USER_STATUS,
 } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import DateTime from 'react-datetime';
 import moment from 'moment';
+import UsersFilterForm from 'app/modules/users/users-filter';
+import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 
 export interface IUsersProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Users = (props: IUsersProps) => {
+  const overrideNewsCriteriaWithQueryParams = () => {
+    const params = new URLSearchParams(props.location.search);
+    return {
+      'fullName.contains': params.get('fullName.contains'),
+      'email.contains': params.get('email.contains'),
+      'mobilePhone.contains': params.get('mobilePhone.contains'),
+      'nationalIdNumber.contains': params.get('nationalIdNumber.contains'),
+      'status.equals': params.get('status.equals'),
+      'bib.equals': params.get('bib.equals'),
+    };
+  };
+  const [criteriaState, setCriteriaState] = useState(overrideNewsCriteriaWithQueryParams());
+
+  const handleFilter = criteria => {
+    setCriteriaState({
+      'fullName.contains': criteria.fullName.contains,
+      'email.contains': criteria.email.contains,
+      'mobilePhone.contains': criteria.mobilePhone.contains,
+      'nationalIdNumber.contains': criteria.nationalIdNumber.contains,
+      'status.equals': criteria.status.equals,
+      'bib.equals': criteria.bib.equals,
+    });
+  };
+
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
-
-  const [criteriaState, setCriteriaState] = useState({
-    'fullName.contains': null,
-    'email.contains': null,
-    'mobilePhone.contains': null,
-    'nationalIdNumber.contains': null,
-    'status.equals': null,
-    'dateCreated.greaterThanOrEqual': null,
-    'dateCreated.lessThanOrEqual': null,
-  });
 
   const getAllEntities = () => {
     props.getEntities(
@@ -48,7 +65,15 @@ export const Users = (props: IUsersProps) => {
 
   const sortEntities = () => {
     getAllEntities();
-    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    let endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+
+    if (criteriaState['fullName.contains']) endURL += '&fullName.contains=' + criteriaState['fullName.contains'];
+    if (criteriaState['email.contains']) endURL += '&email.contains=' + criteriaState['email.contains'];
+    if (criteriaState['mobilePhone.contains']) endURL += '&mobilePhone.contains=' + criteriaState['mobilePhone.contains'];
+    if (criteriaState['nationalIdNumber.contains']) endURL += '&nationalIdNumber.contains=' + criteriaState['nationalIdNumber.contains'];
+    if (criteriaState['status.equals']) endURL += '&status.equals=' + criteriaState['status.equals'];
+    if (criteriaState['bib.equals']) endURL += '&bib.equals=' + criteriaState['bib.equals'];
+
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
     }
@@ -56,7 +81,7 @@ export const Users = (props: IUsersProps) => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [criteriaState, paginationState.activePage, paginationState.order, paginationState.sort]);
 
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
@@ -97,199 +122,49 @@ export const Users = (props: IUsersProps) => {
       <h2 id="users-heading" data-cy="UsersHeading">
         Users
       </h2>
-
-      <AvForm onSubmit={getAllEntities}>
-        <Row>
-          <Col xs="12" sm="6" lg="3">
-            <AvGroup>
-              <AvField
-                type="text"
-                name="fullName"
-                label={'Họ tên'}
-                placeholder={'Nhập họ tên'}
-                value={criteriaState['fullName.contains']}
-                onChange={event => (criteriaState['fullName.contains'] = event.target.value)}
-              />
-            </AvGroup>
-          </Col>
-          <Col xs="12" sm="6" lg="3">
-            <AvGroup>
-              <AvField
-                type="text"
-                name="email"
-                label={'Email'}
-                placeholder={'Nhập email'}
-                value={criteriaState['email.contains']}
-                onChange={event => (criteriaState['email.contains'] = event.target.value)}
-              />
-            </AvGroup>
-          </Col>
-          <Col xs="12" sm="6" lg="3">
-            <AvGroup>
-              <AvField
-                type="text"
-                name="mobilePhone"
-                label={'Số điện thoại'}
-                placeholder={'Nhập số điện thoại'}
-                value={criteriaState['mobilePhone.contains']}
-                onChange={event => (criteriaState['mobilePhone.contains'] = event.target.value)}
-              />
-            </AvGroup>
-          </Col>
-          <Col xs="12" sm="6" lg="3">
-            <AvGroup>
-              <AvField
-                type="text"
-                name="nationalIdNumber"
-                label={'Số GTTT'}
-                placeholder={'Nhập số GTTT'}
-                value={criteriaState['nationalIdNumber.contains']}
-                onChange={event => (criteriaState['nationalIdNumber.contains'] = event.target.value)}
-              />
-            </AvGroup>
-          </Col>
-          <Col xs="12" sm="6" lg="3">
-            <AvGroup>
-              <AvField
-                type="select"
-                name="status"
-                label="Trạng thái"
-                value={criteriaState['status.equals']}
-                onChange={event => (criteriaState['status.equals'] = event.target.value)}
-              >
-                <option value="" key="0">
-                  --Chọn trạng thái--
-                </option>
-                <option value={USER_STATUS.ACTIVATED} key="1">
-                  Đã kích hoạt
-                </option>
-                <option value={USER_STATUS.INACTIVE} key="2">
-                  Chưa kích hoạt
-                </option>
-              </AvField>
-            </AvGroup>
-          </Col>
-          <Col xs="12" sm="6" lg="3">
-            <AvGroup>
-              <Label>Ngày tạo từ</Label>
-              <DateTime
-                value={criteriaState['dateCreated.greaterThanOrEqual']}
-                onChange={date => (criteriaState['dateCreated.greaterThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
-                inputProps={{ placeholder: 'Chọn ngày tạo tài khoản' }}
-                dateFormat="DD/MM/YYYY"
-                timeFormat="HH:mm:ss"
-                closeOnSelect={true}
-              />
-            </AvGroup>
-          </Col>
-          <Col xs="12" sm="6" lg="3">
-            <AvGroup>
-              <Label>Ngày tạo đến</Label>
-              <DateTime
-                value={criteriaState['dateCreated.lessThanOrEqual']}
-                onChange={date => (criteriaState['dateCreated.lessThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
-                inputProps={{ placeholder: 'Chọn ngày tạo tài khoản' }}
-                dateFormat="DD/MM/YYYY"
-                timeFormat="HH:mm:ss"
-                closeOnSelect={true}
-              />
-            </AvGroup>
-          </Col>
-        </Row>
-        <Button color="primary" type="submit">
-          <FontAwesomeIcon icon="search" />
-          &nbsp; Tìm kiếm
-        </Button>
-      </AvForm>
-
-      <div className="d-flex justify-content-end mb-1">
-        <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-          <FontAwesomeIcon icon="sync" spin={loading} /> Làm mới danh sách
-        </Button>
-      </div>
+      <UsersFilterForm usersCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
 
       <div className="table-responsive">
         {usersList && usersList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
+                <th className="hand">STT</th>
+                <th className="hand" onClick={sort('fullName')}>
+                  Họ tên <FontAwesomeIcon icon="sort" />
+                </th>
                 <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon="sort" />
+                  BIB <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('email')}>
                   Email <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('fullName')}>
-                  Họ tên <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('nickName')}>
-                  Nickname <FontAwesomeIcon icon="sort" />
-                </th>
                 <th className="hand" onClick={sort('nationalIdNumber')}>
-                  Số GTTT <FontAwesomeIcon icon="sort" />
+                  Số Giấy tờ <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('mobilePhone')}>
                   Số ĐT <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('gender')}>
-                  Giới tính <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('birthday')}>
-                  Ngày sinh <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('shirtSize')}>
-                  Cỡ áo <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('height')}>
-                  Chiều cao <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('weight')}>
-                  Cân nặng <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('strAddress')}>
-                  Địa chỉ <FontAwesomeIcon icon="sort" />
-                </th>
                 <th className="hand" onClick={sort('status')}>
                   Trạng thái <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('dateCreated')}>
-                  Ngày tạo <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('dateUpdated')}>
-                  Ngày cập nhật <FontAwesomeIcon icon="sort" />
-                </th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {usersList.map((users, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`${match.url}/${users.id}`} color="link" size="sm" style={{ textDecoration: 'none' }}>
-                      {users.id}
-                    </Button>
+                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                      ? 1 + i
+                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
                   </td>
-                  <td>{users.email}</td>
                   <td>{users.fullName}</td>
-                  <td>{users.nickName}</td>
+                  <td>{users.bib}</td>
+                  <td>{users.email}</td>
                   <td>{users.nationalIdNumber}</td>
                   <td>{users.mobilePhone}</td>
-                  <td>{users.gender}</td>
-                  <td>{users.birthday ? <TextFormat type="date" value={users.birthday} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>{users.shirtSize}</td>
-                  <td>{users.height}</td>
-                  <td>{users.weight}</td>
-                  <td>{users.strAddress}</td>
-                  <td>{users.status}</td>
-                  <td>
-                    {users.dateCreated ? (
-                      <TextFormat type="date" value={new Date(users.dateCreated * 1000)} format={APP_TIMESTAMP_FORMAT} />
-                    ) : null}
-                  </td>
-                  <td>
-                    {users.dateUpdated ? (
-                      <TextFormat type="date" value={new Date(users.dateUpdated * 1000)} format={APP_TIMESTAMP_FORMAT} />
-                    ) : null}
-                  </td>
+                  <td>{APP_USER_STATUS.map(status => (users.status === status.id ? status.name : ''))}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${users.id}`} color="info" size="sm" data-cy="entityDetailsButton">

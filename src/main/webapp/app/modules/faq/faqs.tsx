@@ -13,10 +13,10 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 import FaqFilterForm from 'app/modules/faq/faq-filter';
 
-export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export interface IFaqsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export const Faq = (props: INewsProps) => {
-  const overrideNewsCriteriaWithQueryParams = () => {
+export const Faq = (props: IFaqsProps) => {
+  const overrideFaqsCriteriaWithQueryParams = () => {
     const params = new URLSearchParams(props.location.search);
     return {
       'title.contains': params.get('title.contains'),
@@ -26,15 +26,19 @@ export const Faq = (props: INewsProps) => {
       'datePublished.lessThanOrEqual': params.get('datePublished.lessThanOrEqual'),
     };
   };
-  const [criteriaState, setCriteriaState] = useState(overrideNewsCriteriaWithQueryParams());
+  const [criteriaState, setCriteriaState] = useState(overrideFaqsCriteriaWithQueryParams());
 
   const handleFilter = criteria => {
     setCriteriaState({
       'title.contains': criteria.title.contains,
       'status.equals': criteria.status.equals,
       'newsCategoryId.equals': criteria.newsCategoryId.equals,
-      'datePublished.greaterThanOrEqual': convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString(),
-      'datePublished.lessThanOrEqual': convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString(),
+      'datePublished.greaterThanOrEqual': criteria.datePublished.greaterThanOrEqual
+        ? convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString()
+        : null,
+      'datePublished.lessThanOrEqual': criteria.datePublished.lessThanOrEqual
+        ? convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString()
+        : null,
     });
   };
 
@@ -100,23 +104,16 @@ export const Faq = (props: INewsProps) => {
       activePage: currentPage,
     });
 
-  const handleSyncList = () => {
-    sortEntities();
-  };
-
   const { faqsList, match, loading, totalItems } = props;
   return (
     <div>
-      <h2 id="news-heading" data-cy="NewsHeading">
+      <h2 id="Faqs-heading" data-cy="FaqsHeading">
         Quản lý FAQ, Hướng dẫn
       </h2>
 
       <FaqFilterForm faqCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
 
-      <div className="d-flex justify-content-end">
-        <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-          <FontAwesomeIcon icon="sync" spin={loading} /> Làm mới
-        </Button>
+      <div className="d-flex justify-content-end mb-1">
         <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
           <FontAwesomeIcon icon="plus" />
           &nbsp; Tạo mới
@@ -128,14 +125,9 @@ export const Faq = (props: INewsProps) => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon="sort" />
-                </th>
+                <th className="hand">STT</th>
                 <th className="hand" onClick={sort('title')}>
                   Tiêu đề <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  Loại <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   Người tạo <FontAwesomeIcon icon="sort" />
@@ -146,6 +138,9 @@ export const Faq = (props: INewsProps) => {
                 <th className="hand" onClick={sort('datePublished')}>
                   Thời gian đăng bài <FontAwesomeIcon icon="sort" />
                 </th>
+                <th>
+                  Loại <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -153,15 +148,15 @@ export const Faq = (props: INewsProps) => {
               {faqsList.map((faq, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`${match.url}/${faq.id}`} color="link" size="sm">
-                      {faq.id}
-                    </Button>
+                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                      ? 1 + i
+                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
                   </td>
                   <td>{faq.title}</td>
-                  <td>{faq.newsCategory ? <Link to={`news-category/${faq.newsCategory.id}`}>{faq.newsCategory.name}</Link> : ''}</td>
                   <td>{faq.newsCategory ? faq.user.email : ''}</td>
                   <td>{faq.status}</td>
                   <td>{faq.datePublished ? <TextFormat type="date" value={faq.datePublished} format={APP_TIMESTAMP_FORMAT} /> : null}</td>
+                  <td>{faq.newsCategory ? <p>{faq.newsCategory.name}</p> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${faq.id}`} color="info" size="sm" data-cy="entityDetailsButton">
@@ -192,7 +187,7 @@ export const Faq = (props: INewsProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">Không tìm thấy</div>
+          !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
         )}
       </div>
       {props.totalItems ? (
@@ -217,10 +212,10 @@ export const Faq = (props: INewsProps) => {
   );
 };
 
-const mapStateToProps = ({ news }: IRootState) => ({
-  faqsList: news.entities,
-  loading: news.loading,
-  totalItems: news.totalItems,
+const mapStateToProps = ({ faqs }: IRootState) => ({
+  faqsList: faqs.entities,
+  loading: faqs.loading,
+  totalItems: faqs.totalItems,
 });
 
 const mapDispatchToProps = {

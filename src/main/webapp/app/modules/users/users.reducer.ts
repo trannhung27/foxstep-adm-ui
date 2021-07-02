@@ -66,9 +66,11 @@ const apiUrl = 'api/app/users';
 
 export const getEntities: ICrudGetAllWithCriteriaAction<IUsers> = (criteria, page, size, sort) => {
   let criteriaParams = '?';
-  Object.keys(criteria).forEach(function (key, index) {
-    if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
-  });
+  if (criteria) {
+    Object.keys(criteria).forEach(function (key, index) {
+      if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
+    });
+  }
   const requestUrl = `${apiUrl}${sort ? `${criteriaParams}page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS_LIST,

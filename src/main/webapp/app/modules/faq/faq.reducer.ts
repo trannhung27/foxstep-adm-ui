@@ -26,11 +26,11 @@ const initialState = {
   updateSuccess: false,
 };
 
-export type FAQState = Readonly<typeof initialState>;
+export type FaqState = Readonly<typeof initialState>;
 
 // Reducer
 
-export default (state: FAQState = initialState, action): FAQState => {
+export default (state: FaqState = initialState, action): FaqState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_FAQS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_FAQS):
@@ -107,9 +107,11 @@ const apiUrl = 'api/faqs';
 
 export const getEntities: ICrudGetAllWithCriteriaAction<INews> = (criteria, page, size, sort) => {
   let criteriaParams = '?';
-  Object.keys(criteria).forEach(function (key, index) {
-    if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
-  });
+  if (criteria) {
+    Object.keys(criteria).forEach(function (key, index) {
+      if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
+    });
+  }
   const requestUrl = `${apiUrl}${sort ? `${criteriaParams}page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_FAQS_LIST,
