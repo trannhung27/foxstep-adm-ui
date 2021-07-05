@@ -182,7 +182,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Hạng mục 1: &nbsp; &nbsp;
                 </Label>
-                <div className="content">{challengeEntity.challenge_validity.rank_criteria1}</div>
+                <div className="content">{challengeEntity.challenge_validity ? challengeEntity.challenge_validity.rank_criteria1 : ''}</div>
               </AvGroup>
             </Col>
             <Col xs="12" sm="6">
@@ -190,11 +190,29 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Hạng mục 2: &nbsp; &nbsp;
                 </Label>
-                <div className="content">{challengeEntity.challenge_validity.rank_criteria2}</div>
+                <div className="content">{challengeEntity.challenge_validity ? challengeEntity.challenge_validity.rank_criteria2 : ''}</div>
               </AvGroup>
             </Col>
           </Row>
 
+          <Row>
+            <Col xs="12" sm="6">
+              <AvGroup className="form-group form-inline">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                  Hạng mục 3: &nbsp; &nbsp;
+                </Label>
+                <div className="content">Not done yet</div>
+              </AvGroup>
+            </Col>
+            <Col xs="12" sm="6">
+              <AvGroup className="form-group form-inline">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                  Hạng mục 4: &nbsp; &nbsp;
+                </Label>
+                <div className="content">Not done yet</div>
+              </AvGroup>
+            </Col>
+          </Row>
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ:</text>
 

@@ -8,9 +8,9 @@ export interface IChallengeValidity {
   avg_cadence_to?: number;
   gps?: number;
   completion_criteria?: number;
-  rank_criteria1?: number;
-  rank_criteria2?: number;
-  rank_criteria3?: number;
+  rank_criteria1?: number | null;
+  rank_criteria2?: number | null;
+  rank_criteria3?: number | null;
 }
 
 export const defaultValue: Readonly<IChallengeValidity> = {};

@@ -20,7 +20,9 @@ export interface IChallenge {
   user_id_created?: number | null;
   challenge_type?: number | null;
   sport?: ISport;
-  challenge_validity?: IChallengeValidity;
+  challenge_validity?: IChallengeValidity | null;
+  challenge_distance?: IChallengeDistance[] | [];
+  teams?: ITeam[] | [];
 }
 
 export const defaultValue: Readonly<IChallenge> = {};
