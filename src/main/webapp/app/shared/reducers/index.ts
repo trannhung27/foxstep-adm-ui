@@ -12,17 +12,18 @@ import password, { PasswordState } from 'app/modules/account/password/password.r
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
 // prettier-ignore
-import post, {
-  PostState
-} from 'app/entities/post/post.reducer';
+import post, { PostState } from 'app/entities/post/post.reducer';
 // prettier-ignore
-import category, {
-  CategoryState
-} from 'app/entities/category/category.reducer';
+import category, { CategoryState } from 'app/entities/category/category.reducer';
 // prettier-ignore
-import challenge, {
-  ChallengeState
-} from 'app/entities/challenge/challenge.reducer';
+import users, { UsersState } from 'app/modules/users/users.reducer';
+// prettier-ignore
+import newsCategory, { NewsCategoryState } from 'app/modules/news-category/news-category.reducer';
+// prettier-ignore
+import news, { NewsState } from 'app/modules/news/news.reducer';
+// prettier-ignore
+import faqs, { FaqState } from 'app/modules/faq/faq.reducer';
+import challenge, { ChallengeState } from 'app/modules/challenge/challenge.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -32,12 +33,16 @@ export interface IRootState {
   readonly userManagement: UserManagementState;
   readonly register: RegisterState;
   readonly activate: ActivateState;
+  readonly challenge: ChallengeState;
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
   readonly post: PostState;
   readonly category: CategoryState;
-  readonly challenge: ChallengeState;
+  readonly users: UsersState;
+  readonly newsCategory: NewsCategoryState;
+  readonly news: NewsState;
+  readonly faqs: FaqState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -51,10 +56,14 @@ const rootReducer = combineReducers<IRootState>({
   activate,
   passwordReset,
   password,
+  challenge,
   settings,
   post,
   category,
-  challenge,
+  users,
+  newsCategory,
+  news,
+  faqs,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

@@ -11,7 +11,7 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
-const API_URL = 'http://foxstep-api-stag.fpt.net/adm/';
+const API_URL = 'http://foxstep-api-stag.fpt.net/adm';
 
 module.exports = options =>
   webpackMerge(commonConfig({ env: ENV, api_url: API_URL }), {
@@ -49,7 +49,7 @@ module.exports = options =>
       proxy: [
         {
           context: ['/api', '/services', '/management', '/swagger-resources', '/v2/api-docs', '/v3/api-docs', '/h2-console', '/auth'],
-          target: `http${options.tls ? 's' : ''}://localhost:9003`,
+          target: API_URL,
           secure: false,
           changeOrigin: options.tls,
         },

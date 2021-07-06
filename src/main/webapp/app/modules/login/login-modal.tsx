@@ -1,3 +1,5 @@
+import './login.scss';
+
 import React from 'react';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Alert, Row, Col } from 'reactstrap';

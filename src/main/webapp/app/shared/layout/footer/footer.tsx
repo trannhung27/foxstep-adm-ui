@@ -1,13 +1,14 @@
 import React from 'react';
 
-import {Layout} from "antd";
+import { Layout } from 'antd';
 
 const { Footer } = Layout;
 
 const LayoutFooter = () => {
   return (
-    <Footer style={{ textAlign: 'left', marginTop: -24, color: "gray" }}>
-      © {new Date().getFullYear()}{" FTEL DSC"}
+    <Footer style={{ textAlign: 'left' }} className="bg-light-gray">
+      © {new Date().getFullYear()}
+      {' FTEL DSC'}
     </Footer>
   );
 };

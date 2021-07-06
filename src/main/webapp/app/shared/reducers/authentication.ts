@@ -19,7 +19,6 @@ const initialState = {
   isAuthenticated: false,
   loginSuccess: false,
   loginError: false, // Errors returned from server side
-  showModalLogin: false,
   account: {} as any,
   errorMessage: (null as unknown) as string, // Errors returned from server side
   redirectMessage: (null as unknown) as string,
@@ -44,7 +43,6 @@ export default (state: AuthenticationState = initialState, action): Authenticati
       return {
         ...initialState,
         errorMessage: action.payload,
-        showModalLogin: true,
         loginError: true,
       };
     case FAILURE(ACTION_TYPES.GET_SESSION):
@@ -53,7 +51,6 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         loading: false,
         isAuthenticated: false,
         sessionHasBeenFetched: true,
-        showModalLogin: true,
         errorMessage: action.payload,
       };
     case SUCCESS(ACTION_TYPES.LOGIN):
@@ -61,13 +58,11 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         ...state,
         loading: false,
         loginError: false,
-        showModalLogin: false,
         loginSuccess: true,
       };
     case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
-        showModalLogin: true,
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION): {
       const isAuthenticated = action.payload && action.payload.data && action.payload.data.status === USER_STATUS.ACTIVATED;
@@ -82,14 +77,12 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
-        showModalLogin: true,
         redirectMessage: action.message,
       };
     case ACTION_TYPES.CLEAR_AUTH:
       return {
         ...state,
         loading: false,
-        showModalLogin: true,
         isAuthenticated: false,
       };
     default:

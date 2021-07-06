@@ -12,13 +12,12 @@ import {
   AvRadio,
   AvCheckboxGroup,
   AvCheckbox,
-  AvInputContainer,
 } from 'availity-reactstrap-validation';
-import { translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { IRootState } from 'app/shared/reducers';
-
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
 import { getEntity, updateEntity, createEntity, reset } from './challenge.reducer';
 import { IChallenge } from 'app/shared/model/challenge.model';
 import {
@@ -32,8 +31,8 @@ import { render } from '@testing-library/react';
 import moment from 'moment';
 import DateTime from 'react-datetime';
 import CreatableSelect from 'react-select/creatable';
-import AvSelect from '@availity/reactstrap-validation-select';
-import '@availity/reactstrap-validation-select/styles.scss';
+// import AvSelect from '@availity/reactstrap-validation-select';
+// import '@availity/reactstrap-validation-select/styles.scss';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -87,6 +86,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   const [distanceValue, setDistanceValue] = useState({ label: '', value: '' });
 
+  const [validityCriteria, setValidityCriteria] = useState([1, 2, 3]);
+
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const onEditorStateChange = editor => {
+    setEditorState(editor);
+  };
+
   const handleChange = (newValue: any, index: any) => {
     setDistanceValue(newValue);
     const list = [...challengeDistanceList];
@@ -112,6 +119,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     const list = [...teamList];
     list.splice(index, 1);
     setTeamList(list);
+  };
+
+  const swapPosition = () => {
+    const temp = [0, 0, 3];
+    temp[0] = validityCriteria[1];
+    temp[1] = validityCriteria[0];
+    setValidityCriteria(temp);
   };
 
   const handleAddClick = () => {
@@ -301,6 +315,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         </AvGroup>
                       </Col>
                     </Row>
+                    <Label id="contentLabel" for="news-content">
+                      Nội dung:
+                    </Label>
+                    <AvField hidden id="news-content" data-cy="content" type="text" name="content" />
+                    <Editor
+                      editorState={editorState}
+                      onEditorStateChange={onEditorStateChange}
+                      wrapperStyle={{ textDecoration: 'none !important' }}
+                      editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
+                    />
+                    {!editorState.getCurrentContent().hasText() && <p className="invalid-feedback">Không được để trống.</p>}
                   </CardBody>
                 </Card>
               </Collapse>
@@ -366,20 +391,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       Thời gian bắt đầu diễn ra thử thách từ thời gian bắt đầu tới thời gian kết thúc
                     </text>
 
-                    <AvGroup>
-                      <AvField
-                        label="Nội dung thử thách"
-                        id="challenge-content"
-                        data-cy="content"
-                        type="text"
-                        className="form-control"
-                        name="content"
-                      />
-                    </AvGroup>
+                    <AvGroup></AvGroup>
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup inline name="validation_list" className="form-group form-inline">
-                          <AvField type="checkbox" name="valid_avg_pace" />
+                          <input type="checkbox" className="mr-2" />
                           <AvField
                             label="Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp;  Từ &nbsp;"
                             id="challenge-validity_avg_pace_from"
@@ -412,7 +428,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup className="form-group form-inline">
-                          <AvField type="checkbox" name="valid_min_distance" />
+                          <input type="checkbox" className="mr-2" />
                           <AvField
                             label="Bài chạy có quãng đường tối thiểu &nbsp; &nbsp;"
                             id="challenge-validity_min_distance"
@@ -434,7 +450,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup className="form-group form-inline">
-                          <AvField type="checkbox" name="valid_elevation_gain" />
+                          <input type="checkbox" className="mr-2" />
                           <AvField
                             label="Bài chạy có độ cao đạt được (elevation gain) tối thiểu: &nbsp; &nbsp;"
                             id="challenge-validity_elevation_gain"
@@ -456,7 +472,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup className="form-group form-inline">
-                          <AvField type="checkbox" name="valid_avg_padence" />
+                          <input type="checkbox" className="mr-2" />
                           <AvField
                             label="Bài chạy có nhịp chân trung bình(avg pace) &nbsp; &nbsp;  Từ &nbsp;"
                             id="challenge-validity_avg_cadence_from"
@@ -493,6 +509,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             type="checkbox"
                             name="challenge_check"
                             label="Chỉ chấp nhận các bài tập ngoài trời dùng GPS"
+                            className="mr-2"
                             onChange={setGps}
                           />
                           <AvField name="challenge_validity.gps" value={isGps} hidden />
@@ -505,60 +522,31 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <text style={{ color: 'blueviolet' }}>Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký</text>
                     <Row style={{ paddingBottom: '10px' }}></Row>
                     <text style={{ fontWeight: 'bold' }}> Thứ tự các tiêu chí xếp hạng:</text>
-                    <Row className="justify-content-right">
-                      <Col xs="12" sm="7">
+
+                    {validityCriteria.map((criteria, index) => (
+                      <Row className="justify-content-right" key={index}>
                         <AvGroup className="form-group form-inline">
+                          <input type="checkbox" checked={criteria !== 3} className="mr-1" />
                           <AvField
-                            label="1. &nbsp; Số km thực hiện nhiều nhất &nbsp;"
-                            id="challenge-validity_rank_criteria1"
-                            defaultValue="10"
-                            data-cy="challenge_validity.rank_criteria1"
-                            type="number"
-                            step="1"
-                            min="10"
-                            max="300"
-                            className="form-control"
-                            name="challenge_validity.rank_criteria1"
+                            type="string"
+                            name={'challenge_validity.rank_criteria' + index}
+                            disabled
+                            style={{ width: '250px' }}
+                            placeholder={
+                              criteria === 1
+                                ? 'Số km thực hiện nhiều nhất'
+                                : criteria === 2
+                                ? 'Avg Pace thấp nhất'
+                                : criteria === 3
+                                ? 'Avg HR thấp nhất'
+                                : ''
+                            }
+                            value={criteria}
                           />
+                          {index !== 2 ? <Button onClick={swapPosition}> Đổi </Button> : null}
                         </AvGroup>
-                      </Col>
-                    </Row>
-                    <Row className="justify-content-right">
-                      <Col xs="12" sm="7">
-                        <AvGroup className="form-group form-inline">
-                          <AvField
-                            label="1. &nbsp; Avg Pace thấp nhất &nbsp;"
-                            id="challenge-validity_rank_criteria2"
-                            defaultValue="20"
-                            data-cy="challenge_validity.rank_criteria2"
-                            type="number"
-                            step="1"
-                            min="10"
-                            max="100"
-                            className="form-control"
-                            name="challenge_validity.rank_criteria2"
-                          />
-                        </AvGroup>
-                      </Col>
-                    </Row>
-                    <Row className="justify-content-right">
-                      <Col xs="12" sm="7">
-                        <AvGroup className="form-group form-inline">
-                          <AvField
-                            label="1. &nbsp; AVG HR thấp nhất &nbsp;"
-                            id="challenge-validity_rank_criteria3"
-                            defaultValue="30"
-                            data-cy="challenge_validity.rank_criteria3"
-                            type="number"
-                            step="1"
-                            min="10"
-                            max="100"
-                            className="form-control"
-                            name="challenge_validity.rank_criteria3"
-                          />
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      </Row>
+                    ))}
                   </CardBody>
                 </Card>
               </Collapse>
@@ -704,28 +692,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         </Row>
                       </AvGroup>
                     ) : null}
-
-                    {/* {inputList.map((x, i) => {
-                        return (
-                          <div className="box" key={i}>
-                            <input
-                             name="name"
-                             type = "string"
-                             value={x.name}
-                             onChange={ event=> handleInputChange(event,i)}>
-                            </input>
-                             
-                            <div className="btn-box">
-                              {inputList.length !== 1 && <button className="mr10" onClick={() => handleRemoveClick(i)}>Remove index: {i}</button>}
-                            </div>
-                          </div>
-                        );
-                      })
-                    }
-                    </AvInput>
-                    </AvGroup>
-                    {<Button  onClick={handleAddClick}>Thêm</Button>}
-                     <div style={{ marginTop: 20 }}>{JSON.stringify(inputList)}</div> */}
                   </CardBody>
                 </Card>
               </Collapse>
