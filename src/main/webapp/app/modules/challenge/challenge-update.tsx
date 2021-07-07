@@ -19,22 +19,18 @@ import { IRootState } from 'app/shared/reducers';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { getEntity, updateEntity, createEntity, reset } from './challenge.reducer';
-import { IChallenge } from 'app/shared/model/challenge.model';
 import {
   convertDateTimeFromServer,
   convertDateTimeToServer,
   displayDefaultDateTime,
   displayDefaultTimeStamp,
 } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
-import { render } from '@testing-library/react';
 import moment from 'moment';
 import DateTime from 'react-datetime';
 import CreatableSelect from 'react-select/creatable';
 // import AvSelect from '@availity/reactstrap-validation-select';
 // import '@availity/reactstrap-validation-select/styles.scss';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
-import { eventManager } from 'react-toastify/dist/core';
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeUpdate = (props: IChallengeUpdateProps) => {

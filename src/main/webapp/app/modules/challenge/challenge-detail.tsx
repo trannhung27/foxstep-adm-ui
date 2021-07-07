@@ -254,12 +254,12 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/challenges/${challengeEntity.id}/delete`} replace color="primary">
-          <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xoá</span>
-        </Button>
-        &nbsp;
         <Button tag={Link} to={`/challenges/${challengeEntity.id}/approve`} replace color="primary">
           <span className="d-none d-md-inline">Duyệt</span>
+        </Button>
+        &nbsp;
+        <Button tag={Link} to={`/challenges/${challengeEntity.id}/reject`} replace color="primary">
+          <span className="d-none d-md-inline">Từ chối</span>
         </Button>
       </Col>
     </Row>

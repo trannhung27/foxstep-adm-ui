@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity, deleteEntity } from './challenge.reducer';
-
+import { getEntity } from './challenge.reducer';
+import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
 export interface IChallengeApproveDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
@@ -16,7 +16,7 @@ export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
   }, []);
 
   const handleClose = () => {
-    props.history.push('/challenges' + props.location.search);
+    props.history.push('/challenges/' + props.match.params.id);
   };
 
   useEffect(() => {
@@ -25,37 +25,44 @@ export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
     }
   }, [props.updateSuccess]);
 
-  const confirmDelete = () => {
-    props.deleteEntity(props.challengeEntity.id);
+  const { challengeEntity } = props;
+
+  const approveChallenge = () => {
+    const entity = {
+      processGroupId: 1,
+      processTypeId: 1,
+      actionType: 1,
+      contentId: Number(props.match.params.id),
+    };
+    props.updateWorkflow(entity);
   };
 
-  const { challengeEntity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="challengeApproveDialogHeading">
         Confirm delete operation
       </ModalHeader>
-      <ModalBody id="foxstep2AdminWebappApp.challenge.delete.question">Are you sure you want to delete this Challenge?</ModalBody>
+      <ModalBody id="foxstep2AdminWebappApp.challenge.delete.question">
+        Bạn có chắc muốn duyệt yêu cầu thử thách từ cá nhân? Sau khi duyệt thử thách, thử thách sẽ được công khai.
+      </ModalBody>
       <ModalFooter>
-        <Button color="secondary" onClick={handleClose}>
-          <FontAwesomeIcon icon="ban" />
-          &nbsp; Cancel
+        <Button id="jhi-confirm-delete-challenge" data-cy="entityApproveChallengeButton" color="danger" onClick={approveChallenge}>
+          &nbsp; Có
         </Button>
-        <Button id="jhi-confirm-delete-challenge" data-cy="entityConfirmDeleteButton" color="danger" onClick={confirmDelete}>
-          <FontAwesomeIcon icon="trash" />
-          &nbsp; Delete
+        <Button color="secondary" onClick={handleClose}>
+          &nbsp; Không
         </Button>
       </ModalFooter>
     </Modal>
   );
 };
 
-const mapStateToProps = ({ challenge }: IRootState) => ({
+const mapStateToProps = ({ challenge, wfRequest }: IRootState) => ({
   challengeEntity: challenge.entity,
-  updateSuccess: challenge.updateSuccess,
+  updateSuccess: wfRequest.updateSuccess,
 });
 
-const mapDispatchToProps = { getEntity, deleteEntity };
+const mapDispatchToProps = { getEntity, updateWorkflow };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
