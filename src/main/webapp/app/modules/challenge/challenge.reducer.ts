@@ -68,7 +68,7 @@ export default (state: ChallengeState = initialState, action): ChallengeState =>
         ...state,
         loading: false,
         entities: action.payload.data,
-        totalItems: parseInt(action.payload.headers['x-total-count'], 10),
+        totalItems: parseInt(action.payload.headers['xTotalCount'], 10),
       };
     case SUCCESS(ACTION_TYPES.FETCH_CHALLENGE):
       return {

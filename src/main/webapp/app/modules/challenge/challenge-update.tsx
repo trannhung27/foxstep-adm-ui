@@ -34,6 +34,7 @@ import CreatableSelect from 'react-select/creatable';
 // import AvSelect from '@availity/reactstrap-validation-select';
 // import '@availity/reactstrap-validation-select/styles.scss';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import { eventManager } from 'react-toastify/dist/core';
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
@@ -89,6 +90,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [validityCriteria, setValidityCriteria] = useState([1, 2, 3]);
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const [avgPace, setAvgPace] = useState({ from: 0, to: 0, isDisabled: false });
 
   const onEditorStateChange = editor => {
     setEditorState(editor);
@@ -151,6 +154,15 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
+    values.challenge_validity.avg_cadence_from = Number(values.challenge_validity.avg_cadence_from);
+    values.challenge_validity.avg_cadence_to = Number(values.challenge_validity.avg_cadence_to);
+    values.challenge_validity.avg_pace_from = Number(values.challenge_validity.avg_pace_from);
+    values.challenge_validity.avg_pace_to = Number(values.challenge_validity.avg_pace_to);
+    values.challenge_validity.elevation_gain = Number(values.challenge_validity.elevation_gain);
+    values.challenge_validity.completion_criteria = Number(values.challenge_validity.completion_criteria);
+    values.challenge_validity.min_distance = Number(values.challenge_validity.min_distance);
+    values.challenge_validity.avg_pace_to = Number(values.challenge_validity.avg_pace_to);
+    values.challenge_validity.gps = Number(values.challenge_validity.gps);
     if (errors.length === 0) {
       const entity = {
         ...challengeEntity,
@@ -271,8 +283,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             data-cy="num_of_participant"
                             value={localState['dateStart']}
                             onChange={date => (localState['date_start'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
-                            initialValue={!isNew ? moment.utc(props.challengeEntity.date_start).format(APP_TIMESTAMP_FORMAT) : null}
-                            inputProps={{ name: 'dateStart', id: 'challenge-num_of_participant', required: true }}
+                            initialValue={!isNew ? moment.utc(props.challengeEntity.dateStart).format(APP_TIMESTAMP_FORMAT) : null}
+                            inputProps={{ name: 'dateStart', id: 'challenge-numOfParticipant', required: true }}
                             dateFormat="DD/MM/YYYY"
                             timeFormat="HH:mm:ss"
                             closeOnSelect={true}
@@ -306,8 +318,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             data-cy="num_of_participant"
                             value={localState['dateStart']}
                             onChange={date => (localState['date_start'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
-                            initialValue={!isNew ? moment.utc(props.challengeEntity.date_finish).format(APP_TIMESTAMP_FORMAT) : null}
-                            inputProps={{ name: 'dateFinish', id: 'challenge-date_finíh', required: true }}
+                            initialValue={!isNew ? moment.utc(props.challengeEntity.dateStart).format(APP_TIMESTAMP_FORMAT) : null}
+                            inputProps={{ name: 'dateFinish', id: 'challenge-date_finish', required: true }}
                             dateFormat="DD/MM/YYYY"
                             timeFormat="HH:mm:ss"
                             closeOnSelect={true}
@@ -395,19 +407,30 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup inline name="validation_list" className="form-group form-inline">
-                          <input type="checkbox" className="mr-2" />
+                          <input
+                            type="checkbox"
+                            className="mr-2"
+                            onChange={() => setAvgPace({ from: 0, to: 0, isDisabled: !avgPace.isDisabled })}
+                          />
                           <AvField
                             label="Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp;  Từ &nbsp;"
                             id="challenge-validity_avg_pace_from"
-                            defaultValue="3.0"
+                            // defaultValue="3.0"
                             data-cy="challenge_validity.avg_pace_from"
                             type="number"
-                            step="0.1"
+                            step="1"
                             min="0"
                             max="20"
                             className="form-control"
+                            value={avgPace.from}
+                            disabled={avgPace.isDisabled}
+                            onChange={event => {
+                              const avgpace = { from: event.target.value, to: avgPace.to, isDisabled: avgPace.isDisabled };
+                              setAvgPace(avgpace);
+                            }}
                             name="challenge_validity.avg_pace_from"
                           />
+
                           <AvField
                             label="&nbsp; - Đến &nbsp; "
                             id="challenge-validity_avg_pace_to"
@@ -418,6 +441,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             min="0"
                             max="20"
                             className="form-control"
+                            value={avgPace.to}
+                            disabled={avgPace.isDisabled}
+                            onChange={event => {
+                              const avgpace = { from: event.target.value, to: avgPace.to, isDisabled: avgPace.isDisabled };
+                              setAvgPace(avgpace);
+                            }}
                             name="challenge_validity.avg_pace_to"
                           />
                           <text> &nbsp; (phút/km)</text>

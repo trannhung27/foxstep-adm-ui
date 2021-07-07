@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity, deleteEntity } from './challenge.reducer';
 
-export interface IChallengeDeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export interface IChallengeApproveDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export const ChallengeDeleteDialog = (props: IChallengeDeleteDialogProps) => {
+export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
   useEffect(() => {
     props.getEntity(props.match.params.id);
   }, []);
@@ -32,7 +32,7 @@ export const ChallengeDeleteDialog = (props: IChallengeDeleteDialogProps) => {
   const { challengeEntity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose} data-cy="challengeDeleteDialogHeading">
+      <ModalHeader toggle={handleClose} data-cy="challengeApproveDialogHeading">
         Confirm delete operation
       </ModalHeader>
       <ModalBody id="foxstep2AdminWebappApp.challenge.delete.question">Are you sure you want to delete this Challenge?</ModalBody>
@@ -60,4 +60,4 @@ const mapDispatchToProps = { getEntity, deleteEntity };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChallengeDeleteDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(ChallengeApproveDialog);

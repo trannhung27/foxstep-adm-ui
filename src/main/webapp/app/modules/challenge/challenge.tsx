@@ -255,12 +255,12 @@ export const Challenge = (props: IChallengeProps) => {
                   <td>{challenge.title}</td>
                   <td>{challenge.sport.name}</td>
                   <td>
-                    {challenge.challenge_type === 0 && <div>Đang diễn ra</div>}
-                    {challenge.challenge_type === 1 && <div>Sắp diễn ra</div>}
+                    {challenge.challengeType === 0 && <div>Đang diễn ra</div>}
+                    {challenge.challengeType === 1 && <div>Sắp diễn ra</div>}
                   </td>
-                  <td>{moment.utc(challenge.date_start).format(APP_TIMESTAMP_FORMAT)}</td>
-                  <td>{moment.utc(challenge.date_finish).format(APP_TIMESTAMP_FORMAT)}</td>
-                  <td>{challenge.num_of_participant}</td>
+                  <td>{moment.utc(challenge.dateStart).format(APP_TIMESTAMP_FORMAT)}</td>
+                  <td>{moment.utc(challenge.dateFinish).format(APP_TIMESTAMP_FORMAT)}</td>
+                  <td>{challenge.numOfParticipant}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">

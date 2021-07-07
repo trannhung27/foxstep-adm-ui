@@ -7,6 +7,7 @@ import Challenge from './challenge';
 import ChallengeDetail from './challenge-detail';
 import ChallengeUpdate from './challenge-update';
 import ChallengeDeleteDialog from './challenge-delete-dialog';
+import ChallengeApproveDialog from './challenge-approve-dialog';
 
 const Routes = ({ match }) => (
   <>
@@ -17,6 +18,7 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={match.url} component={Challenge} />
     </Switch>
     <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={ChallengeDeleteDialog} />
+    <ErrorBoundaryRoute exact path={`${match.url}/:id/approve`} component={ChallengeApproveDialog} />
   </>
 );
 

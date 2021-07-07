@@ -16,6 +16,7 @@ import {
 } from 'availity-reactstrap-validation';
 import {} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './challenge.reducer';
@@ -56,7 +57,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                   Thành viên: &nbsp; &nbsp;
                 </Label>
                 <div style={{ fontWeight: 'bold' }}>
-                  {challengeEntity.num_of_participant}/{challengeEntity.num_of_regis}
+                  {challengeEntity.numOfParticipant}/{challengeEntity.numOfRegis}
                 </div>
               </AvGroup>
             </Col>
@@ -86,7 +87,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Cá nhân tổ chức: &nbsp; &nbsp;
                 </Label>
-                <div>Not done yet</div>
+                <div>{challengeEntity.userIdCreated}</div>
               </AvGroup>
             </Col>
 
@@ -126,7 +127,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Thời gian bắt đầu: &nbsp; &nbsp;
                 </Label>
-                <div>{moment.utc(challengeEntity.date_start).format(APP_DATE_FORMAT)}</div>
+                <div>{moment.utc(challengeEntity.dateStart).format(APP_DATE_FORMAT)}</div>
               </AvGroup>
             </Col>
 
@@ -135,7 +136,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Thời gian kết thúc: &nbsp; &nbsp;
                 </Label>
-                <div>{moment.utc(challengeEntity.date_finish).format(APP_DATE_FORMAT)}</div>
+                <div>{moment.utc(challengeEntity.dateFinish).format(APP_DATE_FORMAT)}</div>
               </AvGroup>
             </Col>
           </Row>
@@ -182,7 +183,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Hạng mục 1: &nbsp; &nbsp;
                 </Label>
-                <div className="content">{challengeEntity.challenge_validity ? challengeEntity.challenge_validity.rank_criteria1 : ''}</div>
+                <div className="content">{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.rankCriteria1 : ''}</div>
               </AvGroup>
             </Col>
             <Col xs="12" sm="6">
@@ -190,7 +191,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Hạng mục 2: &nbsp; &nbsp;
                 </Label>
-                <div className="content">{challengeEntity.challenge_validity ? challengeEntity.challenge_validity.rank_criteria2 : ''}</div>
+                <div className="content">{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.rankCriteria2 : ''}</div>
               </AvGroup>
             </Col>
           </Row>
@@ -229,7 +230,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Số người tham gia: &nbsp; &nbsp;
                 </Label>
-                <div className="content">{challengeEntity.num_of_participant}</div>
+                <div className="content">{challengeEntity.numOfParticipant}</div>
               </AvGroup>
             </Col>
           </Row>
@@ -240,63 +241,25 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Phạm vi: &nbsp; &nbsp;
                 </Label>
-                <div className="content">{challengeEntity.num_of_participant}</div>
+                <div className="content">{challengeEntity.numOfParticipant}</div>
               </AvGroup>
             </Col>
           </Row>
         </AvForm>
-        {/* <dl className="jh-entity-details">
-          <dt>
-            <span id="id">ID</span>
-          </dt>
-          <dd>{challengeEntity.id}</dd>
-          <dt>
-            <span id="title">Title</span>
-          </dt>
-          <dd>{challengeEntity.title}</dd>
-          <dt>
-            <span id="content">Content</span>
-          </dt>
-          <dd>{challengeEntity.content}</dd>
-          <dt>
-            <span id="img_url">Img Url</span>
-          </dt>
-          <dd>{challengeEntity.img_url}</dd>
-          <dt>
-            <span id="date_regis">Date Regis</span>
-          </dt>
-          <dd>{challengeEntity.date_regis}</dd>
-          <dt>
-            <span id="date_start">Date Start</span>
-          </dt>
-          <dd>{challengeEntity.date_start}</dd>
-          <dt>
-            <span id="date_finish">Date Finish</span>
-          </dt>
-          <dd>{challengeEntity.date_finish}</dd>
-          <dt>
-            <span id="num_of_participant">Num Of Participant</span>
-          </dt>
-          <dd>{challengeEntity.num_of_participant}</dd>
-          <dt>
-            <span id="num_of_regis">Num Of Regis</span>
-          </dt>
-          <dd>{challengeEntity.num_of_regis}</dd>
-          <dt>
-            <span id="user_id_created">User Id Created</span>
-          </dt>
-          <dd>{challengeEntity.user_id_created}</dd>
-        </dl> */}
-        <Button tag={Link} to="/entity/challenge" replace color="info" data-cy="entityDetailsBackButton">
+        <Button tag={Link} to="/challenges" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Trở lại</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/entity/challenge/${challengeEntity.id}/edit`} replace color="primary">
+        <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/entity/challenge/${challengeEntity.id}/delete`} replace color="primary">
+        <Button tag={Link} to={`/challenges/${challengeEntity.id}/delete`} replace color="primary">
           <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xoá</span>
+        </Button>
+        &nbsp;
+        <Button tag={Link} to={`/challenges/${challengeEntity.id}/approve`} replace color="primary">
+          <span className="d-none d-md-inline">Duyệt</span>
         </Button>
       </Col>
     </Row>
