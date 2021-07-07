@@ -65,7 +65,7 @@ export const App = (props: IAppProps) => {
 
 const mapStateToProps = ({ authentication, applicationProfile }: IRootState) => ({
   isAuthenticated: authentication.isAuthenticated,
-  isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
+  isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN.name]),
   login: authentication.account.login,
   ribbonEnv: applicationProfile.ribbonEnv,
   isInProduction: applicationProfile.inProduction,

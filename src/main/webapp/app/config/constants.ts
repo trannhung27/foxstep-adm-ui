@@ -7,8 +7,8 @@ export default config;
 export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const AUTHORITIES = {
-  ADMIN: 'ROLE_ADMIN',
-  USER: 'ROLE_USER',
+  USER: { id: 1, name: 'ROLE_USER' },
+  ADMIN: { id: 2, name: 'ROLE_ADMIN' },
 };
 
 export const USER_STATUS = {
@@ -47,4 +47,19 @@ export const NEWS_CATEGORY_TYPES = {
 export const NEWS_STATUSES = {
   ACTIVE: 1,
   INACTIVE: 0,
+};
+
+export const WfProcessGroup = {
+  CHALLENGE: 1,
+};
+
+export const WfProcessType = {
+  ADD: 1,
+  EDIT: 2,
+};
+
+export const WfActionType = {
+  REQ: 0,
+  APPV: 1,
+  DENY: -1,
 };

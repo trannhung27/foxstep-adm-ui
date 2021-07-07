@@ -58,24 +58,24 @@ describe('hasAnyAuthority', () => {
     expect(hasAnyAuthority(undefined, undefined)).toEqual(false);
     expect(hasAnyAuthority(null, [])).toEqual(false);
     expect(hasAnyAuthority([], [])).toEqual(false);
-    expect(hasAnyAuthority([], [AUTHORITIES.USER])).toEqual(false);
+    expect(hasAnyAuthority([], [AUTHORITIES.USER.name])).toEqual(false);
   });
 
   it('Should return true when authorities is valid and hasAnyAuthorities is empty', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [])).toEqual(true);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name], [])).toEqual(true);
   });
 
   it('Should return true when authorities is valid and hasAnyAuthorities contains an authority', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [AUTHORITIES.USER])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER, AUTHORITIES.ADMIN])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER, 'ROLEADMIN'])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.ADMIN])).toEqual(true);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name], [AUTHORITIES.USER.name])).toEqual(true);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name, AUTHORITIES.ADMIN.name], [AUTHORITIES.USER.name])).toEqual(true);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name, AUTHORITIES.ADMIN.name], [AUTHORITIES.USER.name, AUTHORITIES.ADMIN.name])).toEqual(true);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name, AUTHORITIES.ADMIN.name], [AUTHORITIES.USER.name, 'ROLEADMIN'])).toEqual(true);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name, AUTHORITIES.ADMIN.name], [AUTHORITIES.ADMIN.name])).toEqual(true);
   });
 
   it('Should return false when authorities is valid and hasAnyAuthorities does not contain an authority', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [AUTHORITIES.ADMIN])).toEqual(false);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], ['ROLE_USERSS'])).toEqual(false);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], ['ROLEUSER', 'ROLEADMIN'])).toEqual(false);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name], [AUTHORITIES.ADMIN.name])).toEqual(false);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name, AUTHORITIES.ADMIN.name], ['ROLE_USERSS'])).toEqual(false);
+    expect(hasAnyAuthority([AUTHORITIES.USER.name, AUTHORITIES.ADMIN.name], ['ROLEUSER', 'ROLEADMIN'])).toEqual(false);
   });
 });

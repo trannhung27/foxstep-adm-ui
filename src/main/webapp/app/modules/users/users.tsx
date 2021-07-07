@@ -8,20 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './users.reducer';
-import {
-  APP_DATE_FORMAT,
-  APP_LOCAL_DATE_FORMAT,
-  APP_LOCAL_DATETIME_FORMAT_Z,
-  APP_TIMESTAMP_FORMAT,
-  APP_USER_STATUS,
-  USER_STATUS,
-} from 'app/config/constants';
+import { APP_USER_STATUS } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import DateTime from 'react-datetime';
-import moment from 'moment';
 import UsersFilterForm from 'app/modules/users/users-filter';
-import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 
 export interface IUsersProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 

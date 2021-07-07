@@ -11,19 +11,19 @@ import activate, { ActivateState } from 'app/modules/account/activate/activate.r
 import password, { PasswordState } from 'app/modules/account/password/password.reducer';
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
-// prettier-ignore
+
 import post, { PostState } from 'app/entities/post/post.reducer';
-// prettier-ignore
 import category, { CategoryState } from 'app/entities/category/category.reducer';
-// prettier-ignore
 import users, { UsersState } from 'app/modules/users/users.reducer';
-// prettier-ignore
 import newsCategory, { NewsCategoryState } from 'app/modules/news-category/news-category.reducer';
-// prettier-ignore
 import news, { NewsState } from 'app/modules/news/news.reducer';
-// prettier-ignore
 import faqs, { FaqState } from 'app/modules/faq/faq.reducer';
 import challenge, { ChallengeState } from 'app/modules/challenge/challenge.reducer';
+import wfProcessGroup, { WfProcessGroupState } from 'app/modules/workflow/wf-process-group/wf-process-group.reducer';
+import wfProcess, { WfProcessState } from 'app/modules/workflow/wf-process/wf-process.reducer';
+import wfActionType, { WfActionTypeState } from 'app/modules/workflow/wf-action-type/wf-action-type.reducer';
+import wfRequest, { WfRequestState } from 'app/modules/workflow/workflow-request.reducer';
+
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -43,6 +43,10 @@ export interface IRootState {
   readonly newsCategory: NewsCategoryState;
   readonly news: NewsState;
   readonly faqs: FaqState;
+  readonly wfProcessGroup: WfProcessGroupState;
+  readonly wfProcess: WfProcessState;
+  readonly wfActionType: WfActionTypeState;
+  readonly wfRequest: WfRequestState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -64,6 +68,10 @@ const rootReducer = combineReducers<IRootState>({
   newsCategory,
   news,
   faqs,
+  wfProcessGroup,
+  wfProcess,
+  wfActionType,
+  wfRequest,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

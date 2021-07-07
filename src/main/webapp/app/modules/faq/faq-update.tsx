@@ -147,7 +147,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                   type="select"
                   className="form-control"
                   name="newsCategoryId"
-                  value={isNew ? '0' : faqEntity.newsCategory.id}
+                  value={isNew ? 0 : faqEntity.newsCategory ? faqEntity.newsCategory.id : 0}
                   required
                 >
                   <option value="" key="0">
