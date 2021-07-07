@@ -2,10 +2,7 @@ import React from 'react';
 import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
 import { USER_STATUS } from 'app/config/constants';
-import DateTime from 'react-datetime';
-import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import NewsFilterForm from 'app/modules/news/news-filter';
 
 export interface INewsFilterFormProps {
   usersCriteria: Record<string, unknown>;
