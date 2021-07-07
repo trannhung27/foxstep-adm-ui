@@ -11,6 +11,10 @@ import {
   QuestionCircleOutlined,
   EditOutlined,
   ReadOutlined,
+  BranchesOutlined,
+  BlockOutlined,
+  BorderOutlined,
+  DingtalkOutlined,
 } from '@ant-design/icons';
 
 export const menuItems = [
@@ -64,6 +68,39 @@ export const menuItems = [
         isAuthenticated: true,
         isAdmin: true,
         url: '/news-category',
+      },
+      {
+        key: 108,
+        title: 'Workflow',
+        icon: <BranchesOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
+        child: [
+          {
+            key: 1081,
+            title: 'Process Group',
+            icon: <BlockOutlined />,
+            isAuthenticated: true,
+            isAdmin: true,
+            url: '/wf-process-group',
+          },
+          {
+            key: 1082,
+            title: 'Process',
+            icon: <BorderOutlined />,
+            isAuthenticated: true,
+            isAdmin: true,
+            url: '/wf-process',
+          },
+          {
+            key: 1083,
+            title: 'Action Type',
+            icon: <DingtalkOutlined />,
+            isAuthenticated: true,
+            isAdmin: true,
+            url: '/wf-action-type',
+          },
+        ],
       },
     ],
   },

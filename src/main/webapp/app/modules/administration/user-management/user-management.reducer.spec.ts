@@ -138,7 +138,7 @@ describe('User management reducer tests', () => {
     });
 
     it('should update state according to a successful fetch role request', () => {
-      const payload = { data: [AUTHORITIES.ADMIN] };
+      const payload = { data: [AUTHORITIES.ADMIN.name] };
       const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ROLES), payload });
 
       expect(toTest).toMatchObject({

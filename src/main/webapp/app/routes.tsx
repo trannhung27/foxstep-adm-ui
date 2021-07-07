@@ -18,6 +18,9 @@ import NewsCategory from 'app/modules/news-category';
 import News from 'app/modules/news';
 import Faqs from 'app/modules/faq';
 import Challenge from 'app/modules/challenge';
+import WfProcessGroup from 'app/modules/workflow/wf-process-group';
+import WfActionType from 'app/modules/workflow/wf-action-type';
+import WfProcess from 'app/modules/workflow/wf-process';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
@@ -38,15 +41,18 @@ const Routes = () => (
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
       <ErrorBoundaryRoute path="/reset/request" component={PasswordResetInit} />
       <ErrorBoundaryRoute path="/reset/finish/:key?" component={PasswordResetFinish} />
-      <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]} />
-      <PrivateRoute path="/" component={Home} exact hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-      <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-      <PrivateRoute path="/users" component={Users} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-      <PrivateRoute path="/news-category" component={NewsCategory} hasAnyAuthorities={[AUTHORITIES.ADMIN]} />
-      <PrivateRoute path="/news" component={News} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-      <PrivateRoute path="/challenges" component={Challenge} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-      <PrivateRoute path="/faqs" component={Faqs} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-      {/*<PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />*/}
+      <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
+      <PrivateRoute path="/" component={Home} exact hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
+      <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
+      <PrivateRoute path="/users" component={Users} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
+      <PrivateRoute path="/news-category" component={NewsCategory} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
+      <PrivateRoute path="/wf-process-group" component={WfProcessGroup} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
+      <PrivateRoute path="/wf-process" component={WfProcess} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
+      <PrivateRoute path="/wf-action-type" component={WfActionType} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
+      <PrivateRoute path="/news" component={News} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
+      <PrivateRoute path="/challenges" component={Challenge} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
+      <PrivateRoute path="/faqs" component={Faqs} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
+      {/*<PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />*/}
       <ErrorBoundaryRoute path="*" component={PageNotFound} />
     </Switch>
   </div>
