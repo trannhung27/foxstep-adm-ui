@@ -1,16 +1,16 @@
 export interface IChallengeValidity {
-  check_time?: number;
-  avg_pace_from?: number;
-  avg_pace_to?: number;
-  min_distance?: number;
-  elevation_gain?: number;
-  avg_cadence_from?: number;
-  avg_cadence_to?: number;
+  checkTime?: number;
+  avgPaceFrom?: number;
+  avgPaceTo?: number;
+  minDistance?: number;
+  elevationGain?: number;
+  avgCadenceFrom?: number;
+  avgCadenceTo?: number;
   gps?: number;
-  completion_criteria?: number;
-  rank_criteria1?: number | null;
-  rank_criteria2?: number | null;
-  rank_criteria3?: number | null;
+  completionCriteria?: number;
+  rankCriteria1?: number | null;
+  rankCriteria2?: number | null;
+  rankCriteria3?: number | null;
 }
 
 export const defaultValue: Readonly<IChallengeValidity> = {};

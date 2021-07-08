@@ -15,6 +15,7 @@ import {
   BlockOutlined,
   BorderOutlined,
   DingtalkOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons';
 
 export const menuItems = [
@@ -130,6 +131,14 @@ export const menuItems = [
     title: 'FAQ, Hướng dẫn',
     icon: <QuestionCircleOutlined />,
     url: '/faqs',
+    isAuthenticated: true,
+  },
+
+  {
+    key: 6,
+    title: 'Quản lý thử thách',
+    icon: <AppstoreOutlined />,
+    url: '/challenges',
     isAuthenticated: true,
   },
 ];
