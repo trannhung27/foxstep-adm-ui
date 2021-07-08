@@ -59,13 +59,11 @@ export const ChallengeRejectDialog = (props: IChallengeRejectDialogProps) => {
         </Row>
       </ModalBody>
       <ModalFooter>
-        <Button color="secondary" onClick={handleClose}>
-          <FontAwesomeIcon icon="ban" />
-          &nbsp; Cancel
-        </Button>
         <Button id="jhi-confirm-delete-challenge" data-cy="entityConfirmDeleteButton" color="danger" onClick={rejectChallenge}>
-          <FontAwesomeIcon icon="trash" />
-          &nbsp; Delete
+          Xác nhận
+        </Button>
+        <Button color="secondary" onClick={handleClose}>
+          Hủy
         </Button>
       </ModalFooter>
     </Modal>
