@@ -223,7 +223,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               ) : null}
               <Row style={{ paddingBottom: '40px' }}>
                 <Col xs="12" sm="4">
-                  <Button tag={Link} id="cancel-save" to="/entity/challenge" replace color="info">
+                  <Button tag={Link} id="cancel-save" to="/challenges" replace color="info">
                     <FontAwesomeIcon icon="arrow-left" />
                     &nbsp;
                     <span className="d-none d-md-inline">Hủy</span>
