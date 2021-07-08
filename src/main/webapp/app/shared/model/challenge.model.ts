@@ -11,8 +11,7 @@ export interface IChallenge {
   status?: number | null;
   imgUrl?: string | null;
   price?: number | null;
-  dateRegis?: string | null;
-  dateRegisDeadLine?: string | null;
+  dateRegisDeadline?: string | null;
   dateStart?: string | null;
   dateFinish?: string | null;
   numOfParticipant?: number | null;
