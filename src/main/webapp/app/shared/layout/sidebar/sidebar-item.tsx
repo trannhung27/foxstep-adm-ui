@@ -11,6 +11,9 @@ import {
   UnorderedListOutlined,
   DatabaseOutlined,
   FileTextOutlined,
+  TrophyOutlined,
+  FallOutlined,
+  DingtalkOutlined
 } from "@ant-design/icons";
 
 export const menuItems = [
@@ -37,6 +40,24 @@ export const menuItems = [
         title: "Post",
         icon: <FileTextOutlined />,
         url: "/entity/post"
+      },
+      {
+        key: 103,
+        title: "CFG Level Info",
+        icon: <TrophyOutlined />,
+        url: "/entity/cfglevelinfo"
+      },
+      {
+        key: 104,
+        title: "CFG VO2 Rule",
+        icon: <FallOutlined />,
+        url: "/entity/cfgvo2rule"
+      },
+      {
+        key: 105,
+        title: "CFG VO2 Challenge Rule",
+        icon: <DingtalkOutlined />,
+        url: "/entity/cfgvo2challengerule"
       }
     ]
   },
