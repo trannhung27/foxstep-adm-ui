@@ -40,7 +40,7 @@ export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
   return (
     <Modal isOpen toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="challengeApproveDialogHeading">
-        Confirm delete operation
+        Duyệt thử thách
       </ModalHeader>
       <ModalBody id="foxstep2AdminWebappApp.challenge.delete.question">
         Bạn có chắc muốn duyệt yêu cầu thử thách từ cá nhân? Sau khi duyệt thử thách, thử thách sẽ được công khai.
