@@ -32,17 +32,23 @@ export const menuItems = [
         icon: <DatabaseOutlined />,
         url: "/entity/category"
       },
-      // {
-      //   key: 102,
-      //   title: "Post",
-      //   icon: <FileTextOutlined />,
-      //   url: "/entity/post"
-      // }
       {
         key: 102,
         title: "Post",
         icon: <FileTextOutlined />,
-        url: "/entity/cfgVo2Rule"
+        url: "/entity/post"
+      },
+      {
+        key: 103,
+        title: "News",
+        icon: <FileTextOutlined />,
+        url: "/entity/news"
+      },
+      {
+        key: 104,
+        title: "News Categories",
+        icon: <FileTextOutlined />,
+        url: "/entity/news_categories"
       }
     ]
   },
