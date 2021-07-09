@@ -19,12 +19,15 @@ import post, {
 import category, {
   CategoryState
 } from 'app/entities/category/category.reducer';
-import cfgLevelInfo, { 
-  CfgLevelInfoState } from 'app/entities/cfglevelinfo/CfgLevelInfo.reducer';
-import cfgVo2ChallengeRule, { 
-  CfgVo2ChallengeRuleState } from 'app/entities/cfgvo2challengerule/CfgVo2ChallengeRule.reducer';
-import cfgVo2Rule, { 
-  CfgVo2RuleState } from 'app/entities/cfgvo2rule/CfgVo2Rule.reducer';
+
+import news_categories, {
+  News_categoriesState
+} from 'app/entities/news_categories/news_categories.reducer';
+
+import news, {
+  NewsState
+} from 'app/entities/news/news.reducer';
+
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -39,9 +42,8 @@ export interface IRootState {
   readonly settings: SettingsState;
   readonly post: PostState;
   readonly category: CategoryState;
-  readonly cfgLevelInfo: CfgLevelInfoState;
-  readonly cfgVo2ChallengeRule: CfgVo2ChallengeRuleState;
-  readonly cfgVo2Rule: CfgVo2RuleState;
+  readonly news_categories: News_categoriesState;
+  readonly news: NewsState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -58,9 +60,8 @@ const rootReducer = combineReducers<IRootState>({
   settings,
   post,
   category,
-  cfgLevelInfo,
-  cfgVo2ChallengeRule,
-  cfgVo2Rule,
+  news_categories,
+  news,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

@@ -115,7 +115,7 @@ export default (state: CategoryState = initialState, action): CategoryState => {
 
 const apiUrl = 'api/categories';
 
-/ Actions/
+// Actions
 
 export const getEntities: ICrudGetAllAction<ICategory> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
