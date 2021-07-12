@@ -21,7 +21,15 @@ import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './challenge.reducer';
 import moment from 'moment';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import {
+  APP_DATE_FORMAT,
+  APP_LOCAL_DATE_FORMAT,
+  APP_LOCAL_DATETIME_FORMAT_Z,
+  APP_TIMESTAMP_FORMAT,
+  WfProcessGroup,
+} from 'app/config/constants';
+import { getEntities as getActions } from '../workflow/wf-action/wf-action-reducer';
+import { WfAction } from 'app/modules/workflow/wf-action/wf-action';
 
 export interface IChallengeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -245,6 +253,15 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               </AvGroup>
             </Col>
           </Row>
+
+          <hr color="lightblue" style={{ height: '3px' }} />
+          <WfAction
+            contentId={+props.match.params.id}
+            groupId={WfProcessGroup.CHALLENGE}
+            wfActionList={props.wfActionList}
+            loading={props.wfActionLoading}
+            getEntities={props.getActions}
+          />
         </AvForm>
         <Button tag={Link} to="/challenges" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Trở lại</span>
@@ -266,11 +283,13 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   );
 };
 
-const mapStateToProps = ({ challenge }: IRootState) => ({
+const mapStateToProps = ({ challenge, wfAction }: IRootState) => ({
   challengeEntity: challenge.entity,
+  wfActionList: wfAction.entities,
+  wfActionLoading: wfAction.loading,
 });
 
-const mapDispatchToProps = { getEntity };
+const mapDispatchToProps = { getEntity, getActions };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
