@@ -43,3 +43,5 @@ export type ICrudGetAllWithCriteriaAction<T> = (
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
+
+export type ICrudGetWithParam<T> = (searchValue?: any) => IPayload<T> | ((dispatch: any) => IPayload<T>);

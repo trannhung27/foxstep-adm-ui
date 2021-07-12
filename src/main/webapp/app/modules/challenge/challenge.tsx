@@ -255,8 +255,8 @@ export const Challenge = (props: IChallengeProps) => {
                   <td>{challenge.title}</td>
                   <td>{challenge.sport.name}</td>
                   <td>
-                    {challenge.challengeType === 0 && <div>Đang diễn ra</div>}
-                    {challenge.challengeType === 1 && <div>Sắp diễn ra</div>}
+                    {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
+                    {challenge.challengeType === 1 && <div>Cá nhân</div>}
                   </td>
                   <td>{moment.utc(challenge.dateStart).format(APP_TIMESTAMP_FORMAT)}</td>
                   <td>{moment.utc(challenge.dateFinish).format(APP_TIMESTAMP_FORMAT)}</td>
@@ -274,15 +274,6 @@ export const Challenge = (props: IChallengeProps) => {
                         data-cy="entityEditButton"
                       >
                         <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={`${match.url}/${challenge.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xóa</span>
                       </Button>
                     </div>
                   </td>

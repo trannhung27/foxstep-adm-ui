@@ -1,4 +1,5 @@
 export interface IChallengeValidity {
+  id?: number;
   checkTime?: number;
   avgPaceFrom?: number;
   avgPaceTo?: number;
