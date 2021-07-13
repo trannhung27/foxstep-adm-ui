@@ -57,7 +57,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   const [teamList, setTeamList] = useState([{ name: '' }]);
   const { state } = props.location;
-  const [challengeDistanceList, setChallengeDistanceList] = useState([{ distance: '', isDisabled: false }, {}, {}, {}, {}]);
+  const [challengeDistanceList, setChallengeDistanceList] = useState([
+    { distance: 0, isDisabled: false },
+    { distance: 0, isDisabled: true },
+    { distance: 0, isDisabled: true },
+    { distance: 0, isDisabled: true },
+    { distance: 0, isDisabled: true },
+  ]);
   const [distanceInputCount, setDistanceInputCount] = useState(0);
 
   class RedAsterisk extends React.Component {
@@ -78,22 +84,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const [challengeValidity, setChallengeValidity] = useState({
-    checkTime: 0,
-    avgPaceFrom: 0,
-    avgPaceTo: 0,
-    minDistance: 0,
-    elevationGain: 0,
-    avgCadenceFrom: 0,
-    avgCadenceTo: 0,
-    gps: 0,
-    completionCriteria: 0,
-    rankCriteria1: 0,
-    rankCriteria2: 0,
-    rankCriteria3: 0,
-  });
-
   const [avgPace, setAvgPace] = useState({ from: 0, to: 0, isDisabled: false });
+  const [minDistance, setMinDistance] = useState({ value: 0, isDisabled: false });
+  const [elevationGain, setElevationGain] = useState({ value: 0, isDisabled: false });
+  const [avgCadence, setAvgCadence] = useState({ from: 0, to: 0, isDisabled: false });
   // const
 
   const onEditorStateChange = editor => {
@@ -123,7 +117,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const handleChallengeDistance = (e, i) => {
     const list = [...challengeDistanceList];
     list[i] = { distance: e.target.value, isDisabled: false };
-    if (i < 4) list[i + 1] = { distance: '', isDisabled: false };
+    if (i < 4) list[i + 1] = { distance: 0, isDisabled: false };
     setChallengeDistanceList(list);
   };
   const handleInputChange = (e, index) => {
@@ -463,7 +457,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <option>Swim</option>
                           </AvField>
                           <AvField hidden name="sport.id" type="text" value="1"></AvField>
-                          <AvField hidden name="challengeValidity.id" value={challengeEntity.id} />
+                          {isNew ? null : <AvField hidden name="challengeValidity.id" value={challengeEntity.id} />}
                         </AvGroup>
                       </Col>
                     </Row>
@@ -481,21 +475,54 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           Hạng mục {i + 1}:<RedAsterisk />
                         </Label>
 
-                        <AvInput
-                          name={'challengeDistance[' + i + '].distance'}
-                          value={challengeDistanceList[i] ? challengeDistanceList[i]['value'] : 0}
-                          onChange={e => {
-                            handleChallengeDistance(e, i);
-                          }}
-                        />
-                        <AvField type="input" hidden name={'challengeDistance[' + i + '].orderId'} value={i + 1} />
-                        {distanceValue[i] && Number(distanceValue[i].value) > 0 ? (
+                        <AvGroup className="form-group form-inline">
+                          <Label style={{ marginRight: '10px' }}>
+                            Tên thử thách <RedAsterisk />
+                          </Label>
+                          <AvField
+                            type="text"
+                            name={'title123' + i}
+                            onChange={e => {
+                              handleChallengeDistance(e, i);
+                            }}
+                            validate={{
+                              required: { value: true, errorMessage: 'This field is required.' },
+                              min: {
+                                value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
+                                errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
+                              },
+                            }}
+                          />
+                        </AvGroup>
+                        <AvGroup>
+                          <AvInput
+                            style={{ width: '250px' }}
+                            name={'distanceInput' + i}
+                            disabled={challengeDistanceList[i].isDisabled}
+                            onChange={e => {
+                              handleChallengeDistance(e, i);
+                            }}
+                            validate={{
+                              required: { value: true, errorMessage: 'Value must be greater than previous one' },
+                              min: {
+                                value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
+                                errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
+                              },
+                              minLength: {
+                                value: 5,
+                                errorMessage: 'This field is required to be at least 5 characters.',
+                              },
+                            }}
+                          />
+                        </AvGroup>
+
+                        {challengeDistanceList[i] && Number(challengeDistanceList[i].distance) > 0 ? (
                           <AvGroup>
                             <AvField
                               type="input"
                               hidden
                               name={'challengeDistance[' + i + '].distance'}
-                              value={distanceValue[i] ? distanceValue[i]['value'] : 0}
+                              value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
                             />
                             <AvField type="input" hidden name={'challengeDistance[' + i + '].orderId'} value={i + 1} />
                           </AvGroup>
@@ -522,6 +549,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         <AvGroup inline name="validation_list" className="form-group form-inline">
                           <input
                             type="checkbox"
+                            checked={!avgPace.isDisabled}
                             className="mr-2"
                             onChange={() => setAvgPace({ from: 0, to: 0, isDisabled: !avgPace.isDisabled })}
                           />
@@ -578,16 +606,21 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup className="form-group form-inline">
-                          <input type="checkbox" className="mr-2" />
+                          <input
+                            type="checkbox"
+                            className="mr-2"
+                            checked={!minDistance.isDisabled}
+                            onChange={() => setMinDistance({ value: 0, isDisabled: !minDistance.isDisabled })}
+                          />
                           <AvField
                             label="Bài chạy có quãng đường tối thiểu &nbsp; &nbsp;"
                             id="challenge-validity_min_distance"
-                            // defaultValue="2.0"
                             data-cy="challengeValidity.minDistance"
                             type="number"
+                            disabled={minDistance.isDisabled}
                             step="0.1"
                             min="1"
-                            max="200"
+                            max="50"
                             className="form-control"
                             name="challengeValidity.minDistance"
                           />
@@ -600,16 +633,21 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup className="form-group form-inline">
-                          <input type="checkbox" className="mr-2" />
+                          <input
+                            type="checkbox"
+                            className="mr-2"
+                            checked={!elevationGain.isDisabled}
+                            onChange={() => setElevationGain({ value: 0, isDisabled: !elevationGain.isDisabled })}
+                          />
                           <AvField
                             label="Bài chạy có độ cao đạt được (elevation gain) tối thiểu: &nbsp; &nbsp;"
                             id="challenge-validity_elevation_gain"
-                            // defaultValue="2.0"
                             data-cy="challengeValidity.elevationGain"
+                            disabled={elevationGain.isDisabled}
                             type="number"
                             step="0.1"
                             min="1"
-                            max="20"
+                            max="50"
                             className="form-control"
                             name="challengeValidity.elevationGain"
                           />
@@ -622,13 +660,19 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup className="form-group form-inline">
-                          <input type="checkbox" className="mr-2" />
+                          <input
+                            type="checkbox"
+                            className="mr-2"
+                            checked={!avgCadence.isDisabled}
+                            onChange={() => setAvgCadence({ from: 0, to: 0, isDisabled: !avgCadence.isDisabled })}
+                          />
                           <AvField
-                            label="Bài chạy có nhịp chân trung bình(avg pace) &nbsp; &nbsp;  Từ &nbsp;"
+                            label="Bài chạy có nhịp chân trung bình(avg cadence) &nbsp; &nbsp;  Từ &nbsp;"
                             id="challenge-validity_avgCadenceFrom"
                             // defaultValue="50"
                             data-cy="validity.avgCadenceFrom"
                             type="number"
+                            disabled={avgCadence.isDisabled}
                             step="1"
                             min="10"
                             max="300"
@@ -638,7 +682,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <AvField
                             label="&nbsp; - Đến &nbsp; "
                             id="challenge-validity_avg_cadence_to"
-                            // defaultValue="200"
+                            disabled={avgCadence.isDisabled}
                             data-cy="challenge_validity.avg_cadence_to"
                             type="number"
                             step="1"
@@ -679,7 +723,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input type="checkbox" disabled defaultChecked={criteria !== 3} className="mr-1" />
                           <AvField
                             type="string"
-                            name={'rankCriteria' + (index + 1)}
+                            name={'challengeValidity.rankCriteria' + (index + 1)}
                             disabled
                             style={{ width: '250px' }}
                             value={
@@ -795,13 +839,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <AvGroup className="form-group">
                         <Row>
                           <Col xs="12" sm="2">
-                            <Label for="team_size">
+                            <Label>
                               Giới hạn thành viên:
                               <RedAsterisk />
                             </Label>
                           </Col>
                           <Col xs="12" sm="2">
-                            <AvInput style={{ paddingLeft: '6px' }} type="number" name="team_size" step="1" min="1" />
+                            <AvInput style={{ paddingLeft: '6px' }} type="number" name="numPerTeam" step="1" min="1" />
                           </Col>
                         </Row>
 
