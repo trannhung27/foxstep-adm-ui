@@ -29,6 +29,7 @@ import CreatableSelect from 'react-select/creatable';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { DownOutlined, DownSquareOutlined } from '@ant-design/icons';
+import challenge from './challenge';
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
@@ -197,6 +198,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     values.dateRegisDeadline = convertDateTimeToServer(values.dateRegisDeadline);
     values.dateFinish = convertDateTimeToServer(values.dateFinish);
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+    // let availableDistance = 0;
+    // values.challengeDistance.splice(availableDistance,values.challengeDistance.length - availableDistance -1);
     if (values.challengeValidity.checkTime === true) {
       values.challengeValidity.checkTime = 0;
     } else values.challengeValidity.checkTime = 1;
@@ -482,12 +485,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             </Label>
                             <AvField
                               type="number"
-                              name={'challengeDistance[' + i + '].distance'}
-                              disabled={challengeDistanceList[i].isDisabled}
+                              name={'distanceInput' + i}
+                              disabled={false}
+                              // disabled={challengeDistanceList[i].isDisabled}
                               onChange={e => {
                                 handleChallengeDistance(e, i);
                               }}
                               validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage: 'Không được để trống',
+                                },
                                 min: {
                                   value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
                                   errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
@@ -500,7 +508,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               <AvField
                                 type="input"
                                 hidden
-                                name={'distanceInput' + i}
+                                name={'challengeDistance[' + i + '].distance'}
                                 value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
                               />
                               <AvField type="input" hidden name={'challengeDistance[' + i + '].orderId'} value={i + 1} />
@@ -702,26 +710,28 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
                     {validityCriteria.map((criteria, index) => (
                       <Row className="justify-content-right" key={index}>
-                        <AvGroup className="form-group form-inline">
-                          <input type="checkbox" disabled defaultChecked={criteria !== 3} className="mr-1" />
-                          <AvField
-                            type="string"
-                            name={'challengeValidity.rankCriteria' + (index + 1)}
-                            disabled
-                            style={{ width: '250px' }}
-                            value={
-                              criteria === 1
-                                ? 'Số km thực hiện nhiều nhất'
-                                : criteria === 2
-                                ? 'Avg Pace thấp nhất'
-                                : criteria === 3
-                                ? 'Avg HR thấp nhất'
-                                : ''
-                            }
-                          />
-                          <AvInput hidden name={'challengeValidity.rankCriteria' + (index + 1)} value={criteria} />
-                          {index !== 2 ? <Button onClick={swapPosition}> Đổi </Button> : null}
-                        </AvGroup>
+                        <Col xs="12" sm="7">
+                          <AvGroup className="form-group form-inline">
+                            <input type="checkbox" disabled defaultChecked={criteria !== 3} className="mr-1" />
+                            <AvField
+                              type="string"
+                              name={'challengeValidity.rankCriteria' + (index + 1)}
+                              disabled
+                              style={{ width: '250px' }}
+                              value={
+                                criteria === 1
+                                  ? 'Số km thực hiện nhiều nhất'
+                                  : criteria === 2
+                                  ? 'Avg Pace thấp nhất'
+                                  : criteria === 3
+                                  ? 'Avg HR thấp nhất'
+                                  : ''
+                              }
+                            />
+                            <AvInput hidden name={'challengeValidity.rankCriteria' + (index + 1)} value={criteria} />
+                            {index !== 2 ? <Button onClick={swapPosition}> Đổi </Button> : null}
+                          </AvGroup>
+                        </Col>
                       </Row>
                     ))}
                   </CardBody>
