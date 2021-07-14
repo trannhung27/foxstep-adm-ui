@@ -20,6 +20,7 @@ import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './challenge.reducer';
+import { getEntity as getUser } from 'app/modules/users/users.reducer';
 import moment from 'moment';
 import {
   APP_DATE_FORMAT,
@@ -30,15 +31,17 @@ import {
 } from 'app/config/constants';
 import { getEntities as getActions } from '../workflow/wf-action/wf-action-reducer';
 import { WfAction } from 'app/modules/workflow/wf-action/wf-action';
+import { Users } from 'app/modules/users/users';
 
 export interface IChallengeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeDetail = (props: IChallengeDetailProps) => {
   useEffect(() => {
     props.getEntity(props.match.params.id);
+    props.getUser(challengeEntity.userIdCreated);
   }, []);
 
-  const { challengeEntity } = props;
+  const { challengeEntity, userEntity } = props;
   return (
     <Row>
       <Col md="12">
@@ -95,7 +98,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Cá nhân tổ chức: &nbsp; &nbsp;
                 </Label>
-                <div>{challengeEntity.userIdCreated}</div>
+                <div>{userEntity.fullName}</div>
               </AvGroup>
             </Col>
 
@@ -283,13 +286,14 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   );
 };
 
-const mapStateToProps = ({ challenge, wfAction }: IRootState) => ({
+const mapStateToProps = ({ challenge, wfAction, users }: IRootState) => ({
   challengeEntity: challenge.entity,
   wfActionList: wfAction.entities,
   wfActionLoading: wfAction.loading,
+  userEntity: users.entity,
 });
 
-const mapDispatchToProps = { getEntity, getActions };
+const mapDispatchToProps = { getEntity, getActions, getUser };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

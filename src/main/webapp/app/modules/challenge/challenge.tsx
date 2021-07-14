@@ -15,6 +15,7 @@ import { height } from '@fortawesome/free-solid-svg-icons/faCogs';
 import moment from 'moment';
 import DateTime from 'react-datetime';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import dayjs from 'dayjs';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -127,11 +128,18 @@ export const Challenge = (props: IChallengeProps) => {
               type="select"
               name="status"
               label="Trạng thái"
-              value={criteriaState['status.equals']}
-              onChange={event => (criteriaState['status.equals'] = event.target.value)}
+              onChange={event => {
+                if (event.target.value === 0) {
+                  criteriaState['status.equals'] = 0;
+                  criteriaState['dateStart.lessThanOrEqual'] = moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss.sss[Z]');
+                } else if (event.target.value === 1) {
+                  criteriaState['status.equals'] = 1;
+                  criteriaState['dateFinish.lessThanOrEqual'] = moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss.sss[Z]');
+                }
+              }}
             >
               <option value="" key="0">
-                --Chọn trạng thái--
+                Tất cả
               </option>
               <option value="0">Không hoạt động</option>
               <option value="1">Đang hoạt động</option>
@@ -153,7 +161,7 @@ export const Challenge = (props: IChallengeProps) => {
               onChange={event => (criteriaState['challengeType.equals'] = event.target.value)}
             >
               <option value="" key="0">
-                --Chọn loại--
+                Tất cả
               </option>
               <option value="1">Cá nhân</option>
               <option value="0">Ban tổ chức</option>
@@ -229,14 +237,12 @@ export const Challenge = (props: IChallengeProps) => {
                 <th className="hand" onClick={sort('challenge_type')}>
                   Loại thử thách <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand">Trạng thái</th>
                 <th className="hand" onClick={sort('dateStart')}>
-                  Date Start <FontAwesomeIcon icon="sort" />
+                  Ngày bắt đầu <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('date_finish')}>
-                  Date Finish <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('num_of_participant')}>
-                  Num Of Participant <FontAwesomeIcon icon="sort" />
+                  Ngày kết thúc <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand">
                   <div></div>
@@ -258,9 +264,21 @@ export const Challenge = (props: IChallengeProps) => {
                     {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
                     {challenge.challengeType === 1 && <div>Cá nhân</div>}
                   </td>
+                  <td>
+                    {challenge.status === 1 && Date.parse(challenge.dateStart) < Date.now() ? (
+                      <div>Đang diễn ra</div>
+                    ) : (challenge.status === 1 && Date.parse(challenge.dateFinish) < Date.now()) ||
+                      Date.parse(challenge.dateFinish) < Date.now() ||
+                      challenge.status === 2 ? (
+                      <div>Đã kết thúc</div>
+                    ) : challenge.status === -1 && Date.now() - 2592000 > Date.parse(challenge.dateUpdated) ? (
+                      <div>Đã huỷ</div>
+                    ) : (
+                      <div></div>
+                    )}
+                  </td>
                   <td>{moment.utc(challenge.dateStart).format(APP_TIMESTAMP_FORMAT)}</td>
                   <td>{moment.utc(challenge.dateFinish).format(APP_TIMESTAMP_FORMAT)}</td>
-                  <td>{challenge.numOfParticipant}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">

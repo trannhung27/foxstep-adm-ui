@@ -168,12 +168,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   useEffect(() => {
     if (challengeEntity.content)
       setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(challengeEntity.content))));
-    if (challengeEntity.challengeValidity)
-      setAvgPace({
-        from: challengeEntity.challengeValidity.avgPaceFrom,
-        to: challengeEntity.challengeValidity.avgPaceTo,
-        isDisabled: false,
+
+    if (challengeEntity.challengeDistance) {
+      const list = [{ distance: 0, isDisabled: false }];
+      challengeEntity.challengeDistance.map((challengeDistance, i) => {
+        list[i] = { distance: challengeDistance.distance, isDisabled: false };
       });
+      setChallengeDistanceList(list);
+    }
     // if (challengeEntity.challengeDistance) {
     //   setChallengeDistanceList(challengeEntity.challengeDistance);
     //   challengeEntity.challengeDistance.map((distance, index) => {
@@ -456,7 +458,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         <AvGroup>
                           <AvField id="challenge_sport" type="select" name="sport.name" label="Bộ môn">
                             <option>Run</option>
-                            <option>Swim</option>
+                            <option>Ride</option>
                           </AvField>
                           <AvField hidden name="sport.id" type="text" value="1"></AvField>
                           {isNew ? null : <AvField hidden name="challengeValidity.id" value={challengeEntity.id} />}
@@ -491,9 +493,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               onChange={e => {
                                 handleChallengeDistance(e, i);
                               }}
+                              value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
                               validate={{
                                 required: {
-                                  value: true,
+                                  value: i === 0,
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
