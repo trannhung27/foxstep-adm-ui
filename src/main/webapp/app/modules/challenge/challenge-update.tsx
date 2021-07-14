@@ -28,9 +28,7 @@ import {
 import CreatableSelect from 'react-select/creatable';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-// import AvSelect from '@availity/reactstrap-validation-select';
-// import '@availity/reactstrap-validation-select/styles.scss';
-
+import { DownOutlined, DownSquareOutlined } from '@ant-design/icons';
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
@@ -44,7 +42,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   const [isGps, setIsGps] = useState(0);
 
-  const setGps = () => setIsGps(1);
+  const setGps = () => {
+    if (isGps === 0) {
+      setIsGps(1);
+    } else setIsGps(0);
+  };
 
   const toggle = () => setIsOpen(!isOpen);
   const toggle2 = () => setIsOpen2(!isOpen2);
@@ -261,10 +263,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   </Button>
                 </Col>
               </Row>
-              <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
-              <Button color="primary" onClick={toggle} style={{ marginBottom: '1rem' }}>
-                <FontAwesomeIcon icon="plus" swapOpacity />
-              </Button>
+
+              <Row>
+                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
+                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle} />
+              </Row>
               <Collapse isOpen={isOpen}>
                 <Card>
                   <CardBody>
@@ -438,18 +441,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </Card>
               </Collapse>
 
-              <Row></Row>
-              <div>
+              <Row>
                 <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>2. Cài đặt tiêu chí</h4>
-              </div>
-
-              <Button color="primary" onClick={toggle2} style={{ marginBottom: '1rem' }}>
-                <FontAwesomeIcon icon="plus" />
-              </Button>
+                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle2} />
+              </Row>
               <Collapse isOpen={isOpen2}>
                 <Card>
                   <CardBody>
-                    <Row>
+                    <Row className="justify-content-left">
                       <Col xs="12" sm="6">
                         <AvGroup>
                           <AvField id="challenge_sport" type="select" name="sport.name" label="Bộ môn">
@@ -466,69 +465,50 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <AvRadio label="Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value="2" />
                     </AvRadioGroup>
 
-                    <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>
-                      Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km){' '}
-                    </text>
-                    {challengeDistanceList.map((distance, i) => (
-                      <Col xs="12" sm="4" key={i}>
-                        <Label style={{ marginRight: '10px' }} id="challenge-ChallengeDistance">
-                          Hạng mục {i + 1}:<RedAsterisk />
-                        </Label>
-
-                        <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }}>
-                            Tên thử thách <RedAsterisk />
-                          </Label>
-                          <AvField
-                            type="text"
-                            name={'title123' + i}
-                            onChange={e => {
-                              handleChallengeDistance(e, i);
-                            }}
-                            validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
-                              min: {
-                                value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
-                                errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
-                              },
-                            }}
-                          />
-                        </AvGroup>
-                        <AvGroup>
-                          <AvInput
-                            style={{ width: '250px' }}
-                            name={'distanceInput' + i}
-                            disabled={challengeDistanceList[i].isDisabled}
-                            onChange={e => {
-                              handleChallengeDistance(e, i);
-                            }}
-                            validate={{
-                              required: { value: true, errorMessage: 'Value must be greater than previous one' },
-                              min: {
-                                value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
-                                errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
-                              },
-                              minLength: {
-                                value: 5,
-                                errorMessage: 'This field is required to be at least 5 characters.',
-                              },
-                            }}
-                          />
-                        </AvGroup>
-
-                        {challengeDistanceList[i] && Number(challengeDistanceList[i].distance) > 0 ? (
-                          <AvGroup>
-                            <AvField
-                              type="input"
-                              hidden
-                              name={'challengeDistance[' + i + '].distance'}
-                              value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
-                            />
-                            <AvField type="input" hidden name={'challengeDistance[' + i + '].orderId'} value={i + 1} />
-                          </AvGroup>
-                        ) : null}
+                    <Row>
+                      <Col xs="12" sm="6">
+                        <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>
+                          Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km){' '}
+                        </text>
                       </Col>
-                    ))}
+                    </Row>
+
+                    <Row>
+                      {challengeDistanceList.map((distance, i) => (
+                        <Col xs="12" sm="6" key={i}>
+                          <AvGroup className="form-group">
+                            <Label style={{ marginRight: '10px' }}>
+                              Hạng mục {i + 1}:<RedAsterisk />
+                            </Label>
+                            <AvField
+                              type="number"
+                              name={'challengeDistance[' + i + '].distance'}
+                              disabled={challengeDistanceList[i].isDisabled}
+                              onChange={e => {
+                                handleChallengeDistance(e, i);
+                              }}
+                              validate={{
+                                min: {
+                                  value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
+                                  errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
+                                },
+                              }}
+                            />
+                          </AvGroup>
+                          {challengeDistanceList[i] && Number(challengeDistanceList[i].distance) > 0 ? (
+                            <AvGroup>
+                              <AvField
+                                type="input"
+                                hidden
+                                name={'distanceInput' + i}
+                                value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
+                              />
+                              <AvField type="input" hidden name={'challengeDistance[' + i + '].orderId'} value={i + 1} />
+                            </AvGroup>
+                          ) : null}
+                        </Col>
+                      ))}
+                    </Row>
 
                     <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ</text>
                     <Row></Row>
@@ -538,9 +518,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
                     <AvField
                       type="checkbox"
+                      disabled
+                      check
                       name="challengeValidity.checkTime"
                       label=" Thời gian bắt đầu diễn ra thử thách từ thời gian bắt đầu tới thời gian kết thúc"
-                      value={Number(0)}
+                      value={true}
                     />
 
                     <AvGroup></AvGroup>
@@ -549,7 +531,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         <AvGroup inline name="validation_list" className="form-group form-inline">
                           <input
                             type="checkbox"
-                            checked={!avgPace.isDisabled}
+                            checked
+                            disabled
                             className="mr-2"
                             onChange={() => setAvgPace({ from: 0, to: 0, isDisabled: !avgPace.isDisabled })}
                           />
@@ -745,13 +728,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </Card>
               </Collapse>
 
-              <Row></Row>
-              <div>
+              <Row>
                 <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>3. Cài đặt thành viên</h4>
-              </div>
-              <Button color="primary" onClick={toggle3} style={{ marginBottom: '1rem' }}>
-                <FontAwesomeIcon icon="plus" />
-              </Button>
+                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle3} />
+              </Row>
               <Collapse isOpen={isOpen3}>
                 <Card>
                   <CardBody>
