@@ -15,8 +15,7 @@ import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 export interface IChallengeUserDialogProps extends StateProps, DispatchProps {
   showModal: boolean;
   onClose: () => void;
-  onChangeInput: (event) => void;
-  choose: (email: string) => void;
+  choose: (email: string, userId: number) => void;
 }
 
 export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
@@ -107,7 +106,7 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
                       <Button
                         // tag={Link}
                         // to={{ pathname: `/challenges/new`, state: { email: customer.email, userId: customer.id } }}
-                        onClick={() => props.choose(customer.email)}
+                        onClick={() => props.choose(customer.email, customer.id)}
                         color="info"
                         size="sm"
                         data-cy="entityDetailsButton"

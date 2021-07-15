@@ -47,7 +47,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [showModal, setShowModal] = useState(false);
   const [isGps, setIsGps] = useState(0);
 
-  const [personal, setPersonal] = useState('');
+  const [userIdCreated, setUserIdCreated] = useState(0);
   const [emailUser, setEmailUser] = useState('');
   const setGps = () => {
     if (isGps === 0) {
@@ -210,14 +210,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
         onClose={() => {
           setShowModal(false);
         }}
-        onChangeInput={event => setPersonal(event.target.value)}
         showModal={showModal}
         customer={props.customer}
         updateSuccess={props.updateWfSuccess}
         updateWorkflow={props.updateWorkflow}
         getCustomer={props.getCustomer}
-        choose={email => {
+        choose={(email, userId) => {
           setEmailUser(email);
+          setUserIdCreated(userId);
         }}
       />
       <Row className="justify-content-right">
@@ -280,7 +280,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         <AvGroup className="form-group form-inline">
                           <Label style={{ marginRight: '10px' }}>Cá nhân tổ chức</Label>
                           <AvField id="challenge-userIdCreated" data-cy="challenge_type" type="string" name="userEmail" value={emailUser} />
-                          <AvInput hidden name="userIdCreated" value={state ? state['userId'] : ''} />
+                          <AvInput hidden name="userIdCreated" value={userIdCreated} />
                           <Button onClick={() => setShowModal(true)} replace color="primary">
                             <span className="d-none d-md-inline">Tìm</span>
                           </Button>
@@ -605,8 +605,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             data-cy="challengeValidity.minDistance"
                             type="number"
                             disabled={minDistance.isDisabled}
+                            value={minDistance.value}
                             step="0.1"
-                            min="1"
+                            min="0"
                             max="50"
                             className="form-control"
                             name="challengeValidity.minDistance"
@@ -635,6 +636,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             step="0.1"
                             min="1"
                             max="50"
+                            value={elevationGain.value}
                             className="form-control"
                             name="challengeValidity.elevationGain"
                           />
@@ -660,6 +662,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             data-cy="validity.avgCadenceFrom"
                             type="number"
                             disabled={avgCadence.isDisabled}
+                            value={avgCadence.from}
                             step="1"
                             min="10"
                             max="300"
@@ -671,6 +674,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             id="challenge-validity_avg_cadence_to"
                             disabled={avgCadence.isDisabled}
                             data-cy="challenge_validity.avg_cadence_to"
+                            value={avgCadence.from}
                             type="number"
                             step="1"
                             min="10"
