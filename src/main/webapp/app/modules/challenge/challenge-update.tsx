@@ -19,6 +19,7 @@ import { IRootState } from 'app/shared/reducers';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { getEntity, updateEntity, createEntity, reset } from './challenge.reducer';
+import { getEntity as getUser } from 'app/modules/users/users.reducer';
 import {
   convertDateTimeFromServer,
   convertDateTimeToServer,
@@ -29,20 +30,25 @@ import CreatableSelect from 'react-select/creatable';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { DownOutlined, DownSquareOutlined } from '@ant-design/icons';
-import challenge from './challenge';
+import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
+import { getCustomer } from '../users/users.reducer';
+import { ChallengeUserDialog } from './challenge-search-user-dialog';
+
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [isNew] = useState(!props.match.params || !props.match.params.id);
-
   const { challengeEntity, loading, updating } = props;
 
   const [isOpen, setIsOpen] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
   const [isOpen3, setIsOpen3] = useState(true);
 
+  const [showModal, setShowModal] = useState(false);
   const [isGps, setIsGps] = useState(0);
 
+  const [personal, setPersonal] = useState('');
+  const [emailUser, setEmailUser] = useState('');
   const setGps = () => {
     if (isGps === 0) {
       setIsGps(1);
@@ -86,7 +92,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [validityCriteria, setValidityCriteria] = useState([1, 2, 3]);
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
   const [avgPace, setAvgPace] = useState({ from: 0, to: 0, isDisabled: false });
   const [minDistance, setMinDistance] = useState({ value: 0, isDisabled: false });
   const [elevationGain, setElevationGain] = useState({ value: 0, isDisabled: false });
@@ -96,26 +101,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const onEditorStateChange = editor => {
     setEditorState(editor);
   };
-
-  // const handleChange = (newValue: any, index: any) => {
-  //   const valueList = [...distanceValue];
-  //   // console.log(newValue);
-  //   valueList[index] = newValue;
-  //   setDistanceValue(valueList);
-  //   const list = [...challengeDistanceList];
-  //   list[index]['name'] = newValue;
-  //   setChallengeDistanceList(list);
-  //   setDistanceInputCount(Number(index) + 1);
-  // };
-  // const handleCreate = (inputValue: any) => {
-  //   const options = defaultOptions;
-  //   const newOption = { label: inputValue, value: inputValue };
-  //   setDefaultOptions([...options, newOption]);
-  //   // const valueList = [...distanceValue];
-  //   // const length = valueList.length;
-  //   // valueList[length-1] = newOption;
-  //   // setDistanceValue(valueList);
-  // };
 
   const handleChallengeDistance = (e, i) => {
     const list = [...challengeDistanceList];
@@ -221,6 +206,20 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   return (
     <div>
+      <ChallengeUserDialog
+        onClose={() => {
+          setShowModal(false);
+        }}
+        onChangeInput={event => setPersonal(event.target.value)}
+        showModal={showModal}
+        customer={props.customer}
+        updateSuccess={props.updateWfSuccess}
+        updateWorkflow={props.updateWorkflow}
+        getCustomer={props.getCustomer}
+        choose={email => {
+          setEmailUser(email);
+        }}
+      />
       <Row className="justify-content-right">
         <Col md="6">
           {!isNew ? (
@@ -280,15 +279,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <Col xs="12" sm="6">
                         <AvGroup className="form-group form-inline">
                           <Label style={{ marginRight: '10px' }}>Cá nhân tổ chức</Label>
-                          <AvField
-                            id="challenge-userIdCreated"
-                            data-cy="challenge_type"
-                            type="string"
-                            name="userEmail"
-                            value={state ? state['email'] : ''}
-                          />
+                          <AvField id="challenge-userIdCreated" data-cy="challenge_type" type="string" name="userEmail" value={emailUser} />
                           <AvInput hidden name="userIdCreated" value={state ? state['userId'] : ''} />
-                          <Button tag={Link} to={`/challenges/${challengeEntity.id}/searchuser`} replace color="primary">
+                          <Button onClick={() => setShowModal(true)} replace color="primary">
                             <span className="d-none d-md-inline">Tìm</span>
                           </Button>
                         </AvGroup>
@@ -895,6 +888,8 @@ const mapStateToProps = (storeState: IRootState) => ({
   loading: storeState.challenge.loading,
   updating: storeState.challenge.updating,
   updateSuccess: storeState.challenge.updateSuccess,
+  customer: storeState.users.entity,
+  updateWfSuccess: storeState.wfRequest.updateSuccess,
 });
 
 const mapDispatchToProps = {
@@ -902,6 +897,9 @@ const mapDispatchToProps = {
   updateEntity,
   createEntity,
   reset,
+  getUser,
+  updateWorkflow,
+  getCustomer,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

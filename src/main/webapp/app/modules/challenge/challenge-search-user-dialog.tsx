@@ -7,13 +7,16 @@ import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstr
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities as getUsers, getCustomer } from '../users/users.reducer';
+import { getCustomer } from '../users/users.reducer';
 import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
-export interface IChallengeUserDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {
+export interface IChallengeUserDialogProps extends StateProps, DispatchProps {
   showModal: boolean;
+  onClose: () => void;
+  onChangeInput: (event) => void;
+  choose: (email: string) => void;
 }
 
 export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
@@ -22,9 +25,11 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
   }, []);
 
   const handleClose = () => {
-    props.history.push('/challenges/new', { email: customer.email, userId: customer.id });
+    // props.history.push('/challenges/new', { email: customer.email, userId: customer.id });
+    props.onClose();
   };
 
+  const [showModalIn, setShowModalIn] = useState(props.showModal);
   const findACustomer = (value: string) => {
     props.getCustomer(value);
   };
@@ -49,15 +54,7 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
   // }
 
   return (
-    <Modal
-      size="lg"
-      toggle={handleClose}
-      isOpen
-      // isOpen={props.showModal}
-      backdrop="static"
-      id="challenge-searchuser"
-      autoFocus={false}
-    >
+    <Modal size="lg" toggle={handleClose} isOpen={props.showModal} backdrop="static" id="challenge-searchuser" autoFocus={false}>
       <ModalHeader toggle={handleClose} data-cy="challengeUserDialogHeading">
         Tìm khách hàng
       </ModalHeader>
@@ -108,8 +105,9 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button
-                        tag={Link}
-                        to={{ pathname: `/challenges/new`, state: { email: customer.email, userId: customer.id } }}
+                        // tag={Link}
+                        // to={{ pathname: `/challenges/new`, state: { email: customer.email, userId: customer.id } }}
+                        onClick={() => props.choose(customer.email)}
                         color="info"
                         size="sm"
                         data-cy="entityDetailsButton"
@@ -139,12 +137,11 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
 };
 
 const mapStateToProps = ({ users, wfRequest }: IRootState) => ({
-  userEntities: users.entities,
   customer: users.entity,
   updateSuccess: wfRequest.updateSuccess,
 });
 
-const mapDispatchToProps = { getUsers, updateWorkflow, getCustomer };
+const mapDispatchToProps = { updateWorkflow, getCustomer };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
