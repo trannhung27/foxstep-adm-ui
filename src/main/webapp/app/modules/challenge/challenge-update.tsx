@@ -292,11 +292,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
                       <Col xs="12" sm="6">
                         <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />
-                        <AvGroup className="form-group form-inline">
-                          <Label>
-                            Ảnh đại diện TT: <RedAsterisk />
-                          </Label>
-                        </AvGroup>
+                        <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
                       </Col>
                     </Row>
 
