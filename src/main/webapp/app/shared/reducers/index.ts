@@ -24,6 +24,7 @@ import wfProcess, { WfProcessState } from 'app/modules/workflow/wf-process/wf-pr
 import wfActionType, { WfActionTypeState } from 'app/modules/workflow/wf-action-type/wf-action-type.reducer';
 import wfRequest, { WfRequestState } from 'app/modules/workflow/workflow-request.reducer';
 import wfAction, { WfActionState } from 'app/modules/workflow/wf-action/wf-action-reducer';
+import uploadImage, { UploadImageState } from 'app/modules/upload-image/upload-image-reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -49,6 +50,7 @@ export interface IRootState {
   readonly wfActionType: WfActionTypeState;
   readonly wfRequest: WfRequestState;
   readonly wfAction: WfActionState;
+  readonly uploadImage: UploadImageState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -75,6 +77,7 @@ const rootReducer = combineReducers<IRootState>({
   wfActionType,
   wfRequest,
   wfAction,
+  uploadImage,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

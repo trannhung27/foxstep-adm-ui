@@ -42,16 +42,6 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
   const { customer } = props;
 
   const [searchValue, setSearchValue] = useState('');
-  // const [criteriaState, setCriteriaState] = useState({
-  //   'title.contains': null,
-  //   'userId.equals': null,
-  //   'status.equals': null,
-  // }
-
-  // const findUser = () => {
-  //   userEntities = users.find(it => it.id.toString() === values.userId.toString());
-  // }
-
   return (
     <Modal size="lg" toggle={handleClose} isOpen={props.showModal} backdrop="static" id="challenge-searchuser" autoFocus={false}>
       <ModalHeader toggle={handleClose} data-cy="challengeUserDialogHeading">

@@ -3,6 +3,7 @@ import { IPaginationBaseState } from 'react-jhipster';
 import { IPayload } from 'react-jhipster/src/type/redux-action.type';
 import { IWfRequest } from 'app/shared/model/workflow/wf-request.model';
 import { IWfResponse } from 'app/shared/model/workflow/wf-response.model';
+import { IUploadImageResponse } from 'app/shared/model/upload-image/upload-image-response';
 
 /**
  * Removes fields with an 'id' field that equals ''.
@@ -52,3 +53,7 @@ export type ICrudPutActionRequest<IWfRequest> = (
   challengeId?: number,
   entity?: IWfRequest
 ) => IPayload<IWfResponse> | ((dispatch: any) => IPayload<IWfResponse>);
+
+export type ICrudPutImageRequest<IUploadImageRequest> = (
+  entity?: IUploadImageRequest
+) => IPayload<IUploadImageResponse> | ((dispatch: any) => IPayload<IUploadImageResponse>);

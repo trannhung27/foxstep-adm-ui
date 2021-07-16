@@ -2,14 +2,10 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { WfProcessType, WfProcessGroup, WfActionType } from '../../config/constants';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './challenge.reducer';
-import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
 import { approveChallenge as approve } from './challenge.reducer';
-import { WfProcessType, WfProcessGroup, WfActionType } from '../../config/constants';
 
 export interface IChallengeApproveDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -70,7 +66,7 @@ const mapStateToProps = ({ challenge, wfRequest }: IRootState) => ({
   updateSuccess: challenge.updateSuccess,
 });
 
-const mapDispatchToProps = { getEntity, updateWorkflow, approve };
+const mapDispatchToProps = { getEntity, approve };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

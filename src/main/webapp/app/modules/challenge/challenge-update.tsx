@@ -33,6 +33,8 @@ import { DownOutlined, DownSquareOutlined } from '@ant-design/icons';
 import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
 import { getCustomer } from '../users/users.reducer';
 import { ChallengeUserDialog } from './challenge-search-user-dialog';
+import { UploadImageInput } from '../upload-image/upload-image';
+import { uploadImage } from '../upload-image/upload-image-reducer';
 
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -220,6 +222,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
           setUserIdCreated(userId);
         }}
       />
+
       <Row className="justify-content-right">
         <Col md="6">
           {!isNew ? (
@@ -288,6 +291,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       </Col>
 
                       <Col xs="12" sm="6">
+                        <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />
                         <AvGroup className="form-group form-inline">
                           <Label>
                             Ảnh đại diện TT: <RedAsterisk />
@@ -888,6 +892,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  uploadImageEntity: storeState.uploadImage.entity,
+  uploadImageLoading: storeState.uploadImage.loading,
   challengeEntity: storeState.challenge.entity,
   loading: storeState.challenge.loading,
   updating: storeState.challenge.updating,
@@ -904,6 +910,7 @@ const mapDispatchToProps = {
   getUser,
   updateWorkflow,
   getCustomer,
+  uploadImage,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
