@@ -64,6 +64,7 @@ export const UploadImageInput = (props: IUploadImage) => {
       uploadImageToServer(btoa(reader.result.toString()));
     };
     reader.onerror = function () {
+      // eslint-disable-next-line no-console
       console.log('there are some problems');
     };
     // console.log(base64File);
