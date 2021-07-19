@@ -160,7 +160,7 @@ export const Faq = (props: IFaqsProps) => {
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${faq.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Chi tiết</span>
+                        <FontAwesomeIcon icon="eye" /> <span className="d-md-none d-lg-inline">Xem</span>
                       </Button>
                       <Button
                         tag={Link}
@@ -169,16 +169,7 @@ export const Faq = (props: IFaqsProps) => {
                         size="sm"
                         data-cy="entityEditButton"
                       >
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={`${match.url}/${faq.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xóa</span>
+                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-md-none d-lg-inline">Sửa</span>
                       </Button>
                     </div>
                   </td>

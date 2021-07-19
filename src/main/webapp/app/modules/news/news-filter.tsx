@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,27 +12,38 @@ export interface INewsFilterFormProps {
 }
 
 class NewsFilterForm extends React.Component<INewsFilterFormProps> {
+  private form: any;
+  constructor(props) {
+    super(props);
+    this.cancelFilter = this.cancelFilter.bind(this);
+  }
+
   handleSubmit = (even, errors, newsCriteria) => {
     const { handleFilter } = this.props;
     handleFilter(newsCriteria);
+  };
+
+  cancelFilter = (event, fields) => {
+    this.form && this.form.reset();
   };
 
   render() {
     const { newsCriteria, updating } = this.props;
 
     return (
-      <AvForm model={newsCriteria} onSubmit={this.handleSubmit}>
+      <AvForm onValidSubmit={this.handleSubmit} onReset={this.cancelFilter} ref={c => (this.form = c)}>
         <Row>
           <Col xs="12" sm="6">
             <AvGroup>
               <Label id="titleLabel" for="news-title">
                 Tiêu đề
               </Label>
-              <AvField
+              <AvInput
                 id="news-title"
-                data-cy="title.contains"
                 type="text"
                 name="title.contains"
+                value={newsCriteria['title.contains']}
+                defaultValue=""
                 validate={{
                   maxLength: { value: 500, errorMessage: 'Tối đa 500 ký tự.' },
                 }}
@@ -44,7 +55,17 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="statusLabel" for="news-status">
                 Trạng thái
               </Label>
-              <AvInput id="news-status" data-cy="status" type="select" className="form-control" name="status">
+              <AvInput
+                id="news-status"
+                data-cy="status"
+                type="select"
+                className="form-control"
+                name="status.equals"
+                value={newsCriteria['status.equals']}
+              >
+                <option value={''} key="0">
+                  --Chọn trạng thái--
+                </option>
                 <option value={NEWS_STATUSES.ACTIVE} key="1">
                   Hoạt động
                 </option>
@@ -66,7 +87,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
                 placeholder={'YYYY-MM-DD HH:mm'}
-                value={convertDateTimeFromServer(this.props.newsCriteria['datePublished.greaterThanOrEqual'])}
+                value={convertDateTimeFromServer(newsCriteria['datePublished.greaterThanOrEqual'])}
               />
             </AvGroup>
           </Col>
@@ -82,15 +103,33 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
                 placeholder={'YYYY-MM-DD HH:mm'}
-                value={convertDateTimeFromServer(this.props.newsCriteria['datePublished.lessThanOrEqual'])}
+                value={convertDateTimeFromServer(newsCriteria['datePublished.lessThanOrEqual'])}
               />
             </AvGroup>
           </Col>
         </Row>
-        <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating}>
-          <FontAwesomeIcon icon="search" />
-          &nbsp; Tìm kiếm
-        </Button>
+        <Row>
+          <Col sm={2}>
+            <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating} block>
+              <FontAwesomeIcon icon="search" />
+              &nbsp; Tìm kiếm
+            </Button>
+          </Col>
+          <Col sm={2}>
+            <Button
+              color="default"
+              className="border-secondary"
+              id="cancel-button"
+              data-cy="cancelFilterButton"
+              type="reset"
+              value="Reset"
+              block
+            >
+              <FontAwesomeIcon icon="ban" />
+              &nbsp; Huỷ
+            </Button>
+          </Col>
+        </Row>
       </AvForm>
     );
   }

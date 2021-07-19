@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Table } from 'reactstrap';
-import { getSortState, JhiItemCount, JhiPagination, TextFormat } from 'react-jhipster';
+import { getSortState, JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './news.reducer';
-import { APP_DATE_FORMAT, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import NewsFilterForm from 'app/modules/news/news-filter';
 import { convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { PageHeader } from 'antd';
+import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 
 export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -105,20 +107,24 @@ export const News = (props: INewsProps) => {
   const { newsList, match, loading, totalItems } = props;
   return (
     <div>
-      <h2 id="news-heading" data-cy="NewsHeading">
-        Quản lý tin tức
-      </h2>
-
+      {/*<h4 id="news-heading" data-cy="NewsHeading">*/}
+      {/*  Quản lý tin tức*/}
+      {/*</h4>*/}
+      <PageHeader
+        style={{ padding: '0 0' }}
+        className="site-page-header"
+        title="Quản lý tin tức"
+        extra={
+          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <FontAwesomeIcon icon="plus" />
+            &nbsp; Tạo mới
+          </Link>
+        }
+      />
+      <hr />
       <NewsFilterForm newsCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
 
-      <div className="d-flex justify-content-end mb-1">
-        <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-          <FontAwesomeIcon icon="plus" />
-          &nbsp; Tạo mới
-        </Link>
-      </div>
-
-      <div className="table-responsive">
+      <div className="table-responsive pt-2">
         {newsList && newsList.length > 0 ? (
           <Table responsive>
             <thead>
@@ -154,7 +160,7 @@ export const News = (props: INewsProps) => {
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${news.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Chi tiết</span>
+                        <FontAwesomeIcon icon="eye" /> <span className="d-md-none d-lg-inline">Xem</span>
                       </Button>
                       <Button
                         tag={Link}
@@ -163,16 +169,7 @@ export const News = (props: INewsProps) => {
                         size="sm"
                         data-cy="entityEditButton"
                       >
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={`${match.url}/${news.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xóa</span>
+                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-md-none d-lg-inline">Sửa</span>
                       </Button>
                     </div>
                   </td>
@@ -185,11 +182,9 @@ export const News = (props: INewsProps) => {
         )}
       </div>
       {props.totalItems ? (
-        <div className={newsList && newsList.length > 0 ? '' : 'd-none'}>
-          <Row className="justify-content-center">
-            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
-          </Row>
-          <Row className="justify-content-center">
+        <div className={newsList && newsList.length > 0 ? 'px-4' : 'd-none'}>
+          <Row className="justify-content-between">
+            <PaginationItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
             <JhiPagination
               activePage={paginationState.activePage}
               onSelect={handlePagination}

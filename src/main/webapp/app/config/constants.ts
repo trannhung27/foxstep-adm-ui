@@ -63,3 +63,8 @@ export const WfActionType = {
   APPV: 1,
   DENY: -1,
 };
+
+export const ChallengeTypes = {
+  ORGANIZATION: 0,
+  INDIVIDUAL: 1,
+};
