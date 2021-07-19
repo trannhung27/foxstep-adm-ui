@@ -37,7 +37,7 @@ export const App = (props: IAppProps) => {
 
   return (
     <Router basename={baseHref}>
-      <Layout style={{ minHeight: '100vh', background: 'lightgray' }}>
+      <Layout style={{ minHeight: '100vh', background: 'aliceblue' }}>
         {props.isAuthenticated && (
           <Sidebar
             isAuthenticated={props.isAuthenticated}
@@ -47,7 +47,7 @@ export const App = (props: IAppProps) => {
             isOpenAPIEnabled={props.isOpenAPIEnabled}
           />
         )}
-        <Layout style={{ background: 'lightgray' }}>
+        <Layout style={{ background: 'aliceblue' }}>
           <LoadingBar />
           <ToastContainer position={toast.POSITION.TOP_RIGHT} className="toastify-container" toastClassName="toastify-toast" />
           {props.isAuthenticated && <LayoutHeader isAuthenticated={props.isAuthenticated} username={props.login} />}
@@ -57,7 +57,7 @@ export const App = (props: IAppProps) => {
               padding: '16px 16px',
               margin: '16px 16px',
               borderRadius: '5px',
-              background: props.isAuthenticated ? 'white' : 'lightgray',
+              background: props.isAuthenticated ? 'white' : 'aliceblue',
             }}
           >
             <AppRoutes />

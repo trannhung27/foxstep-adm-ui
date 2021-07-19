@@ -1,7 +1,7 @@
 import React from 'react';
 import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
-import { USER_STATUS } from 'app/config/constants';
+import { APP_USER_STATUS, NEWS_STATUSES, USER_STATUS } from 'app/config/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface INewsFilterFormProps {
@@ -11,23 +11,33 @@ export interface INewsFilterFormProps {
 }
 
 class UsersFilterForm extends React.Component<INewsFilterFormProps> {
+  private form: any;
+  constructor(props) {
+    super(props);
+    this.cancelFilter = this.cancelFilter.bind(this);
+  }
+
   handleSubmit = (even, errors, usersCriteria) => {
     const { handleFilter } = this.props;
     handleFilter(usersCriteria);
+  };
+
+  cancelFilter = (event, fields) => {
+    this.form && this.form.reset();
   };
 
   render() {
     const { usersCriteria, updating } = this.props;
 
     return (
-      <AvForm model={usersCriteria} onSubmit={this.handleSubmit} className="mb-2">
+      <AvForm onSubmit={this.handleSubmit} onReset={this.cancelFilter} ref={c => (this.form = c)}>
         <Row>
           <Col xs="12" sm="4">
             <AvGroup>
               <Label id="fullNameLabel" for="fullName">
                 Tên khách hàng
               </Label>
-              <AvField id="fullName" type="text" name="fullName.contains" />
+              <AvField id="fullName" type="text" name="fullName.contains" value={usersCriteria['fullName.contains']} />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -35,7 +45,7 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="emailLabel" for="email">
                 Email
               </Label>
-              <AvField id="email" type="text" name="email.contains" />
+              <AvField id="email" type="text" name="email.contains" value={usersCriteria['email.contains']} />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -43,7 +53,7 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="phoneLabel" for="phone">
                 Số điện thoại
               </Label>
-              <AvField id="phone" type="text" name="mobilePhone.contains" />
+              <AvField id="phone" type="text" name="mobilePhone.contains" value={usersCriteria['mobilePhone.contains']} />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -51,7 +61,12 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="nationalIdNumberLabel" for="nationalIdNumber">
                 Số giấy tờ
               </Label>
-              <AvField id="nationalIdNumber" type="text" name="nationalIdNumber.contains" />
+              <AvField
+                id="nationalIdNumber"
+                type="text"
+                name="nationalIdNumber.contains"
+                value={usersCriteria['nationalIdNumber.contains']}
+              />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -59,7 +74,7 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="bibLabel" for="bib">
                 BIB
               </Label>
-              <AvField id="bib" type="text" name="bib.equals" />
+              <AvField id="bib" type="text" name="bib.equals" value={usersCriteria['bib.equals']} />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -67,24 +82,42 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="statusLabel" for="status">
                 Trạng thái
               </Label>
-              <AvField id="status" type="select" name="status.equals">
+              <AvField id="status" type="select" name="status.equals" value={usersCriteria['status.equals']}>
                 <option value="" key="0">
                   --Chọn trạng thái--
                 </option>
-                <option value={USER_STATUS.ACTIVATED} key="1">
-                  Đã kích hoạt
+                <option value={APP_USER_STATUS[0].id} key="1">
+                  {APP_USER_STATUS[0].name}
                 </option>
-                <option value={USER_STATUS.INACTIVE} key="2">
-                  Chưa kích hoạt
+                <option value={APP_USER_STATUS[1].id} key="2">
+                  {APP_USER_STATUS[1].name}
                 </option>
               </AvField>
             </AvGroup>
           </Col>
         </Row>
-        <Button color="primary" type="submit">
-          <FontAwesomeIcon icon="search" />
-          &nbsp; Tìm kiếm
-        </Button>
+        <Row>
+          <Col sm={2}>
+            <Button color="primary" type="submit" block>
+              <FontAwesomeIcon icon="search" />
+              <span className="d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
+            </Button>
+          </Col>
+          <Col sm={2}>
+            <Button
+              color="default"
+              className="border-secondary"
+              id="cancel-button"
+              data-cy="cancelFilterButton"
+              type="reset"
+              value="Reset"
+              block
+            >
+              <FontAwesomeIcon icon="ban" />
+              <span className="d-md-none d-lg-inline">&nbsp; Hủy</span>
+            </Button>
+          </Col>
+        </Row>
       </AvForm>
     );
   }

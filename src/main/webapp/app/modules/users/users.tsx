@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Label, Row, Table } from 'reactstrap';
+import { Badge, Button, Col, Label, Row, Table } from 'reactstrap';
 import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { getSortState, JhiItemCount, JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,8 @@ import { APP_USER_STATUS } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import UsersFilterForm from 'app/modules/users/users-filter';
+import { PageHeader } from 'antd';
+import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 
 export interface IUsersProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -109,12 +111,11 @@ export const Users = (props: IUsersProps) => {
   const { usersList, match, loading, totalItems } = props;
   return (
     <div>
-      <h2 id="users-heading" data-cy="UsersHeading">
-        Users
-      </h2>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý khách hàng" />
+      <hr />
       <UsersFilterForm usersCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
 
-      <div className="table-responsive">
+      <div className="table-responsive pt-2">
         {usersList && usersList.length > 0 ? (
           <Table responsive>
             <thead>
@@ -154,11 +155,15 @@ export const Users = (props: IUsersProps) => {
                   <td>{users.email}</td>
                   <td>{users.nationalIdNumber}</td>
                   <td>{users.mobilePhone}</td>
-                  <td>{APP_USER_STATUS.map(status => (users.status === status.id ? status.name : ''))}</td>
+                  <td className="text-center">
+                    {APP_USER_STATUS.map(status =>
+                      users.status === status.id ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
+                    )}
+                  </td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${users.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Detail</span>
+                        <FontAwesomeIcon icon="eye" /> <span className="d-md-none d-lg-inline">Xem</span>
                       </Button>
                     </div>
                   </td>
@@ -167,15 +172,13 @@ export const Users = (props: IUsersProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">No Users found</div>
+          !loading && <div className="alert alert-warning">Không tìm thấy khách hàng!</div>
         )}
       </div>
       {props.totalItems ? (
-        <div className={usersList && usersList.length > 0 ? '' : 'd-none'}>
-          <Row className="justify-content-center">
-            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
-          </Row>
-          <Row className="justify-content-center">
+        <div className={usersList && usersList.length > 0 ? 'px-4' : 'd-none'}>
+          <Row className="justify-content-between">
+            <PaginationItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
             <JhiPagination
               activePage={paginationState.activePage}
               onSelect={handlePagination}

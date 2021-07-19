@@ -7,6 +7,8 @@ import { TextFormat } from 'react-jhipster';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './users.reducer';
 import { APP_LOCAL_DATE_FORMAT, APP_USER_GENDER, APP_USER_STATUS } from 'app/config/constants';
+import { PageHeader } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface IUsersDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -18,28 +20,31 @@ export const UsersDetail = (props: IUsersDetailProps) => {
   const { usersEntity } = props;
   return (
     <div>
-      <div className="mb-4">
-        <h2 data-cy="usersDetailsHeading">Thông tin khách hàng</h2>
-      </div>
-      <Row className="mb-2 justify-content-start">
-        <Col sm="12">
-          <Button color="danger" className="m-1">
-            Khóa
-          </Button>
-          <Button color="info" className="m-1">
-            Thử thách
-          </Button>
-          <Button color="info" className="m-1">
-            Hoạt động
-          </Button>
-          <Button tag={Link} to={`/users/${usersEntity.id}/edit`} replace color="info" className="m-1">
-            Chỉnh sửa
-          </Button>
-          <Button tag={Link} to="/users" replace color="default" className="border-secondary m-1">
-            Quay lại
-          </Button>
-        </Col>
-      </Row>
+      <PageHeader
+        style={{ padding: '0 0' }}
+        className="site-page-header"
+        title="Thông tin khách hàng"
+        extra={
+          <>
+            <Button color="danger" className="m-1">
+              Khóa
+            </Button>
+            <Button color="info" className="m-1">
+              Thử thách
+            </Button>
+            <Button color="info" className="m-1">
+              Hoạt động
+            </Button>
+            <Button tag={Link} to={`/users/${usersEntity.id}/edit`} replace color="info" className="m-1">
+              Chỉnh sửa
+            </Button>
+            <Button tag={Link} to="/users" replace color="default" className="border-secondary m-1">
+              Quay lại
+            </Button>
+          </>
+        }
+      />
+      {/*<hr />*/}
       <Row>
         <Col sm="12" md="6">
           <Table>

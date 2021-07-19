@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Row, Table } from 'reactstrap';
-import { getSortState, JhiPagination, TextFormat } from 'react-jhipster';
+import { Badge, Button, Row, Table } from 'reactstrap';
+import { JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './news.reducer';
-import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import { APP_TIMESTAMP_FORMAT, NEWS_STATUSES } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import NewsFilterForm from 'app/modules/news/news-filter';
 import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
+import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
 
 export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -43,7 +44,10 @@ export const News = (props: INewsProps) => {
   };
 
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
+    overridePaginationStateWithQueryParams(
+      getSortStateCustom(props.location, ITEMS_PER_PAGE, 'datePublished', 'desc'),
+      props.location.search
+    )
   );
 
   const getAllEntities = () => {
@@ -107,9 +111,6 @@ export const News = (props: INewsProps) => {
   const { newsList, match, loading, totalItems } = props;
   return (
     <div>
-      {/*<h4 id="news-heading" data-cy="NewsHeading">*/}
-      {/*  Quản lý tin tức*/}
-      {/*</h4>*/}
       <PageHeader
         style={{ padding: '0 0' }}
         className="site-page-header"
@@ -133,7 +134,7 @@ export const News = (props: INewsProps) => {
                 <th className="hand" onClick={sort('title')}>
                   Tiêu đề <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
+                <th className="hand" onClick={sort('user.email')}>
                   Người tạo <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={sort('status')}>
@@ -155,7 +156,11 @@ export const News = (props: INewsProps) => {
                   </td>
                   <td>{news.title}</td>
                   <td>{news.user ? news.user.email : ''}</td>
-                  <td>{news.status}</td>
+                  <td className="text-center">
+                    {NEWS_STATUSES.map(status =>
+                      status.id === news.status ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
+                    )}
+                  </td>
                   <td>{news.datePublished ? <TextFormat type="date" value={news.datePublished} format={APP_TIMESTAMP_FORMAT} /> : null}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">

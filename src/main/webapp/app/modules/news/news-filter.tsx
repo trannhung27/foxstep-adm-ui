@@ -31,7 +31,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
     const { newsCriteria, updating } = this.props;
 
     return (
-      <AvForm onValidSubmit={this.handleSubmit} onReset={this.cancelFilter} ref={c => (this.form = c)}>
+      <AvForm onSubmit={this.handleSubmit} onReset={this.cancelFilter} ref={c => (this.form = c)}>
         <Row>
           <Col xs="12" sm="6">
             <AvGroup>
@@ -43,7 +43,6 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 type="text"
                 name="title.contains"
                 value={newsCriteria['title.contains']}
-                defaultValue=""
                 validate={{
                   maxLength: { value: 500, errorMessage: 'Tối đa 500 ký tự.' },
                 }}
@@ -66,11 +65,11 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 <option value={''} key="0">
                   --Chọn trạng thái--
                 </option>
-                <option value={NEWS_STATUSES.ACTIVE} key="1">
-                  Hoạt động
+                <option value={NEWS_STATUSES[0].id} key="1">
+                  {NEWS_STATUSES[0].name}
                 </option>
-                <option value={NEWS_STATUSES.INACTIVE} key="2">
-                  Không Hoạt động
+                <option value={NEWS_STATUSES[1].id} key="2">
+                  {NEWS_STATUSES[1].name}
                 </option>
               </AvInput>
             </AvGroup>
@@ -78,7 +77,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
           <Col xs="12" sm="6">
             <AvGroup>
               <Label id="datePublishedFromLabel" for="news-datePublishedFrom">
-                Thời gian đăng từ
+                Từ ngày
               </Label>
               <AvInput
                 id="news-datePublishedFrom"
@@ -86,7 +85,6 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 type="datetime-local"
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
-                placeholder={'YYYY-MM-DD HH:mm'}
                 value={convertDateTimeFromServer(newsCriteria['datePublished.greaterThanOrEqual'])}
               />
             </AvGroup>
@@ -94,7 +92,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
           <Col xs="12" sm="6">
             <AvGroup>
               <Label id="datePublishedToLabel" for="news-datePublishedTo">
-                Thời gian đăng đến
+                Đến ngày
               </Label>
               <AvInput
                 id="news-datePublishedTo"
@@ -102,7 +100,6 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 type="datetime-local"
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
-                placeholder={'YYYY-MM-DD HH:mm'}
                 value={convertDateTimeFromServer(newsCriteria['datePublished.lessThanOrEqual'])}
               />
             </AvGroup>
@@ -112,7 +109,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
           <Col sm={2}>
             <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating} block>
               <FontAwesomeIcon icon="search" />
-              &nbsp; Tìm kiếm
+              <span className="d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
             </Button>
           </Col>
           <Col sm={2}>
@@ -126,7 +123,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               block
             >
               <FontAwesomeIcon icon="ban" />
-              &nbsp; Huỷ
+              <span className="d-md-none d-lg-inline">&nbsp; Hủy</span>
             </Button>
           </Col>
         </Row>
