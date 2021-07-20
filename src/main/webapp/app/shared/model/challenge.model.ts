@@ -19,6 +19,7 @@ export interface IChallenge {
   userIdCreated?: number | null;
   challengeType?: number | null;
   dateUpdated?: string | null;
+  dateCreated?: string | null;
   sport?: ISport;
   challengeValidity?: IChallengeValidity | null;
   challengeDistance?: IChallengeDistance[] | [];
