@@ -68,3 +68,18 @@ export const ChallengeTypes = {
   ORGANIZATION: 0,
   INDIVIDUAL: 1,
 };
+
+export const ChallengeStatuses = [
+  { id: 0, name: 'Chờ duyệt' },
+  { id: 1, name: 'Đã duyệt' },
+  { id: 2, name: 'Kết thúc' },
+  { id: 12, name: 'Đang diễn ra' },
+  { id: -1, name: 'Bị từ chối' },
+  { id: -2, name: 'Hủy' },
+];
+
+export const ChallengeUserStatuses = [
+  { id: 0, name: 'Chờ duyệt tham gia' },
+  { id: 1, name: 'Đã tham gia' },
+  { id: -1, name: 'Bị từ chối tham gia' },
+];
