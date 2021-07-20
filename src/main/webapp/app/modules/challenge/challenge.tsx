@@ -41,6 +41,7 @@ export const Challenge = (props: IChallengeProps) => {
     'dateFinish.lessThanOrEqual': null,
     'dateRegisDeadline.greaterThanOrEqual': null,
     'dateRegisDeadline.lessThanOrEqual': null,
+    'sport.name.equals': null,
   });
 
   const getAllEntities = () => {
@@ -176,7 +177,35 @@ export const Challenge = (props: IChallengeProps) => {
             <Row>
               <Col xs="12" sm="8">
                 <AvGroup>
-                  <Label>Ngày bắt đầu</Label>
+                  <AvField
+                    type="select"
+                    name="sportName"
+                    label="Bộ môn"
+                    value={criteriaState['sport.name.equals']}
+                    onChange={event => (criteriaState['sport.name.equals'] = event.target.value)}
+                  >
+                    <option value="" key="0">
+                      Tất cả
+                    </option>
+                    <option value="Run">Chạy bộ</option>
+                    {/* {categories
+                ? categories.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.name}
+                    </option>
+                  ))
+                : null} */}
+                  </AvField>
+                </AvGroup>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col xs="12" sm="4">
+            <Row>
+              <Col xs="12" sm="8">
+                <AvGroup>
+                  <Label>Từ ngày</Label>
                   <DateTime
                     value={criteriaState['dateStart.greaterThanOrEqual']}
                     onChange={date => (criteriaState['dateStart.greaterThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
@@ -194,7 +223,7 @@ export const Challenge = (props: IChallengeProps) => {
             <Row>
               <Col xs="12" sm="8">
                 <AvGroup>
-                  <Label>Ngày kết thúc</Label>
+                  <Label>Đến ngày</Label>
                   <DateTime
                     value={criteriaState['dateFinish.greaterThanOrEqual']}
                     onChange={date => (criteriaState['dateFinish.lessThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
@@ -257,7 +286,7 @@ export const Challenge = (props: IChallengeProps) => {
                     </Button>
                   </td>
                   <td>{challenge.title}</td>
-                  <td>{challenge.sport.name}</td>
+                  <td>{challenge.sport.name === 'Run' ? 'Chạy bộ' : ''}</td>
                   <td>
                     {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
                     {challenge.challengeType === 1 && <div>Cá nhân</div>}
