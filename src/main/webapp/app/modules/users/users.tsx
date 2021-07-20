@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Badge, Button, Col, Label, Row, Table } from 'reactstrap';
-import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
-import { getSortState, JhiItemCount, JhiPagination, TextFormat } from 'react-jhipster';
+import { Badge, Button, Row, Table } from 'reactstrap';
+import { getSortState, JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -14,6 +13,7 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import UsersFilterForm from 'app/modules/users/users-filter';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
+import { SortIcon } from 'app/shared/util/sort-icon-util';
 
 export interface IUsersProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -43,7 +43,7 @@ export const Users = (props: IUsersProps) => {
   };
 
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
+    overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'fullName'), props.location.search)
   );
 
   const getAllEntities = () => {
@@ -122,22 +122,22 @@ export const Users = (props: IUsersProps) => {
               <tr>
                 <th className="hand">STT</th>
                 <th className="hand" onClick={sort('fullName')}>
-                  Họ tên <FontAwesomeIcon icon="sort" />
+                  Họ tên <SortIcon sortBy="fullName" paginationState={paginationState} />
                 </th>
-                <th className="hand" onClick={sort('id')}>
-                  BIB <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('bib')}>
+                  BIB <SortIcon sortBy="bib" paginationState={paginationState} />
                 </th>
                 <th className="hand" onClick={sort('email')}>
-                  Email <FontAwesomeIcon icon="sort" />
+                  Email <SortIcon sortBy="email" paginationState={paginationState} />
                 </th>
                 <th className="hand" onClick={sort('nationalIdNumber')}>
-                  Số Giấy tờ <FontAwesomeIcon icon="sort" />
+                  Số Giấy tờ <SortIcon sortBy="nationalIdNumber" paginationState={paginationState} />
                 </th>
                 <th className="hand" onClick={sort('mobilePhone')}>
-                  Số ĐT <FontAwesomeIcon icon="sort" />
+                  Số ĐT <SortIcon sortBy="mobilePhone" paginationState={paginationState} />
                 </th>
                 <th className="hand" onClick={sort('status')}>
-                  Trạng thái <FontAwesomeIcon icon="sort" />
+                  Trạng thái <SortIcon sortBy="status" paginationState={paginationState} />
                 </th>
                 <th></th>
               </tr>

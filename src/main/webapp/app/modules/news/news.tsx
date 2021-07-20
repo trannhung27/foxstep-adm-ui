@@ -15,6 +15,7 @@ import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
+import { SortIcon } from 'app/shared/util/sort-icon-util';
 
 export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -132,16 +133,16 @@ export const News = (props: INewsProps) => {
               <tr>
                 <th className="hand">STT</th>
                 <th className="hand" onClick={sort('title')}>
-                  Tiêu đề <FontAwesomeIcon icon="sort" />
+                  Tiêu đề <SortIcon sortBy="title" paginationState={paginationState} />
                 </th>
                 <th className="hand" onClick={sort('user.email')}>
-                  Người tạo <FontAwesomeIcon icon="sort" />
+                  Người tạo <SortIcon sortBy="user.email" paginationState={paginationState} />
                 </th>
                 <th className="hand" onClick={sort('status')}>
-                  Trạng thái <FontAwesomeIcon icon="sort" />
+                  Trạng thái <SortIcon sortBy="status" paginationState={paginationState} />
                 </th>
                 <th className="hand" onClick={sort('datePublished')}>
-                  Thời gian đăng bài <FontAwesomeIcon icon="sort" />
+                  Thời gian đăng bài <SortIcon sortBy="datePublished" paginationState={paginationState} />
                 </th>
                 <th />
               </tr>
