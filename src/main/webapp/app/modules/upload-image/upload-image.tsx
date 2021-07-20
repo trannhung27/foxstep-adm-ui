@@ -24,8 +24,9 @@ export const UploadImageInput = (props: IUploadImage) => {
     const imageEntity = {
       content: base64Image,
       imageName: 'imageday',
+      url: 'http://abc.com',
     };
-    upload(imageEntity);
+    props.upload(imageEntity);
   };
 
   // const getEmergencyFoundImg = urlImg => {
@@ -46,6 +47,16 @@ export const UploadImageInput = (props: IUploadImage) => {
 
   const handleChangeImage = event => {
     setSelectedFile(event.target.files[0]);
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onload = function () {
+      // uploadImageToServer(btoa(reader.result.toString()));
+      setBase64File(reader.result.toString());
+    };
+    reader.onerror = function () {
+      // eslint-disable-next-line no-console
+      console.log('there are some problems');
+    };
   };
 
   const getBase64 = file => {
@@ -55,13 +66,13 @@ export const UploadImageInput = (props: IUploadImage) => {
 
     // Convert the file to base64 text
     reader.readAsDataURL(file);
-    setBase64File(reader.result.toString);
   };
   const uploadHandler = () => {
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onload = function () {
       uploadImageToServer(btoa(reader.result.toString()));
+      setBase64File(btoa(reader.result.toString()));
     };
     reader.onerror = function () {
       // eslint-disable-next-line no-console
@@ -81,6 +92,7 @@ export const UploadImageInput = (props: IUploadImage) => {
           <Col xs="12" sm="7">
             <Label>Ảnh đại diện TT:</Label>
             <AvInput type="file" name="file" className="upload-file" id="file" onChange={handleChangeImage} required />
+            <img src={`${base64File}`} />
           </Col>
           <Col xs="12" sm="5">
             <Button color="info" onClick={uploadHandler}>
