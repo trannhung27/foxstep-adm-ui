@@ -12,8 +12,6 @@ import password, { PasswordState } from 'app/modules/account/password/password.r
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
 
-import post, { PostState } from 'app/entities/post/post.reducer';
-import category, { CategoryState } from 'app/entities/category/category.reducer';
 import users, { UsersState } from 'app/modules/users/users.reducer';
 import newsCategory, { NewsCategoryState } from 'app/modules/news-category/news-category.reducer';
 import news, { NewsState } from 'app/modules/news/news.reducer';
@@ -39,8 +37,6 @@ export interface IRootState {
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
-  readonly post: PostState;
-  readonly category: CategoryState;
   readonly users: UsersState;
   readonly newsCategory: NewsCategoryState;
   readonly news: NewsState;
@@ -66,8 +62,6 @@ const rootReducer = combineReducers<IRootState>({
   password,
   challenge,
   settings,
-  post,
-  category,
   users,
   newsCategory,
   news,

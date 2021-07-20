@@ -25,10 +25,8 @@ export const NewsDetail = (props: INewsDetailProps) => {
       <div className="text-center">{newsEntity.imgUrl ? <img src={newsEntity.imgUrl} alt="" width="100%" /> : ''}</div>
       <div>
         <h2 style={{ display: 'inline' }}>{newsEntity.title}</h2>
-        {newsEntity.status === NEWS_STATUSES.ACTIVE ? (
-          <Badge color="success">Đang hoạt động</Badge>
-        ) : (
-          <Badge color="danger">Không hoạt động</Badge>
+        {NEWS_STATUSES.map(status =>
+          status.id === newsEntity.status ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
         )}
         <p className="mb-2 text-muted">
           <TextFormat type="date" value={newsEntity.datePublished} format={APP_TIMESTAMP_FORMAT} />

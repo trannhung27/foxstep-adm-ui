@@ -6,7 +6,7 @@ const { Footer } = Layout;
 
 const LayoutFooter = () => {
   return (
-    <Footer style={{ textAlign: 'left' }} className="bg-light-gray">
+    <Footer className="bg-light-gray" style={{ padding: '24px 16px', textAlign: 'right', color: 'darkcyan', background: 'aliceblue' }}>
       © {new Date().getFullYear()}
       {' FTEL DSC'}
     </Footer>

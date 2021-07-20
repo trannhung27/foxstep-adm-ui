@@ -73,7 +73,7 @@
     "react-select": "^4.3.1",
     "react-toastify": "7.0.3",
     "react-transition-group": "4.4.1",
-    "reactstrap": "^6.5.0",
+    "reactstrap": "^8.9.0",
     "reactstrap-date-picker": "0.0.11",
     "redux": "4.0.5",
     "redux-devtools": "3.7.0",

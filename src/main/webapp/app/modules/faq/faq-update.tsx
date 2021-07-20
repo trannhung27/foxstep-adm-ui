@@ -14,6 +14,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import { PageHeader } from 'antd';
 
 export interface IFaqUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -79,9 +80,12 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
     <div>
       <Row>
         <Col>
-          <h2 id="faqcreateOrEditLabel" data-cy="FaqsCreateUpdateHeading">
-            Tạo hoặc sửa FAQ, Hướng dẫn
-          </h2>
+          <PageHeader
+            style={{ padding: '0 0' }}
+            className="site-page-header"
+            title={isNew ? 'Tạo Câu hỏi thường gặp/Hướng dẫn' : 'Sửa Câu hỏi thường gặp/Hướng dẫn'}
+          />
+          <hr />
         </Col>
       </Row>
       <Row>
@@ -91,7 +95,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
           ) : (
             <AvForm model={isNew ? {} : faqEntity} onSubmit={saveEntity}>
               {!isNew ? (
-                <AvGroup>
+                <AvGroup hidden>
                   <Label for="faqs-id">ID</Label>
                   <AvInput id="faqs-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
@@ -114,11 +118,11 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                       <option value="" key="0">
                         --Chọn trạng thái--
                       </option>
-                      <option value={NEWS_STATUSES.ACTIVE} key="1">
-                        Hoạt động
+                      <option value={NEWS_STATUSES[0].id} key="1">
+                        {NEWS_STATUSES[0].name}
                       </option>
-                      <option value={NEWS_STATUSES.INACTIVE} key="2">
-                        Không Hoạt động
+                      <option value={NEWS_STATUSES[1].id} key="2">
+                        {NEWS_STATUSES[1].name}
                       </option>
                     </AvInput>
                   </AvGroup>
@@ -176,6 +180,22 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                   onEditorStateChange={onEditorStateChange}
                   wrapperStyle={{ textDecoration: 'none !important' }}
                   editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
+                  toolbar={{
+                    options: [
+                      'inline',
+                      'blockType',
+                      'fontSize',
+                      'list',
+                      'textAlign',
+                      'colorPicker',
+                      'link',
+                      'embedded',
+                      'emoji',
+                      'image',
+                      'remove',
+                      'history',
+                    ],
+                  }}
                 />
                 {!editorState.getCurrentContent().hasText() && <p className="invalid-feedback">Không được để trống.</p>}
               </AvGroup>
