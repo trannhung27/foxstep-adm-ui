@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label, Collapse, CardBody, Card } from 'reactstrap';
@@ -16,11 +16,9 @@ import {
 } from 'availity-reactstrap-validation';
 import {} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './challenge.reducer';
-import { getEntity as getUser } from 'app/modules/users/users.reducer';
+import { approveChallenge, getEntity } from './challenge.reducer';
 import moment from 'moment';
 import {
   APP_DATE_FORMAT,
@@ -31,19 +29,42 @@ import {
 } from 'app/config/constants';
 import { getEntities as getActions } from '../workflow/wf-action/wf-action-reducer';
 import { WfAction } from 'app/modules/workflow/wf-action/wf-action';
-import { Users } from 'app/modules/users/users';
+import { ChallengeApproveDialog } from 'app/modules/challenge/challenge-approve-dialog';
+import { ChallengeRejectDialog } from 'app/modules/challenge/challenge-reject-dialog';
 
 export interface IChallengeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeDetail = (props: IChallengeDetailProps) => {
   useEffect(() => {
     props.getEntity(props.match.params.id);
-    props.getUser(challengeEntity.userIdCreated);
   }, []);
 
-  const { challengeEntity, userEntity } = props;
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+
+  const { challengeEntity } = props;
   return (
     <Row>
+      <ChallengeApproveDialog
+        showModal={showApproveModal}
+        onClose={() => {
+          setShowApproveModal(false);
+        }}
+        challengeEntity={props.challengeEntity}
+        getEntity={props.getEntity}
+        approve={props.approveChallenge}
+        updateSuccess={props.updateSuccess}
+      />
+      <ChallengeRejectDialog
+        onClose={() => {
+          setShowRejectModal(false);
+        }}
+        showModal={showRejectModal}
+        challengeEntity={props.challengeEntity}
+        getEntity={props.getEntity}
+        reject={props.approveChallenge}
+        updateSuccess={props.updateSuccess}
+      />
       <Col md="12">
         <h2 data-cy="challengeDetailsHeading">Challenge</h2>
         <AvForm model={challengeEntity} readOnly>
@@ -98,7 +119,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Cá nhân tổ chức: &nbsp; &nbsp;
                 </Label>
-                <div>{userEntity.fullName}</div>
+                <div>{challengeEntity.userCreated ? challengeEntity.userCreated.name : ''}</div>
               </AvGroup>
             </Col>
 
@@ -274,11 +295,23 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/challenges/${challengeEntity.id}/approve`} replace color="primary">
+        <Button
+          onClick={() => {
+            setShowApproveModal(true);
+          }}
+          replace
+          color="primary"
+        >
           <span className="d-none d-md-inline">Duyệt</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/challenges/${challengeEntity.id}/reject`} replace color="primary">
+        <Button
+          onClick={() => {
+            setShowRejectModal(true);
+          }}
+          replace
+          color="primary"
+        >
           <span className="d-none d-md-inline">Từ chối</span>
         </Button>
       </Col>
@@ -286,14 +319,14 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   );
 };
 
-const mapStateToProps = ({ challenge, wfAction, users }: IRootState) => ({
+const mapStateToProps = ({ challenge, wfAction }: IRootState) => ({
   challengeEntity: challenge.entity,
   wfActionList: wfAction.entities,
   wfActionLoading: wfAction.loading,
-  userEntity: users.entity,
+  updateSuccess: challenge.updateSuccess,
 });
 
-const mapDispatchToProps = { getEntity, getActions, getUser };
+const mapDispatchToProps = { getEntity, getActions, approveChallenge };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

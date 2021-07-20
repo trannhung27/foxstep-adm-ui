@@ -8,15 +8,14 @@ import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './challenge.reducer';
 import { approveChallenge as reject } from './challenge.reducer';
 
-export interface IChallengeRejectDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export interface IChallengeRejectDialogProps extends StateProps, DispatchProps {
+  onClose: () => void;
+  showModal: boolean;
+}
 
 export const ChallengeRejectDialog = (props: IChallengeRejectDialogProps) => {
-  useEffect(() => {
-    props.getEntity(props.match.params.id);
-  }, []);
-
   const handleClose = () => {
-    props.history.push('/challenges/' + props.match.params.id);
+    props.onClose();
   };
 
   useEffect(() => {
@@ -42,7 +41,7 @@ export const ChallengeRejectDialog = (props: IChallengeRejectDialogProps) => {
   const { challengeEntity } = props;
   const [actionMessage, setActionMessage] = useState('');
   return (
-    <Modal isOpen toggle={handleClose}>
+    <Modal isOpen={props.showModal} toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="challengeRejectDialogHeading">
         Từ chối duyệt thử thách
       </ModalHeader>
@@ -75,7 +74,7 @@ export const ChallengeRejectDialog = (props: IChallengeRejectDialogProps) => {
 
 const mapStateToProps = ({ challenge, wfRequest }: IRootState) => ({
   challengeEntity: challenge.entity,
-  updateSuccess: wfRequest.updateSuccess,
+  updateSuccess: challenge.updateSuccess,
 });
 
 const mapDispatchToProps = { getEntity, reject };

@@ -2,6 +2,7 @@ import { ISport } from 'app/shared/model/sport.model';
 import { IChallengeValidity } from './challengeValidity,model';
 import { IChallengeDistance } from './challenge-distance.model';
 import { ITeam } from './team.model';
+import { IUserCreated } from 'app/shared/model/user-created.model';
 export interface IChallenge {
   id?: number;
   title?: string | null;
@@ -24,6 +25,7 @@ export interface IChallenge {
   challengeValidity?: IChallengeValidity | null;
   challengeDistance?: IChallengeDistance[] | [];
   teams?: ITeam[] | [];
+  userCreated?: IUserCreated | null;
 }
 
 export const defaultValue: Readonly<IChallenge> = {};

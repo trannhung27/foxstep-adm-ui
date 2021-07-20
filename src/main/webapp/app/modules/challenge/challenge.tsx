@@ -29,8 +29,6 @@ export const Challenge = (props: IChallengeProps) => {
     'userId.equals': null,
     'status.equals': null,
     'challengeType.equals': null,
-    dateStart: null,
-    dateStartCompare: null,
     'dateStart.greaterThanOrEqual': null,
     'dateStart.lessThanOrEqual': null,
     'dateFinish.greaterThanOrEqual': null,

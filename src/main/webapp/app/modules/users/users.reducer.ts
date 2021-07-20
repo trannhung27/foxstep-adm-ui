@@ -16,7 +16,6 @@ const initialState = {
   loading: false,
   errorMessage: null,
   entities: [] as ReadonlyArray<IUsers>,
-  customer: [] as ReadonlyArray<IUsers>,
   entity: defaultValue,
   updating: false,
   totalItems: 0,

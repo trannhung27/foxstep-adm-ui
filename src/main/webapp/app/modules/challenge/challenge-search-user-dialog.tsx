@@ -96,7 +96,10 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
                       <Button
                         // tag={Link}
                         // to={{ pathname: `/challenges/new`, state: { email: customer.email, userId: customer.id } }}
-                        onClick={() => props.choose(customer.email, customer.id)}
+                        onClick={() => {
+                          props.choose(customer.email, customer.id);
+                          handleClose();
+                        }}
                         color="info"
                         size="sm"
                         data-cy="entityDetailsButton"
