@@ -5,10 +5,12 @@ import { cleanEntity, ICrudGetAllWithCriteriaAction, ICrudGetWithParam } from 'a
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IUsers, defaultValue } from 'app/shared/model/users.model';
+import { IChallengesOfUser } from 'app/shared/model/challenges-of-user.model';
 
 export const ACTION_TYPES = {
   FETCH_USERS_LIST: 'users/FETCH_USERS_LIST',
   FETCH_USERS: 'users/FETCH_USERS',
+  FETCH_CHALLENGES_OF_USER_LIST: 'users/FETCH_CHALLENGES_OF_USER_LIST',
   RESET: 'users/RESET',
 };
 
@@ -16,6 +18,7 @@ const initialState = {
   loading: false,
   errorMessage: null,
   entities: [] as ReadonlyArray<IUsers>,
+  challengesOfUser: [] as ReadonlyArray<IChallengesOfUser>,
   entity: defaultValue,
   updating: false,
   totalItems: 0,
@@ -29,6 +32,7 @@ export type UsersState = Readonly<typeof initialState>;
 export default (state: UsersState = initialState, action): UsersState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_USERS_LIST):
+    case REQUEST(ACTION_TYPES.FETCH_CHALLENGES_OF_USER_LIST):
     case REQUEST(ACTION_TYPES.FETCH_USERS):
       return {
         ...state,
@@ -43,6 +47,14 @@ export default (state: UsersState = initialState, action): UsersState => {
         ...state,
         loading: false,
         entities: action.payload.data,
+        totalItems: parseInt(action.payload.headers['xTotalCount'], 10),
+      };
+    case FAILURE(ACTION_TYPES.FETCH_CHALLENGES_OF_USER_LIST):
+    case SUCCESS(ACTION_TYPES.FETCH_CHALLENGES_OF_USER_LIST):
+      return {
+        ...state,
+        loading: false,
+        challengesOfUser: action.payload.data,
         totalItems: parseInt(action.payload.headers['xTotalCount'], 10),
       };
     case SUCCESS(ACTION_TYPES.FETCH_USERS):
@@ -61,6 +73,7 @@ export default (state: UsersState = initialState, action): UsersState => {
 };
 
 const apiUrl = 'api/app/users';
+const couApiUrl = 'api/challenges-of-user';
 
 // Actions
 
@@ -75,6 +88,20 @@ export const getEntities: ICrudGetAllWithCriteriaAction<IUsers> = (criteria, pag
   return {
     type: ACTION_TYPES.FETCH_USERS_LIST,
     payload: axios.get<IUsers>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
+  };
+};
+
+export const getChallengesOfUser: ICrudGetAllWithCriteriaAction<IChallengesOfUser> = (criteria, page, size, sort) => {
+  let criteriaParams = '?';
+  if (criteria) {
+    Object.keys(criteria).forEach(function (key, index) {
+      if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
+    });
+  }
+  const requestUrl = `${couApiUrl}${sort ? `${criteriaParams}page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_CHALLENGES_OF_USER_LIST,
+    payload: axios.get<IChallengesOfUser>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
   };
 };
 

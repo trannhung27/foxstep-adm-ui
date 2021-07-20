@@ -26,18 +26,18 @@ export const UsersDetail = (props: IUsersDetailProps) => {
         title="Thông tin khách hàng"
         extra={
           <>
-            <Button color="danger" className="m-1">
-              Khóa
+            {/*<Button color="danger" className="m-1">*/}
+            {/*  Khóa*/}
+            {/*</Button>*/}
+            <Button tag={Link} to={`/users/${usersEntity.id}/challenges-of-user`} replace color="info" className="m-1">
+              Thử thách của KH
             </Button>
-            <Button color="info" className="m-1">
-              Thử thách
-            </Button>
-            <Button color="info" className="m-1">
-              Hoạt động
-            </Button>
-            <Button tag={Link} to={`/users/${usersEntity.id}/edit`} replace color="info" className="m-1">
-              Chỉnh sửa
-            </Button>
+            {/*<Button color="info" className="m-1">*/}
+            {/*  Hoạt động*/}
+            {/*</Button>*/}
+            {/*<Button tag={Link} to={`/users/${usersEntity.id}/edit`} replace color="info" className="m-1">*/}
+            {/*  Chỉnh sửa*/}
+            {/*</Button>*/}
             <Button tag={Link} to="/users" replace color="default" className="border-secondary m-1">
               Quay lại
             </Button>

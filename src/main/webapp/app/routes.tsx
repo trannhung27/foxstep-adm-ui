@@ -21,6 +21,7 @@ import Challenge from 'app/modules/challenge';
 import WfProcessGroup from 'app/modules/workflow/wf-process-group';
 import WfActionType from 'app/modules/workflow/wf-action-type';
 import WfProcess from 'app/modules/workflow/wf-process';
+import Sport from 'app/modules/sport';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
@@ -49,6 +50,7 @@ const Routes = () => (
       <PrivateRoute path="/wf-process-group" component={WfProcessGroup} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
       <PrivateRoute path="/wf-process" component={WfProcess} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
       <PrivateRoute path="/wf-action-type" component={WfActionType} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
+      <PrivateRoute path="/sport" component={Sport} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
       <PrivateRoute path="/news" component={News} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <PrivateRoute path="/challenges" component={Challenge} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <PrivateRoute path="/faqs" component={Faqs} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />

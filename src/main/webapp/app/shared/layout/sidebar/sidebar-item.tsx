@@ -16,6 +16,7 @@ import {
   BorderOutlined,
   DingtalkOutlined,
   AppstoreOutlined,
+  TrophyOutlined,
 } from '@ant-design/icons';
 
 export const menuItems = [
@@ -64,6 +65,14 @@ export const menuItems = [
       },
       {
         key: 107,
+        title: 'Sports',
+        icon: <TrophyOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
+        url: '/sport',
+      },
+      {
+        key: 108,
         title: 'News Category',
         icon: <ReadOutlined />,
         isAuthenticated: true,
@@ -71,7 +80,7 @@ export const menuItems = [
         url: '/news-category',
       },
       {
-        key: 108,
+        key: 109,
         title: 'Workflow',
         icon: <BranchesOutlined />,
         isAuthenticated: true,

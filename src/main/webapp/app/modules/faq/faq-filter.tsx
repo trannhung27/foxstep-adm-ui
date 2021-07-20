@@ -103,7 +103,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
           <Col xs="12" sm="6">
             <AvGroup>
               <Label id="datePublishedFromLabel" for="faq-datePublishedFrom">
-                Đến ngày
+                Từ ngày
               </Label>
               <AvInput
                 id="faq-datePublishedFrom"
@@ -111,7 +111,6 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 type="datetime-local"
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
-                placeholder={'YYYY-MM-DD HH:mm'}
                 value={convertDateTimeFromServer(faqCriteria['datePublished.greaterThanOrEqual'])}
               />
             </AvGroup>
@@ -119,7 +118,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
           <Col xs="12" sm="6">
             <AvGroup>
               <Label id="datePublishedToLabel" for="faq-datePublishedTo">
-                Từ ngày
+                Đến ngày
               </Label>
               <AvInput
                 id="faq-datePublishedTo"
@@ -127,7 +126,6 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 type="datetime-local"
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
-                placeholder={'YYYY-MM-DD HH:mm'}
                 value={convertDateTimeFromServer(faqCriteria['datePublished.lessThanOrEqual'])}
               />
             </AvGroup>
