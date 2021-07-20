@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, ICrudSearchAction } from 'react-jhipster';
 
-import { cleanEntity, ICrudGetAllWithCriteriaAction } from 'app/shared/util/entity-utils';
+import { cleanEntity, ICrudGetAllWithCriteriaAction, ICrudGetWithParam } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IUsers, defaultValue } from 'app/shared/model/users.model';
@@ -16,6 +16,7 @@ const initialState = {
   loading: false,
   errorMessage: null,
   entities: [] as ReadonlyArray<IUsers>,
+  customer: [] as ReadonlyArray<IUsers>,
   entity: defaultValue,
   updating: false,
   totalItems: 0,
@@ -75,6 +76,14 @@ export const getEntities: ICrudGetAllWithCriteriaAction<IUsers> = (criteria, pag
   return {
     type: ACTION_TYPES.FETCH_USERS_LIST,
     payload: axios.get<IUsers>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
+  };
+};
+
+export const getCustomer: ICrudGetWithParam<IUsers> = search => {
+  const requestUrl = `${apiUrl}/search?searchValue=${search}`;
+  return {
+    type: ACTION_TYPES.FETCH_USERS,
+    payload: axios.get<IUsers>(requestUrl),
   };
 };
 

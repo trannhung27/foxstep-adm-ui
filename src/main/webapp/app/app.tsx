@@ -21,7 +21,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import { IRootState } from 'app/shared/reducers';
 import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
-import NavPath from 'app/shared/layout/navpath/navpath';
 import AppRoutes from 'app/routes';
 import LoadingBar from 'react-redux-loading-bar';
 
@@ -38,7 +37,7 @@ export const App = (props: IAppProps) => {
 
   return (
     <Router basename={baseHref}>
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: '100vh', background: 'aliceblue' }}>
         {props.isAuthenticated && (
           <Sidebar
             isAuthenticated={props.isAuthenticated}
@@ -48,12 +47,19 @@ export const App = (props: IAppProps) => {
             isOpenAPIEnabled={props.isOpenAPIEnabled}
           />
         )}
-        <Layout>
+        <Layout style={{ background: 'aliceblue' }}>
           <LoadingBar />
           <ToastContainer position={toast.POSITION.TOP_RIGHT} className="toastify-container" toastClassName="toastify-toast" />
           {props.isAuthenticated && <LayoutHeader isAuthenticated={props.isAuthenticated} username={props.login} />}
-          {props.isAuthenticated && <NavPath />}
-          <Content className={props.isAuthenticated ? 'bg-white' : 'bg-light-gray'} style={{ padding: 24, margin: '0 16px' }}>
+          {/*{props.isAuthenticated && <NavPath />}*/}
+          <Content
+            style={{
+              padding: '16px 16px',
+              margin: '16px 16px',
+              borderRadius: '5px',
+              background: props.isAuthenticated ? 'white' : 'aliceblue',
+            }}
+          >
             <AppRoutes />
           </Content>
           <LayoutFooter />

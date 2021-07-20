@@ -1,6 +1,6 @@
 import { ISport } from 'app/shared/model/sport.model';
 import { IChallengeValidity } from './challengeValidity,model';
-import { IChallengeDistance } from './challengeDistance.model';
+import { IChallengeDistance } from './challenge-distance.model';
 import { ITeam } from './team.model';
 export interface IChallenge {
   id?: number;
@@ -18,6 +18,7 @@ export interface IChallenge {
   numOfRegis?: number | null;
   userIdCreated?: number | null;
   challengeType?: number | null;
+  dateUpdated?: string | null;
   sport?: ISport;
   challengeValidity?: IChallengeValidity | null;
   challengeDistance?: IChallengeDistance[] | [];

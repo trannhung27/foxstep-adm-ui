@@ -12,8 +12,6 @@ import password, { PasswordState } from 'app/modules/account/password/password.r
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
 
-import post, { PostState } from 'app/entities/post/post.reducer';
-import category, { CategoryState } from 'app/entities/category/category.reducer';
 import users, { UsersState } from 'app/modules/users/users.reducer';
 import newsCategory, { NewsCategoryState } from 'app/modules/news-category/news-category.reducer';
 import news, { NewsState } from 'app/modules/news/news.reducer';
@@ -24,6 +22,7 @@ import wfProcess, { WfProcessState } from 'app/modules/workflow/wf-process/wf-pr
 import wfActionType, { WfActionTypeState } from 'app/modules/workflow/wf-action-type/wf-action-type.reducer';
 import wfRequest, { WfRequestState } from 'app/modules/workflow/workflow-request.reducer';
 import wfAction, { WfActionState } from 'app/modules/workflow/wf-action/wf-action-reducer';
+import uploadImage, { UploadImageState } from 'app/modules/upload-image/upload-image-reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -38,8 +37,6 @@ export interface IRootState {
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
-  readonly post: PostState;
-  readonly category: CategoryState;
   readonly users: UsersState;
   readonly newsCategory: NewsCategoryState;
   readonly news: NewsState;
@@ -49,6 +46,7 @@ export interface IRootState {
   readonly wfActionType: WfActionTypeState;
   readonly wfRequest: WfRequestState;
   readonly wfAction: WfActionState;
+  readonly uploadImage: UploadImageState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -64,8 +62,6 @@ const rootReducer = combineReducers<IRootState>({
   password,
   challenge,
   settings,
-  post,
-  category,
   users,
   newsCategory,
   news,
@@ -75,6 +71,7 @@ const rootReducer = combineReducers<IRootState>({
   wfActionType,
   wfRequest,
   wfAction,
+  uploadImage,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

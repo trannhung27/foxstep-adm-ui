@@ -33,7 +33,7 @@ const accountMenuItems = (
 export const AccountMenu = ({ isAuthenticated = false, name = 'Account' }) => (
   <Dropdown overlay={isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}>
     <a style={{ textDecoration: 'none' }}>
-      <Avatar shape="square" style={{ backgroundColor: 'lightskyblue' }}>
+      <Avatar shape="square" style={{ backgroundColor: 'darkorange' }}>
         {name}
       </Avatar>
     </a>

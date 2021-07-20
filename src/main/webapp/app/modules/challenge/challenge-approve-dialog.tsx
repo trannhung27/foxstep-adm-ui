@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { WfProcessType, WfProcessGroup, WfActionType } from '../../config/constants';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './challenge.reducer';
-import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
+import { approveChallenge as approve } from './challenge.reducer';
+
 export interface IChallengeApproveDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
@@ -29,12 +28,17 @@ export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
 
   const approveChallenge = () => {
     const entity = {
-      processGroupId: 1,
-      processTypeId: 1,
-      actionType: 1,
-      contentId: Number(props.match.params.id),
+      processGroupId: WfProcessGroup.CHALLENGE,
+      processTypeId: WfProcessType.ADD,
+      actionType: WfActionType.APPV,
+      contentId: Number(challengeEntity.id),
+
+      attachmentUrl: '',
+      requestNote: '',
+      requestData: '',
+      actionNote: '',
     };
-    props.updateWorkflow(entity);
+    props.approve(challengeEntity.id, entity);
   };
 
   return (
@@ -59,10 +63,10 @@ export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
 
 const mapStateToProps = ({ challenge, wfRequest }: IRootState) => ({
   challengeEntity: challenge.entity,
-  updateSuccess: wfRequest.updateSuccess,
+  updateSuccess: challenge.updateSuccess,
 });
 
-const mapDispatchToProps = { getEntity, updateWorkflow };
+const mapDispatchToProps = { getEntity, approve };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

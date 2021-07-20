@@ -67,15 +67,15 @@ export const Login = (props: ILoginProps) => {
             </Button>
           </ModalFooter>
         </AvForm>
-        <div className="mt-1">&nbsp;</div>
-        <Alert color="warning">
-          <Link to="/reset/request" data-cy="forgetYourPasswordSelector">
-            Quên mật khẩu?
-          </Link>
-        </Alert>
-        <Alert color="warning">
-          <span>Chưa có tài khoản?</span> <Link to="/register">Đăng ký</Link>
-        </Alert>
+        {/*<div className="mt-1">&nbsp;</div>*/}
+        {/*<Alert color="warning">*/}
+        {/*  <Link to="/reset/request" data-cy="forgetYourPasswordSelector">*/}
+        {/*    Quên mật khẩu?*/}
+        {/*  </Link>*/}
+        {/*</Alert>*/}
+        {/*<Alert color="warning">*/}
+        {/*  <span>Chưa có tài khoản?</span> <Link to="/register">Đăng ký</Link>*/}
+        {/*</Alert>*/}
       </Col>
     </Row>
   );

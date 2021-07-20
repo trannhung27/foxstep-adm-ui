@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
-import { cleanEntity, ICrudGetAllWithCriteriaAction } from 'app/shared/util/entity-utils';
+import { cleanEntity, ICrudGetAllWithCriteriaAction, ICrudPutActionRequest } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IChallenge, defaultValue } from 'app/shared/model/challenge.model';
+import { IWfRequest } from 'app/shared/model/workflow/wf-request.model';
 
 export const ACTION_TYPES = {
   FETCH_CHALLENGE_LIST: 'challenge/FETCH_CHALLENGE_LIST',
@@ -115,6 +116,13 @@ export const getEntities: ICrudGetAllWithCriteriaAction<IChallenge> = (criteria,
   return {
     type: ACTION_TYPES.FETCH_CHALLENGE_LIST,
     payload: axios.get<IChallenge>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`),
+  };
+};
+
+export const approveChallenge: ICrudPutActionRequest<IWfRequest> = (challengeId, entity) => {
+  return {
+    type: ACTION_TYPES.UPDATE_CHALLENGE,
+    payload: axios.post(`${apiUrl}/${challengeId}/approval`, cleanEntity(entity)),
   };
 };
 

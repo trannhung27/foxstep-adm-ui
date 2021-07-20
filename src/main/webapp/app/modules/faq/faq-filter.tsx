@@ -12,16 +12,26 @@ export interface IFaqFilterFormProps {
 }
 
 class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
+  private form: any;
+  constructor(props) {
+    super(props);
+    this.cancelFilter = this.cancelFilter.bind(this);
+  }
+
   handleSubmit = (even, errors, faqCriteria) => {
     const { handleFilter } = this.props;
     handleFilter(faqCriteria);
+  };
+
+  cancelFilter = (event, fields) => {
+    this.form && this.form.reset();
   };
 
   render() {
     const { faqCriteria, updating } = this.props;
 
     return (
-      <AvForm model={faqCriteria} onSubmit={this.handleSubmit}>
+      <AvForm onSubmit={this.handleSubmit} onReset={this.cancelFilter} ref={c => (this.form = c)}>
         <Row>
           <Col xs="12" sm="4">
             <AvGroup>
@@ -33,6 +43,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 data-cy="title.contains"
                 type="text"
                 name="title.contains"
+                value={faqCriteria['title.contains']}
                 validate={{
                   maxLength: { value: 500, errorMessage: 'Tối đa 500 ký tự.' },
                 }}
@@ -44,15 +55,22 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
               <Label id="statusLabel" for="faq-status">
                 Trạng thái
               </Label>
-              <AvInput id="faq-status" data-cy="status.equals" type="select" className="form-control" name="status.equals">
+              <AvInput
+                id="faq-status"
+                data-cy="status.equals"
+                type="select"
+                className="form-control"
+                name="status.equals"
+                value={faqCriteria['status.equals']}
+              >
                 <option value="" key="0">
-                  --Tất cả--
+                  --Chọn trạng thái--
                 </option>
-                <option value={NEWS_STATUSES.ACTIVE} key="1">
-                  Hoạt động
+                <option value={NEWS_STATUSES[0].id} key="1">
+                  {NEWS_STATUSES[0].name}
                 </option>
-                <option value={NEWS_STATUSES.INACTIVE} key="2">
-                  Không Hoạt động
+                <option value={NEWS_STATUSES[1].id} key="2">
+                  {NEWS_STATUSES[1].name}
                 </option>
               </AvInput>
             </AvGroup>
@@ -68,6 +86,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 type="select"
                 className="form-control"
                 name="newsCategoryId.equals"
+                value={faqCriteria['newsCategoryId.equals']}
               >
                 <option value="" key="0">
                   --Tất cả--
@@ -84,7 +103,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
           <Col xs="12" sm="6">
             <AvGroup>
               <Label id="datePublishedFromLabel" for="faq-datePublishedFrom">
-                Thời gian đăng từ
+                Đến ngày
               </Label>
               <AvInput
                 id="faq-datePublishedFrom"
@@ -93,14 +112,14 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
                 placeholder={'YYYY-MM-DD HH:mm'}
-                value={convertDateTimeFromServer(this.props.faqCriteria['datePublished.greaterThanOrEqual'])}
+                value={convertDateTimeFromServer(faqCriteria['datePublished.greaterThanOrEqual'])}
               />
             </AvGroup>
           </Col>
           <Col xs="12" sm="6">
             <AvGroup>
               <Label id="datePublishedToLabel" for="faq-datePublishedTo">
-                Thời gian đăng đến
+                Từ ngày
               </Label>
               <AvInput
                 id="faq-datePublishedTo"
@@ -109,15 +128,33 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
                 placeholder={'YYYY-MM-DD HH:mm'}
-                value={convertDateTimeFromServer(this.props.faqCriteria['datePublished.lessThanOrEqual'])}
+                value={convertDateTimeFromServer(faqCriteria['datePublished.lessThanOrEqual'])}
               />
             </AvGroup>
           </Col>
         </Row>
-        <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating}>
-          <FontAwesomeIcon icon="search" />
-          &nbsp; Tìm kiếm
-        </Button>
+        <Row>
+          <Col sm={2}>
+            <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating} block>
+              <FontAwesomeIcon icon="search" />
+              <span className="d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
+            </Button>
+          </Col>
+          <Col sm={2}>
+            <Button
+              color="default"
+              className="border-secondary"
+              id="cancel-button"
+              data-cy="cancelFilterButton"
+              type="reset"
+              value="Reset"
+              block
+            >
+              <FontAwesomeIcon icon="ban" />
+              <span className="d-md-none d-lg-inline">&nbsp; Hủy</span>
+            </Button>
+          </Col>
+        </Row>
       </AvForm>
     );
   }

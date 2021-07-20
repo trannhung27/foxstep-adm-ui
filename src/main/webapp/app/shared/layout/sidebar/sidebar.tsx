@@ -30,7 +30,7 @@ const Sidebar = (props: ISidebarProps) => {
   const path = useLocation().pathname;
 
   const findMenuItem = arr => {
-    if (path.length === 0 || path === '/') return { key: 0 };
+    if (path.length === 0 || path === '/') return { key: 2 };
     if (!Array.isArray(arr)) return arr;
     return (
       Array.isArray(arr) &&

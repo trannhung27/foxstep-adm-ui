@@ -3,10 +3,10 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Alert, Button, Col, Label, Row } from 'reactstrap';
-import { AvField, AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
+import { Button, Col, Label, Row } from 'reactstrap';
+import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
@@ -16,6 +16,9 @@ import { createEntity, getEntity, reset, updateEntity } from './news.reducer';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
+import { UploadImageInput } from 'app/modules/upload-image/upload-image';
+import { uploadImage } from 'app/modules/upload-image/upload-image-reducer';
+import { PageHeader } from 'antd';
 
 export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -82,9 +85,8 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
     <div>
       <Row className="mb-4">
         <Col md="8">
-          <h2 id="createOrEditLabel" data-cy="NewsCreateUpdateHeading">
-            Tạo hoặc sửa tin tức
-          </h2>
+          <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Tạo tin tức' : 'Sửa tin tức'} />
+          <hr />
         </Col>
       </Row>
       <Row>
@@ -94,7 +96,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
           ) : (
             <AvForm model={isNew ? {} : newsEntity} onSubmit={saveEntity}>
               {!isNew ? (
-                <AvGroup>
+                <AvGroup hidden>
                   <Label for="news-id">ID</Label>
                   <AvInput id="news-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
@@ -107,6 +109,9 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     </Label>
                     <AvField id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" />
                   </AvGroup>
+                  {/*<AvField id='news-imgUrl' data-cy='imgUrl' type='text' name='imgUrl'*/}
+                  {/*         value={props.uploadImageEntity.url} />*/}
+                  {/*<UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.uploadingImage} />*/}
                 </Col>
                 <Col>
                   <AvGroup>
@@ -117,11 +122,11 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                       <option value="" key="0">
                         --Chọn trạng thái--
                       </option>
-                      <option value={NEWS_STATUSES.ACTIVE} key="1">
-                        Hoạt động
+                      <option value={NEWS_STATUSES[0].id} key="1">
+                        {NEWS_STATUSES[0].name}
                       </option>
-                      <option value={NEWS_STATUSES.INACTIVE} key="2">
-                        Không Hoạt động
+                      <option value={NEWS_STATUSES[1].id} key="2">
+                        {NEWS_STATUSES[1].name}
                       </option>
                     </AvInput>
                   </AvGroup>
@@ -167,6 +172,22 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   onEditorStateChange={onEditorStateChange}
                   wrapperStyle={{ textDecoration: 'none !important' }}
                   editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
+                  toolbar={{
+                    options: [
+                      'inline',
+                      'blockType',
+                      'fontSize',
+                      'list',
+                      'textAlign',
+                      'colorPicker',
+                      'link',
+                      'embedded',
+                      'emoji',
+                      'image',
+                      'remove',
+                      'history',
+                    ],
+                  }}
                 />
                 {!editorState.getCurrentContent().hasText() && <p className="invalid-feedback">Không được để trống.</p>}
               </AvGroup>
@@ -258,6 +279,8 @@ const mapStateToProps = (storeState: IRootState) => ({
   loading: storeState.news.loading,
   updating: storeState.news.updating,
   updateSuccess: storeState.news.updateSuccess,
+  uploadImageEntity: storeState.uploadImage.entity,
+  uploadingImage: storeState.uploadImage.loading,
 });
 
 const mapDispatchToProps = {
@@ -267,6 +290,7 @@ const mapDispatchToProps = {
   updateEntity,
   createEntity,
   reset,
+  uploadImage,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

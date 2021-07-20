@@ -31,7 +31,7 @@ export const messages = {
 };
 
 export const APP_DATE_FORMAT = 'DD/MM/YY HH:mm';
-export const APP_TIMESTAMP_FORMAT = 'DD/MM/YY HH:mm:ss';
+export const APP_TIMESTAMP_FORMAT = 'DD/MM/YYYY HH:mm:ss';
 export const APP_LOCAL_DATE_FORMAT = 'DD/MM/YYYY';
 export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm Z';
@@ -44,10 +44,10 @@ export const NEWS_CATEGORY_TYPES = {
   TUTORIAL: { id: 3, name: 'Hướng dẫn' },
 };
 
-export const NEWS_STATUSES = {
-  ACTIVE: 1,
-  INACTIVE: 0,
-};
+export const NEWS_STATUSES = [
+  { id: 1, name: 'Hoạt động' },
+  { id: 0, name: 'Không hoạt động' },
+];
 
 export const WfProcessGroup = {
   CHALLENGE: 1,
@@ -62,4 +62,9 @@ export const WfActionType = {
   REQ: 0,
   APPV: 1,
   DENY: -1,
+};
+
+export const ChallengeTypes = {
+  ORGANIZATION: 0,
+  INDIVIDUAL: 1,
 };

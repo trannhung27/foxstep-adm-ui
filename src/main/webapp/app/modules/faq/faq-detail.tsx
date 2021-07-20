@@ -24,10 +24,8 @@ export const FaqDetail = (props: IFaqDetailProps) => {
       <div className="text-center">{faqEntity.imgUrl ? <img src={faqEntity.imgUrl} alt="" width="100%" /> : ''}</div>
       <div>
         <h2 style={{ display: 'inline' }}>{faqEntity.title}</h2>
-        {faqEntity.status === NEWS_STATUSES.ACTIVE ? (
-          <Badge color="success">Đang hoạt động</Badge>
-        ) : (
-          <Badge color="danger">Không hoạt động</Badge>
+        {NEWS_STATUSES.map(status =>
+          status.id === faqEntity.status ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
         )}
         <p className="mb-2 text-muted">
           <TextFormat type="date" value={faqEntity.datePublished} format={APP_TIMESTAMP_FORMAT} />
