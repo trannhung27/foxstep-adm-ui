@@ -29,8 +29,6 @@ export const Challenge = (props: IChallengeProps) => {
     'userId.equals': null,
     'status.equals': null,
     'challengeType.equals': null,
-    dateStart: null,
-    dateStartCompare: null,
     'dateStart.greaterThanOrEqual': null,
     'dateStart.lessThanOrEqual': null,
     'dateFinish.greaterThanOrEqual': null,
@@ -234,15 +232,18 @@ export const Challenge = (props: IChallengeProps) => {
                 <th className="hand" onClick={sort('sport.name')}>
                   Bộ môn <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('challenge_type')}>
+                <th className="hand" onClick={sort('challengeType')}>
                   Loại thử thách <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand">Trạng thái</th>
                 <th className="hand" onClick={sort('dateStart')}>
                   Ngày bắt đầu <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={sort('date_finish')}>
+                <th className="hand" onClick={sort('dateFinish')}>
                   Ngày kết thúc <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('dateCreated')}>
+                  Ngày tạo <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand">
                   <div></div>
@@ -279,6 +280,7 @@ export const Challenge = (props: IChallengeProps) => {
                   </td>
                   <td>{moment.utc(challenge.dateStart).format(APP_TIMESTAMP_FORMAT)}</td>
                   <td>{moment.utc(challenge.dateFinish).format(APP_TIMESTAMP_FORMAT)}</td>
+                  <td>{moment.utc(challenge.dateCreated).format(APP_TIMESTAMP_FORMAT)}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">

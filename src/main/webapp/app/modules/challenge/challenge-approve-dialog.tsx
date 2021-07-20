@@ -7,15 +7,14 @@ import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './challenge.reducer';
 import { approveChallenge as approve } from './challenge.reducer';
 
-export interface IChallengeApproveDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export interface IChallengeApproveDialogProps extends StateProps, DispatchProps {
+  showModal: boolean;
+  onClose: () => void;
+}
 
 export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
-  useEffect(() => {
-    props.getEntity(props.match.params.id);
-  }, []);
-
   const handleClose = () => {
-    props.history.push('/challenges/' + props.match.params.id);
+    props.onClose();
   };
 
   useEffect(() => {
@@ -42,7 +41,7 @@ export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
   };
 
   return (
-    <Modal isOpen toggle={handleClose}>
+    <Modal isOpen={props.showModal} toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="challengeApproveDialogHeading">
         Duyệt thử thách
       </ModalHeader>
