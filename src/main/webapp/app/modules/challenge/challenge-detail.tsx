@@ -25,6 +25,7 @@ import {
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT_Z,
   APP_TIMESTAMP_FORMAT,
+  ChallengeStatuses,
   WfProcessGroup,
 } from 'app/config/constants';
 import { getEntities as getActions } from '../workflow/wf-action/wf-action-reducer';
@@ -73,12 +74,20 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             <Col xs="12" sm="6">
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }}>Trạng thái: &nbsp; &nbsp; &nbsp;</Label>
-                {challengeEntity.status === 0 ? (
-                  <div style={{ fontWeight: 'bold' }}>Tạo thử thách</div>
-                ) : challengeEntity.status === 1 ? (
-                  <div style={{ fontWeight: 'bold' }}>Đã được duyệt</div>
+                {challengeEntity.status === ChallengeStatuses[0].id ? (
+                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[0].name}</div>
+                ) : challengeEntity.status === ChallengeStatuses[1].id ? (
+                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[1].name}</div>
+                ) : challengeEntity.status === ChallengeStatuses[2].id ? (
+                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[2].name}</div>
+                ) : challengeEntity.status === ChallengeStatuses[3].id ? (
+                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[3].name}</div>
+                ) : challengeEntity.status === ChallengeStatuses[4].id ? (
+                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[4].name}</div>
+                ) : challengeEntity.status === ChallengeStatuses[5].id ? (
+                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[5].name}</div>
                 ) : (
-                  <div style={{ fontWeight: 'bold' }}>Đã kết thúc</div>
+                  <div style={{ fontWeight: 'bold' }}></div>
                 )}
               </AvGroup>
             </Col>
