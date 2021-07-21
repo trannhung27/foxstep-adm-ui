@@ -14,12 +14,12 @@ export const BrandIcon = props => (
 
 export const Brand = props => (
   <Row justify="space-between" align="middle" className="brand">
-    <Col span={props.expanded ? 6 : 24}>
+    <Col span={props.expanded ? 6 : 24} className="text-center">
       <BrandIcon />
     </Col>
     {props.expanded && (
       <Col span={18} className="text-left">
-        <span className="brand-title">FOXSTEP2 ADMIN</span>
+        <span className="brand-title">Foxsteps Admin</span>
         <span className="navbar-version">{appConfig.VERSION}</span>
       </Col>
     )}

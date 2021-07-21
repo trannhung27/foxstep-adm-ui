@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 import { connect } from 'react-redux';
 import { APP_LOCAL_DATE_FORMAT, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import { PageSizePicker } from 'app/shared/util/page-size-picker';
 
 export interface ICOUProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -48,7 +49,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
   };
 
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getSortStateCustom(props.location, ITEMS_PER_PAGE, 'dateStart', 'desc'), props.location.search)
+    overridePaginationStateWithQueryParams(getSortStateCustom(props.location, 'dateStart', 'desc'), props.location.search)
   );
 
   const getAllEntities = () => {
@@ -62,7 +63,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
 
   const sortEntities = () => {
     getAllEntities();
-    let endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    let endURL = `?size=${paginationState.itemsPerPage}&page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
 
     if (criteriaState['title']) endURL += '&title=' + criteriaState['title'];
     if (criteriaState['chalType']) endURL += '&chalType=' + criteriaState['chalType'];
@@ -79,13 +80,14 @@ export const ChallengesOfUser = (props: ICOUProps) => {
 
   useEffect(() => {
     sortEntities();
-  }, [criteriaState, paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [criteriaState, paginationState.itemsPerPage, paginationState.activePage, paginationState.order, paginationState.sort]);
 
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
     const sort = params.get('sort');
-    if (page && sort) {
+    const size = params.get('size');
+    if (page && sort && size) {
       const sortSplit = sort.split(',');
       setPaginationState({
         ...paginationState,
@@ -110,6 +112,13 @@ export const ChallengesOfUser = (props: ICOUProps) => {
       activePage: currentPage,
     });
 
+  const handlePageSize = size => {
+    setPaginationState({
+      ...paginationState,
+      itemsPerPage: size,
+    });
+  };
+
   const { couList, match, loading, totalItems } = props;
   return (
     <div>
@@ -130,61 +139,64 @@ export const ChallengesOfUser = (props: ICOUProps) => {
 
       <div className="table-responsive pt-2">
         {couList && couList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="hand">STT</th>
-                <th className="hand" onClick={sort('chalTitle')}>
-                  Tên thử thách <SortIcon sortBy="chalTitle" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('sportName')}>
-                  Bộ môn <SortIcon sortBy="sportName" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('chalType')}>
-                  Loại thử thách <SortIcon sortBy="chalType" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('chalStatus')}>
-                  Trạng thái <SortIcon sortBy="chalStatus" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('chalUserStatus')}>
-                  Trạng thái tham gia
-                  <SortIcon sortBy="chalUserStatus" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('dateStart')}>
-                  Thời gian bắt đầu
-                  <SortIcon sortBy="dateStart" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('dateFinish')}>
-                  Thời gian kết thúc
-                  <SortIcon sortBy="dateFinish" paginationState={paginationState} />
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {couList.map((challenge, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
-                      ? 1 + i
-                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
-                  </td>
-                  <td>
-                    <Link to={'/challenges/' + challenge.chalId}>{challenge.chalTitle}</Link>
-                  </td>
-                  <td>{challenge.sportName}</td>
-                  <td>{challenge.chalType}</td>
-                  <td>{challenge.chalStatus}</td>
-                  <td>{challenge.chalUserStatus}</td>
-                  <td>
-                    {challenge.dateStart ? <TextFormat value={challenge.dateStart} type="date" format={APP_TIMESTAMP_FORMAT} /> : null}
-                  </td>
-                  <td>
-                    {challenge.dateFinish ? <TextFormat value={challenge.dateFinish} type="date" format={APP_TIMESTAMP_FORMAT} /> : null}
-                  </td>
+          <div>
+            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize} />
+            <Table responsive hover striped>
+              <thead>
+                <tr>
+                  <th className="hand">STT</th>
+                  <th className="hand" onClick={sort('chalTitle')}>
+                    Tên thử thách <SortIcon sortBy="chalTitle" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('sportName')}>
+                    Bộ môn <SortIcon sortBy="sportName" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('chalType')}>
+                    Loại thử thách <SortIcon sortBy="chalType" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('chalStatus')}>
+                    Trạng thái <SortIcon sortBy="chalStatus" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('chalUserStatus')}>
+                    Trạng thái tham gia
+                    <SortIcon sortBy="chalUserStatus" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('dateStart')}>
+                    Thời gian bắt đầu
+                    <SortIcon sortBy="dateStart" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('dateFinish')}>
+                    Thời gian kết thúc
+                    <SortIcon sortBy="dateFinish" paginationState={paginationState} />
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {couList.map((challenge, i) => (
+                  <tr key={`entity-${i}`} data-cy="entityTable">
+                    <td>
+                      {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                        ? 1 + i
+                        : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
+                    </td>
+                    <td>
+                      <Link to={'/challenges/' + challenge.chalId}>{challenge.chalTitle}</Link>
+                    </td>
+                    <td>{challenge.sportName}</td>
+                    <td>{challenge.chalType}</td>
+                    <td>{challenge.chalStatus}</td>
+                    <td>{challenge.chalUserStatus}</td>
+                    <td>
+                      {challenge.dateStart ? <TextFormat value={challenge.dateStart} type="date" format={APP_TIMESTAMP_FORMAT} /> : null}
+                    </td>
+                    <td>
+                      {challenge.dateFinish ? <TextFormat value={challenge.dateFinish} type="date" format={APP_TIMESTAMP_FORMAT} /> : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         ) : (
           !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
         )}

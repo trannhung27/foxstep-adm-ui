@@ -22,8 +22,12 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorChanged, setEditorChanged] = useState(false);
+  const [editorError, setEditorErrorState] = useState(false);
 
   const onEditorStateChange = editor => {
+    setEditorChanged(true);
+    setEditorErrorState(!editorState.getCurrentContent().hasText());
     setEditorState(editor);
   };
 
@@ -139,7 +143,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                   name="title"
                   validate={{
                     required: { value: true, errorMessage: 'Không được để trống.' },
-                    maxLength: { value: 500, errorMessage: 'Tối đa 500 ký tự.' },
+                    maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
                   }}
                 />
               </AvGroup>
@@ -197,7 +201,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     ],
                   }}
                 />
-                {!editorState.getCurrentContent().hasText() && <p className="invalid-feedback">Không được để trống.</p>}
+                {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
               </AvGroup>
               <Row>
                 <Col>

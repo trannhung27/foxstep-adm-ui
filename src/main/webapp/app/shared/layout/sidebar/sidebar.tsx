@@ -86,7 +86,7 @@ const Sidebar = (props: ISidebarProps) => {
   const menu = _menuProcess(menuItems);
 
   return (
-    <Sider className={'text-center'} trigger={null} collapsible collapsed={!sidebarOpen}>
+    <Sider trigger={null} collapsible collapsed={!sidebarOpen}>
       <Brand expanded={sidebarOpen} />
       <Menu theme="dark" mode="inline" selectedKeys={[activeKey]} defaultOpenKeys={[openKey]} onClick={menuClickHandle}>
         {menu}

@@ -14,6 +14,8 @@ import UsersFilterForm from 'app/modules/users/users-filter';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 import { SortIcon } from 'app/shared/util/sort-icon-util';
+import { PageSizePicker } from 'app/shared/util/page-size-picker';
+import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
 
 export interface IUsersProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -43,7 +45,7 @@ export const Users = (props: IUsersProps) => {
   };
 
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'fullName'), props.location.search)
+    overridePaginationStateWithQueryParams(getSortStateCustom(props.location, 'fullName', 'asc'), props.location.search)
   );
 
   const getAllEntities = () => {
@@ -57,7 +59,7 @@ export const Users = (props: IUsersProps) => {
 
   const sortEntities = () => {
     getAllEntities();
-    let endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    let endURL = `?size=${paginationState.itemsPerPage}&page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
 
     if (criteriaState['fullName.contains']) endURL += '&fullName.contains=' + criteriaState['fullName.contains'];
     if (criteriaState['email.contains']) endURL += '&email.contains=' + criteriaState['email.contains'];
@@ -73,16 +75,18 @@ export const Users = (props: IUsersProps) => {
 
   useEffect(() => {
     sortEntities();
-  }, [criteriaState, paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [criteriaState, paginationState.itemsPerPage, paginationState.activePage, paginationState.order, paginationState.sort]);
 
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
     const sort = params.get('sort');
-    if (page && sort) {
+    const size = params.get('size');
+    if (page && sort && size) {
       const sortSplit = sort.split(',');
       setPaginationState({
         ...paginationState,
+        itemsPerPage: parseInt(size, 10),
         activePage: +page,
         sort: sortSplit[0],
         order: sortSplit[1],
@@ -104,8 +108,11 @@ export const Users = (props: IUsersProps) => {
       activePage: currentPage,
     });
 
-  const handleSyncList = () => {
-    sortEntities();
+  const handlePageSize = size => {
+    setPaginationState({
+      ...paginationState,
+      itemsPerPage: size,
+    });
   };
 
   const { usersList, match, loading, totalItems } = props;
@@ -117,60 +124,63 @@ export const Users = (props: IUsersProps) => {
 
       <div className="table-responsive pt-2">
         {usersList && usersList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="hand">STT</th>
-                <th className="hand" onClick={sort('fullName')}>
-                  Họ tên <SortIcon sortBy="fullName" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('bib')}>
-                  BIB <SortIcon sortBy="bib" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('email')}>
-                  Email <SortIcon sortBy="email" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('nationalIdNumber')}>
-                  Số Giấy tờ <SortIcon sortBy="nationalIdNumber" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('mobilePhone')}>
-                  Số ĐT <SortIcon sortBy="mobilePhone" paginationState={paginationState} />
-                </th>
-                <th className="hand" onClick={sort('status')}>
-                  Trạng thái <SortIcon sortBy="status" paginationState={paginationState} />
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {usersList.map((users, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
-                      ? 1 + i
-                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
-                  </td>
-                  <td>{users.fullName}</td>
-                  <td>{users.bib}</td>
-                  <td>{users.email}</td>
-                  <td>{users.nationalIdNumber}</td>
-                  <td>{users.mobilePhone}</td>
-                  <td className="text-center">
-                    {APP_USER_STATUS.map(status =>
-                      users.status === status.id ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
-                    )}
-                  </td>
-                  <td className="text-right">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${users.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-md-none d-lg-inline">Xem</span>
-                      </Button>
-                    </div>
-                  </td>
+          <div>
+            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize} />
+            <Table responsive hover striped>
+              <thead>
+                <tr>
+                  <th className="hand">STT</th>
+                  <th className="hand" onClick={sort('fullName')}>
+                    Họ tên <SortIcon sortBy="fullName" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('bib')}>
+                    BIB <SortIcon sortBy="bib" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('email')}>
+                    Email <SortIcon sortBy="email" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('nationalIdNumber')}>
+                    Số Giấy tờ <SortIcon sortBy="nationalIdNumber" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('mobilePhone')}>
+                    Số ĐT <SortIcon sortBy="mobilePhone" paginationState={paginationState} />
+                  </th>
+                  <th className="hand" onClick={sort('status')}>
+                    Trạng thái <SortIcon sortBy="status" paginationState={paginationState} />
+                  </th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {usersList.map((users, i) => (
+                  <tr key={`entity-${i}`} data-cy="entityTable">
+                    <td>
+                      {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                        ? 1 + i
+                        : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
+                    </td>
+                    <td>{users.fullName}</td>
+                    <td>{users.bib}</td>
+                    <td>{users.email}</td>
+                    <td>{users.nationalIdNumber}</td>
+                    <td>{users.mobilePhone}</td>
+                    <td className="text-center">
+                      {APP_USER_STATUS.map(status =>
+                        users.status === status.id ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
+                      )}
+                    </td>
+                    <td className="text-right">
+                      <div className="btn-group flex-btn-group-container">
+                        <Button tag={Link} to={`${match.url}/${users.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                          <FontAwesomeIcon icon="eye" /> <span className="d-md-none d-lg-inline">Xem</span>
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         ) : (
           !loading && <div className="alert alert-warning">Không tìm thấy khách hàng!</div>
         )}
