@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Row, Table, Label } from 'reactstrap';
+import { Button, Col, Row, Table, Label, Badge } from 'reactstrap';
 import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
@@ -14,7 +14,13 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { height } from '@fortawesome/free-solid-svg-icons/faCogs';
 import moment from 'moment';
 import DateTime from 'react-datetime';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import {
+  APP_DATE_FORMAT,
+  APP_LOCAL_DATE_FORMAT,
+  APP_LOCAL_DATETIME_FORMAT_Z,
+  APP_TIMESTAMP_FORMAT,
+  ChallengeStatuses,
+} from 'app/config/constants';
 import dayjs from 'dayjs';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
@@ -35,6 +41,7 @@ export const Challenge = (props: IChallengeProps) => {
     'dateFinish.lessThanOrEqual': null,
     'dateRegisDeadline.greaterThanOrEqual': null,
     'dateRegisDeadline.lessThanOrEqual': null,
+    'sport.name.equals': null,
   });
 
   const getAllEntities = () => {
@@ -127,27 +134,18 @@ export const Challenge = (props: IChallengeProps) => {
               name="status"
               label="Trạng thái"
               onChange={event => {
-                if (event.target.value === 0) {
-                  criteriaState['status.equals'] = 0;
-                  criteriaState['dateStart.lessThanOrEqual'] = moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss.sss[Z]');
-                } else if (event.target.value === 1) {
-                  criteriaState['status.equals'] = 1;
-                  criteriaState['dateFinish.lessThanOrEqual'] = moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss.sss[Z]');
-                }
+                criteriaState['status.equals'] = event.target.value;
               }}
             >
               <option value="" key="0">
                 Tất cả
               </option>
-              <option value="0">Không hoạt động</option>
-              <option value="1">Đang hoạt động</option>
-              {/* {users
-                ? users.map(otherEntity => (
-                    <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.login}
-                    </option>
-                  ))
-                : null} */}
+              <option value={ChallengeStatuses[0].id}>{ChallengeStatuses[0].name}</option>
+              <option value={ChallengeStatuses[1].id}>{ChallengeStatuses[1].name}</option>
+              <option value={ChallengeStatuses[2].id}>{ChallengeStatuses[2].name}</option>
+              <option value={ChallengeStatuses[3].id}>{ChallengeStatuses[3].name}</option>
+              <option value={ChallengeStatuses[4].id}>{ChallengeStatuses[4].name}</option>
+              <option value={ChallengeStatuses[5].id}>{ChallengeStatuses[5].name}</option>
             </AvField>
           </Col>
           <Col xs="12" sm="4">
@@ -179,7 +177,35 @@ export const Challenge = (props: IChallengeProps) => {
             <Row>
               <Col xs="12" sm="8">
                 <AvGroup>
-                  <Label>Ngày bắt đầu</Label>
+                  <AvField
+                    type="select"
+                    name="sportName"
+                    label="Bộ môn"
+                    value={criteriaState['sport.name.equals']}
+                    onChange={event => (criteriaState['sport.name.equals'] = event.target.value)}
+                  >
+                    <option value="" key="0">
+                      Tất cả
+                    </option>
+                    <option value="Run">Chạy bộ</option>
+                    {/* {categories
+                ? categories.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.name}
+                    </option>
+                  ))
+                : null} */}
+                  </AvField>
+                </AvGroup>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col xs="12" sm="4">
+            <Row>
+              <Col xs="12" sm="8">
+                <AvGroup>
+                  <Label>Từ ngày</Label>
                   <DateTime
                     value={criteriaState['dateStart.greaterThanOrEqual']}
                     onChange={date => (criteriaState['dateStart.greaterThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
@@ -197,7 +223,7 @@ export const Challenge = (props: IChallengeProps) => {
             <Row>
               <Col xs="12" sm="8">
                 <AvGroup>
-                  <Label>Ngày kết thúc</Label>
+                  <Label>Đến ngày</Label>
                   <DateTime
                     value={criteriaState['dateFinish.greaterThanOrEqual']}
                     onChange={date => (criteriaState['dateFinish.lessThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
@@ -260,20 +286,24 @@ export const Challenge = (props: IChallengeProps) => {
                     </Button>
                   </td>
                   <td>{challenge.title}</td>
-                  <td>{challenge.sport.name}</td>
+                  <td>{challenge.sport.name === 'Run' ? 'Chạy bộ' : ''}</td>
                   <td>
                     {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
                     {challenge.challengeType === 1 && <div>Cá nhân</div>}
                   </td>
                   <td>
-                    {challenge.status === 1 && Date.parse(challenge.dateStart) < Date.now() ? (
-                      <div>Đang diễn ra</div>
-                    ) : (challenge.status === 1 && Date.parse(challenge.dateFinish) < Date.now()) ||
-                      Date.parse(challenge.dateFinish) < Date.now() ||
-                      challenge.status === 2 ? (
-                      <div>Đã kết thúc</div>
-                    ) : challenge.status === -1 && Date.now() - 2592000 > Date.parse(challenge.dateUpdated) ? (
-                      <div>Đã huỷ</div>
+                    {challenge.status === 0 ? (
+                      <Badge color="dark">{ChallengeStatuses[0].name}</Badge>
+                    ) : challenge.status === 1 ? (
+                      <Badge color="primary">{ChallengeStatuses[1].name}</Badge>
+                    ) : challenge.status === 2 ? (
+                      <Badge color="danger">{ChallengeStatuses[2].name}</Badge>
+                    ) : challenge.status === 12 ? (
+                      <Badge color="success">{ChallengeStatuses[3].name}</Badge>
+                    ) : challenge.status === -1 ? (
+                      <Badge color="secondary">{ChallengeStatuses[4].name}</Badge>
+                    ) : challenge.status === -2 ? (
+                      <Badge color="info">{ChallengeStatuses[5].name}</Badge>
                     ) : (
                       <div></div>
                     )}
