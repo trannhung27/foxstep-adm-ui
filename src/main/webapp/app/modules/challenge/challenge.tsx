@@ -249,9 +249,7 @@ export const Challenge = (props: IChallengeProps) => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon="sort" />
-                </th>
+                <th className="hand">STT</th>
                 <th className="hand" onClick={sort('title')}>
                   Tên thử thách <FontAwesomeIcon icon="sort" />
                 </th>
@@ -271,9 +269,6 @@ export const Challenge = (props: IChallengeProps) => {
                 <th className="hand" onClick={sort('dateCreated')}>
                   Ngày tạo <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand">
-                  <div></div>
-                </th>
                 <th />
               </tr>
             </thead>
@@ -281,11 +276,15 @@ export const Challenge = (props: IChallengeProps) => {
               {challengeList.map((challenge, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
+                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                      ? 1 + i
+                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
+                  </td>
+                  <td>
                     <Button tag={Link} to={`${match.url}/${challenge.id}`} color="link" size="sm">
-                      {challenge.id}
+                      {challenge.title}
                     </Button>
                   </td>
-                  <td>{challenge.title}</td>
                   <td>{challenge.sport.name === 'Run' ? 'Chạy bộ' : ''}</td>
                   <td>
                     {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
@@ -311,22 +310,6 @@ export const Challenge = (props: IChallengeProps) => {
                   <td>{moment.utc(challenge.dateStart).format(APP_TIMESTAMP_FORMAT)}</td>
                   <td>{moment.utc(challenge.dateFinish).format(APP_TIMESTAMP_FORMAT)}</td>
                   <td>{moment.utc(challenge.dateCreated).format(APP_TIMESTAMP_FORMAT)}</td>
-                  <td className="text-right">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${challenge.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Xem</span>
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={`${match.url}/${challenge.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
-                      </Button>
-                    </div>
-                  </td>
                 </tr>
               ))}
             </tbody>
