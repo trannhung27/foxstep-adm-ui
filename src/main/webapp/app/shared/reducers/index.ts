@@ -28,6 +28,11 @@ import news, {
   NewsState
 } from 'app/entities/news/news.reducer';
 
+import banners, {
+  BannersState
+} from 'app/entities/banners/banners.reducer';
+
+
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -44,6 +49,7 @@ export interface IRootState {
   readonly category: CategoryState;
   readonly news_categories: News_categoriesState;
   readonly news: NewsState;
+  readonly banners: BannersState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -62,6 +68,7 @@ const rootReducer = combineReducers<IRootState>({
   category,
   news_categories,
   news,
+  banners,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

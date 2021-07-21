@@ -6,7 +6,7 @@ import { Translate, TextFormat, getSortState, IPaginationBaseState, JhiPaginatio
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './news.reducer';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT,APP_LOCAL_DATETIME_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import {Layout} from "antd";
@@ -122,7 +122,7 @@ export const News = (props: INewsProps) => {
                   User <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  Category <FontAwesomeIcon icon="sort" />
+                  News Categories <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -138,10 +138,10 @@ export const News = (props: INewsProps) => {
                   <td>{news.title}</td>
                   <td>{news.content}</td>
                   <td>{news.desc}</td>
-                  <td>{news.dateCreated ? <TextFormat type="date" value={news.dateCreated} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>{news.dateUpdated ? <TextFormat type="date" value={news.dateUpdated} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
+                  <td>{news.dateCreated ? <TextFormat type="date" value={news.dateCreated} format={APP_LOCAL_DATETIME_FORMAT} /> : null}</td>
+                  <td>{news.dateUpdated ? <TextFormat type="date" value={news.dateUpdated} format={APP_LOCAL_DATETIME_FORMAT} /> : null}</td>
                   <td>{news.user ? news.user.login : ''}</td>
-                  <td>{news.category ? <Link to={`category/${news.category.id}`}>{news.category.name}</Link> : ''}</td>
+                  <td>{news.category ? <Link to={`newscategories/${news.category.id}`}>{news.category.name}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${news.id}`} color="info" size="sm" data-cy="entityDetailsButton">

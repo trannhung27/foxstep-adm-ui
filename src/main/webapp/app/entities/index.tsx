@@ -8,6 +8,7 @@ import Post from './post';
 import Category from './category';
 import News_categories from './news_categories';
 import News from './news';
+import Banners from './banners';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 const Routes = ({ match }) => (
@@ -18,6 +19,7 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}/category`} component={Category} />
       <ErrorBoundaryRoute path={`${match.url}/news_categories`} component={News_categories} />
       <ErrorBoundaryRoute path={`${match.url}/news`} component={News} />
+      <ErrorBoundaryRoute path={`${match.url}/banners`} component={Banners} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
     </Switch>
   </div>

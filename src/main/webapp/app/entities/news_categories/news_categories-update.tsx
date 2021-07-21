@@ -16,6 +16,9 @@ export interface INewsCategoriesUpdateProps extends StateProps, DispatchProps, R
 export const NewsCategoriesUpdate = (props: INewsCategoriesUpdateProps) => {
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
+  // newscategoriesEntity.creationDate = convertDateTimeToServer(values.dateCreated);
+  // values.dateUpdated = convertDateTimeToServer(values.dateUpdated);
+
   const { newscategoriesEntity, loading, updating } = props;
 
   const handleClose = () => {

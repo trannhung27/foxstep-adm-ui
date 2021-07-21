@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { IUser } from 'app/shared/model/user.model';
-import { ICategory } from 'app/shared/model/category.model';
+import { INewsCategories } from './news_categories.model';
+import { ICategory } from './category.model';
 
 export interface INews {
   id?: number;
@@ -10,8 +11,9 @@ export interface INews {
   title?: string;
   dateCreated?:string;
   dateUpdated?:string;
+  status?: number;
   user?: IUser;
-  category?: ICategory;
+  category?: INewsCategories;
 }
 
 export const defaultValue: Readonly<INews> = {};

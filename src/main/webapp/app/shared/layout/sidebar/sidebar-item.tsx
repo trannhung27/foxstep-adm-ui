@@ -49,7 +49,7 @@ export const menuItems = [
         title: "News Categories",
         icon: <FileTextOutlined />,
         url: "/entity/news_categories"
-      }
+      },
     ]
   },
   {
@@ -95,6 +95,20 @@ export const menuItems = [
         icon: <ApiOutlined/>,
         url: "/admin/docs"
       },
+    ]
+  },
+  {
+    key: 3,
+    title: "Magane Banners",
+    icon: <UnorderedListOutlined/>,
+    isAuthenticated: true,
+    child: [
+      {
+        key: 301,
+        title: "Banners",
+        icon: <FileTextOutlined />,
+        url: "/entity/banners"
+      }
     ]
   },
 ]

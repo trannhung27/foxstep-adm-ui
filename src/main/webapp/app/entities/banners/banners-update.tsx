@@ -11,16 +11,17 @@ import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { ICategory } from 'app/shared/model/category.model';
 import { getEntities as getCategories } from 'app/entities/news_categories/news_categories.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './news.reducer';
+import { getEntity, updateEntity, createEntity, reset } from './banners.reducer';
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { convertDateTimeToServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { getEntities as getNews} from '../news/news.reducer';
 
 export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const NewsUpdate = (props: INewsUpdateProps) => {
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { newsEntity, users, categories, loading, updating } = props;
+  const { newsEntity, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/entity/news' + props.location.search);
@@ -32,9 +33,6 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
-
-    props.getUsers();
-    props.getCategories();
   }, []);
 
   useEffect(() => {
@@ -44,14 +42,12 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.dateCreated = convertDateTimeToServer(values.dateCreated);
-    values.dateUpdated = convertDateTimeToServer(values.dateUpdated);
+    values.date_created = convertDateTimeToServer(values.date_created);
+    values.date_updated = convertDateTimeToServer(values.date_updated);
     if (errors.length === 0) {
       const entity = {
         ...newsEntity,
         ...values,
-        user: users.find(it => it.id.toString() === values.userId.toString()),
-        category: categories.find(it => it.id.toString() === values.categoryId.toString()),
       };
 
       if (isNew) {
@@ -83,122 +79,51 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   <AvInput id="post-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
-              <AvGroup>
-                <Label id="titleLabel" for="post-title">
-                  Title
-                </Label>
-                <AvField
-                  id="post-title"
-                  data-cy="title"
-                  type="text"
-                  name="title"
-                  validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
-                  }}
-                />
-              </AvGroup>
-              <AvGroup>
-                <Label id="titleLabel" for="post-title">
-                  Type
-                </Label>
-                <AvField
-                  id="post-title"
-                  data-cy="typeId"
-                  type="text"
-                  name="typeId"
-                />
-              </AvGroup>
 
               <AvGroup>
-                  {/* <Label for="post-id">status</Label> */}
-                  <AvInput id="post-id" value="0" type="hidden" data="1" className="form-control" name="status" required readOnly />
-              </AvGroup>
-
-              <AvGroup>
-                <Label id="titleLabel" for="post-title">
-                  Desc
+                <Label id="creationDateLabel" for="post-creationDate">
+                  content
                 </Label>
                 <AvField
-                  id="post-title"
-                  data-cy="desc"
-                  type="text"
-                  name="desc"
-                  validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
-                  }}
+                  id="post-creationDate"
+                  data-cy="content_id"
+                  type="datetime-local"
+                  className="form-control"
+                  name="content_id"
                 />
               </AvGroup>
-              <AvGroup>
-                <Label id="contentLabel" for="post-content">
-                  Content
-                </Label>
-                <AvField
-                  id="post-content"
-                  data-cy="content"
-                  type="text"
-                  name="content"
-                />
-              </AvGroup>
-              
               <AvGroup>
                 <Label id="creationDateLabel" for="post-creationDate">
                   Creation Date
                 </Label>
                 <AvField
                   id="post-creationDate"
-                  data-cy="dateCreated"
+                  data-cy="date_created"
                   type="datetime-local"
                   className="form-control"
-                  name="dateCreated"
-                  value={isNew ?'':convertDateTimeFromServer(newsEntity.dateCreated)}
+                  name="date_created"
+                  value={isNew ?'':convertDateTimeFromServer(newsEntity.date_created)}
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' },
                   }}
                 />
               </AvGroup>
+
               <AvGroup>
                 <Label id="creationDateLabel" for="post-creationDate">
-                  Updated Date
+                  Creation Date
                 </Label>
                 <AvField
                   id="post-creationDate"
-                  data-cy="dateUpdated"
+                  data-cy="date_updated"
                   type="datetime-local"
                   className="form-control"
-                  name="dateUpdated"
-                  value={isNew ?'':convertDateTimeFromServer(newsEntity.dateUpdated)}
+                  name="date_updated"
+                  value={isNew ?'':convertDateTimeFromServer(newsEntity.date_updated)}
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' },
                   }}
                 />
-              </AvGroup>
-              <AvGroup>
-                <Label for="post-user">User</Label>
-                <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" required>
-                  <option value="" key="0" />
-                  {users
-                    ? users.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.login}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-                <AvFeedback>This field is required.</AvFeedback>
-              </AvGroup>
-              <AvGroup>
-                <Label for="post-category">Category</Label>
-                <AvInput id="post-category" data-cy="category" type="select" className="form-control" name="categoryId" required>
-                  <option value="" key="0" />
-                  {categories
-                    ? categories.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}-{otherEntity.name}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-                <AvFeedback>This field is required.</AvFeedback>
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/entity/news" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
@@ -215,21 +140,18 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
         </Col>
       </Row>
     </div>
+  
   );
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  users: storeState.userManagement.users,
-  categories: storeState.news_categories.entities,
-  newsEntity: storeState.news.entity,
-  loading: storeState.news.loading,
-  updating: storeState.news.updating,
-  updateSuccess: storeState.news.updateSuccess,
+  newsEntity: storeState.banners.entity,
+  loading: storeState.banners.loading,
+  updating: storeState.banners.updating,
+  updateSuccess: storeState.banners.updateSuccess,
 });
 
 const mapDispatchToProps = {
-  getUsers,
-  getCategories,
   getEntity,
   updateEntity,
   createEntity,

@@ -3,20 +3,19 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-import { Translate, getSortState, IPaginationBaseState } from 'react-jhipster';
+import { Translate, TextFormat, getSortState, IPaginationBaseState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities, reset } from './category.reducer';
+import { getEntities, reset } from './banners.reducer';
 import { ICategory } from 'app/shared/model/category.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { getEntity } from './category.reducer';
 
-export interface ICategoryProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export interface IBannersProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export const Category = (props: ICategoryProps) => {
+export const Banners = (props: IBannersProps) => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
@@ -76,19 +75,19 @@ export const Category = (props: ICategoryProps) => {
     setSorting(true);
   };
 
-  const handleSyncList = () => {
-    resetAll();
-  };
+  // const handleSyncList = () => {
+  //   resetAll();
+  // };
 
-  const { categoryList, categorys, match, loading } = props;
+  const { bannersList, match, loading } = props;
   return (
     <div>
       <h2 id="category-heading" data-cy="CategoryHeading">
-        Categories
+        Banners
         <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+          {/* <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> Refresh List
-          </Button>
+          </Button> */}
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp; Create new Category
@@ -104,7 +103,7 @@ export const Category = (props: ICategoryProps) => {
           threshold={0}
           initialLoad={false}
         >
-          {categoryList && categoryList.length > 0 ? (
+          {bannersList && bannersList.length > 0 ? (
             <Table responsive>
               <thead>
                 <tr>
@@ -112,39 +111,22 @@ export const Category = (props: ICategoryProps) => {
                     ID <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('name')}>
-                    Name <FontAwesomeIcon icon="sort" />
+                    News <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('description')}>
-                    Description <FontAwesomeIcon icon="sort" />
+                    Time <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('name')}>
+                    News Categories <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('status')}>
+                    Status <FontAwesomeIcon icon="sort" />
                   </th>
                   <th />
                 </tr>
               </thead>
               <tbody>
-                {categoryList.map((category, i) => (
-                  <tr key={`entity-${i}`} data-cy="entityTable">
-                    <td>
-                      <Button tag={Link} to={`${match.url}/${category.id}`} color="link" size="sm">
-                        {category.id}
-                      </Button>
-                    </td>
-                    <td>{category.name}</td>
-                    <td>{category.description}</td>
-                    <td className="text-right">
-                      <div className="btn-group flex-btn-group-container">
-                        <Button tag={Link} to={`${match.url}/${category.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                          <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                        </Button>
-                        <Button tag={Link} to={`${match.url}/${category.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
-                          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                        </Button>
-                        <Button tag={Link} to={`${match.url}/${category.id}/delete`} color="danger" size="sm" data-cy="entityDeleteButton">
-                          <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+               
               </tbody>
             </Table>
           ) : (
@@ -156,18 +138,16 @@ export const Category = (props: ICategoryProps) => {
   );
 };
 
-const mapStateToProps = ({ category }: IRootState) => ({
-  categorys: category.entity,
-  categoryList: category.entities,
-  loading: category.loading,
-  totalItems: category.totalItems,
-  links: category.links,
-  entity: category.entity,
-  updateSuccess: category.updateSuccess,
+const mapStateToProps = ({ banners }: IRootState) => ({
+  bannersList: banners.entities,
+  loading: banners.loading,
+  totalItems: banners.totalItems,
+  links: banners.links,
+  entity: banners.entity,
+  updateSuccess: banners.updateSuccess,
 });
 
 const mapDispatchToProps = {
-  getEntity,
   getEntities,
   reset,
 };
@@ -175,4 +155,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Category);
+export default connect(mapStateToProps, mapDispatchToProps)(Banners);
