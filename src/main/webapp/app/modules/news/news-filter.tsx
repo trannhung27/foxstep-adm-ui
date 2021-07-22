@@ -4,6 +4,7 @@ import { Button, Col, Label, Row } from 'reactstrap';
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NEWS_STATUSES } from 'app/config/constants';
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 export interface INewsFilterFormProps {
   newsCriteria: Record<string, unknown>;
@@ -109,7 +110,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
           <Col sm={2}>
             <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating} block>
               <FontAwesomeIcon icon="search" />
-              <span className="d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
             </Button>
           </Col>
           <Col sm={2}>
@@ -122,8 +123,8 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               value="Reset"
               block
             >
-              <FontAwesomeIcon icon="ban" />
-              <span className="d-md-none d-lg-inline">&nbsp; Hủy</span>
+              <FontAwesomeIcon icon={faWindowClose} />
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Hủy</span>
             </Button>
           </Col>
         </Row>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Badge, Button, Row, Table } from 'reactstrap';
+import { Badge, Button, Col, Row, Table } from 'reactstrap';
 import { JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -118,24 +118,21 @@ export const News = (props: INewsProps) => {
   const { newsList, match, loading, totalItems } = props;
   return (
     <div>
-      <PageHeader
-        style={{ padding: '0 0' }}
-        className="site-page-header"
-        title="Quản lý tin tức"
-        extra={
-          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp; Tạo mới
-          </Link>
-        }
-      />
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý tin tức" />
       <hr />
       <NewsFilterForm newsCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
 
       <div className="table-responsive pt-2">
         {newsList && newsList.length > 0 ? (
           <div>
-            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize} />
+            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>
+              <Col sm="2">
+                <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                  <FontAwesomeIcon icon="plus" />
+                  <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
+                </Button>
+              </Col>
+            </PageSizePicker>
             <Table responsive hover striped>
               <thead>
                 <tr>
@@ -143,7 +140,7 @@ export const News = (props: INewsProps) => {
                   <th className="hand" onClick={sort('title')}>
                     Tiêu đề <SortIcon sortBy="title" paginationState={paginationState} />
                   </th>
-                  <th className="hand" onClick={sort('user.email')}>
+                  <th className="hand" onClick={sort('user.firstName')}>
                     Người tạo <SortIcon sortBy="user.email" paginationState={paginationState} />
                   </th>
                   <th className="hand" onClick={sort('status')}>
@@ -164,7 +161,7 @@ export const News = (props: INewsProps) => {
                         : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
                     </td>
                     <td>{news.title}</td>
-                    <td>{news.user ? news.user.email : ''}</td>
+                    <td>{news.user ? news.user.firstName : ''}</td>
                     <td className="text-center">
                       {NEWS_STATUSES.map(status =>
                         status.id === news.status ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
@@ -176,7 +173,7 @@ export const News = (props: INewsProps) => {
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${news.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                          <FontAwesomeIcon icon="eye" /> <span className="d-md-none d-lg-inline">Xem</span>
+                          <FontAwesomeIcon icon="eye" /> <span className="d-sm-none d-md-none d-lg-inline">Xem</span>
                         </Button>
                         <Button
                           tag={Link}
@@ -185,7 +182,7 @@ export const News = (props: INewsProps) => {
                           size="sm"
                           data-cy="entityEditButton"
                         >
-                          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-md-none d-lg-inline">Sửa</span>
+                          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-sm-none d-md-none d-lg-inline">Sửa</span>
                         </Button>
                       </div>
                     </td>

@@ -15,6 +15,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { PageHeader } from 'antd';
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 export interface IFaqUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -49,7 +50,8 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   }, []);
 
   useEffect(() => {
-    if (faqEntity.content) setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(faqEntity.content))));
+    if (faqEntity.content && !isNew)
+      setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(faqEntity.content))));
   }, [faqEntity]);
 
   useEffect(() => {
@@ -82,16 +84,12 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
 
   return (
     <div>
-      <Row>
-        <Col>
-          <PageHeader
-            style={{ padding: '0 0' }}
-            className="site-page-header"
-            title={isNew ? 'Tạo Câu hỏi thường gặp/Hướng dẫn' : 'Sửa Câu hỏi thường gặp/Hướng dẫn'}
-          />
-          <hr />
-        </Col>
-      </Row>
+      <PageHeader
+        style={{ padding: '0 0' }}
+        className="site-page-header"
+        title={isNew ? 'Tạo Câu hỏi thường gặp/Hướng dẫn' : 'Sửa Câu hỏi thường gặp/Hướng dẫn'}
+      />
+      <hr />
       <Row>
         <Col>
           {loading ? (
@@ -203,8 +201,20 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                 />
                 {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
               </AvGroup>
-              <Row>
-                <Col>
+              <AvGroup hidden>
+                <Label for="post-user">Người tạo:</Label>
+                <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
+                  {users
+                    ? users.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.login}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
+              <Row className="justify-content-between">
+                <Col sm="6">
                   <AvGroup>
                     <Label id="datePublishedLabel" for="faq-datePublished">
                       Thời gian đăng bài:
@@ -223,37 +233,29 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     />
                   </AvGroup>
                 </Col>
-                <Col>
-                  <AvGroup>
-                    <Label for="post-user">Người tạo:</Label>
-                    <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
-                      {users
-                        ? users.map(otherEntity => (
-                            <option value={otherEntity.id} key={otherEntity.id}>
-                              {otherEntity.login}
-                            </option>
-                          ))
-                        : null}
-                    </AvInput>
-                  </AvGroup>
+                <Col sm="3">
+                  <Label for="save-entity">&nbsp;</Label>
+                  <Button tag={Link} id="cancel-save" to="/faqs" color="default" className="border-secondary" replace block>
+                    <FontAwesomeIcon icon={faWindowClose} />
+                    &nbsp;
+                    <span className="d-none d-md-inline">Hủy</span>
+                  </Button>
+                </Col>
+                <Col sm="3">
+                  <Label for="save-entity">&nbsp;</Label>
+                  <Button
+                    color="primary"
+                    id="save-entity"
+                    data-cy="entityCreateSaveButton"
+                    type="submit"
+                    disabled={updating || !editorState.getCurrentContent().hasText()}
+                    block
+                  >
+                    <FontAwesomeIcon icon="save" />
+                    &nbsp; Lưu
+                  </Button>
                 </Col>
               </Row>
-              <Button tag={Link} id="cancel-save" to="/faqs" replace color="info">
-                <FontAwesomeIcon icon="arrow-left" />
-                &nbsp;
-                <span className="d-none d-md-inline">Quay lại</span>
-              </Button>
-              &nbsp;
-              <Button
-                color="primary"
-                id="save-entity"
-                data-cy="entityCreateSaveButton"
-                type="submit"
-                disabled={updating || !editorState.getCurrentContent().hasText()}
-              >
-                <FontAwesomeIcon icon="save" />
-                &nbsp; Lưu
-              </Button>
             </AvForm>
           )}
         </Col>

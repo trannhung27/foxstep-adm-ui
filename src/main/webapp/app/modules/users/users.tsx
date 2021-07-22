@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Badge, Button, Row, Table } from 'reactstrap';
+import { Badge, Button, Col, Row, Table } from 'reactstrap';
 import { getSortState, JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -172,7 +172,7 @@ export const Users = (props: IUsersProps) => {
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${users.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                          <FontAwesomeIcon icon="eye" /> <span className="d-md-none d-lg-inline">Xem</span>
+                          <FontAwesomeIcon icon="eye" /> <span className="d-sm-none d-md-none d-lg-inline">Xem</span>
                         </Button>
                       </div>
                     </td>

@@ -16,9 +16,10 @@ import { createEntity, getEntity, reset, updateEntity } from './news.reducer';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
-import { UploadImageInput } from 'app/modules/upload-image/upload-image';
 import { uploadImage } from 'app/modules/upload-image/upload-image-reducer';
 import { PageHeader } from 'antd';
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -53,7 +54,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   }, []);
 
   useEffect(() => {
-    if (newsEntity.content)
+    if (newsEntity.content && !isNew)
       setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(newsEntity.content))));
   }, [newsEntity]);
 
@@ -87,12 +88,8 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
 
   return (
     <div>
-      <Row className="mb-4">
-        <Col md="8">
-          <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Tạo tin tức' : 'Sửa tin tức'} />
-          <hr />
-        </Col>
-      </Row>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Tạo tin tức' : 'Sửa tin tức'} />
+      <hr />
       <Row>
         <Col>
           {loading ? (
@@ -195,8 +192,35 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 />
                 {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
               </AvGroup>
-              <Row>
-                <Col>
+              <AvGroup hidden>
+                <Label for="post-user">Người tạo:</Label>
+                <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
+                  {users
+                    ? users.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.login}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
+              <AvGroup hidden>
+                <Label for="news-newsCategory">Phân loại:</Label>
+                <AvInput
+                  id="news-newsCategory"
+                  data-cy="newsCategory"
+                  type="select"
+                  className="form-control"
+                  name="newsCategoryId"
+                  value={NEWS_CATEGORY_TYPES.NEWS.id}
+                >
+                  <option value={NEWS_CATEGORY_TYPES.NEWS.id} key="1">
+                    {NEWS_CATEGORY_TYPES.NEWS.name}
+                  </option>
+                </AvInput>
+              </AvGroup>
+              <Row className="justify-content-between">
+                <Col sm="6">
                   <AvGroup>
                     <Label id="datePublishedLabel" for="news-datePublished">
                       Thời gian đăng bài:
@@ -215,38 +239,16 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     />
                   </AvGroup>
                 </Col>
-                <Col>
-                  <AvGroup>
-                    <Label for="post-user">Người tạo:</Label>
-                    <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
-                      {users
-                        ? users.map(otherEntity => (
-                            <option value={otherEntity.id} key={otherEntity.id}>
-                              {otherEntity.login}
-                            </option>
-                          ))
-                        : null}
-                    </AvInput>
-                  </AvGroup>
+                <Col sm="3">
+                  <Label for="save-entity">&nbsp;</Label>
+                  <Button tag={Link} id="cancel-save" to="/news" color="default" className="border-secondary" replace block>
+                    <FontAwesomeIcon icon={faWindowClose} />
+                    &nbsp;
+                    <span className="d-none d-md-inline">Hủy</span>
+                  </Button>
                 </Col>
-              </Row>
-              <AvGroup hidden>
-                <Label for="news-newsCategory">Phân loại:</Label>
-                <AvInput
-                  id="news-newsCategory"
-                  data-cy="newsCategory"
-                  type="select"
-                  className="form-control"
-                  name="newsCategoryId"
-                  value={NEWS_CATEGORY_TYPES.NEWS.id}
-                >
-                  <option value={NEWS_CATEGORY_TYPES.NEWS.id} key="1">
-                    {NEWS_CATEGORY_TYPES.NEWS.name}
-                  </option>
-                </AvInput>
-              </AvGroup>
-              <Row>
-                <Col sm="2">
+                <Col sm="3">
+                  <Label for="save-entity">&nbsp;</Label>
                   <Button
                     color="primary"
                     id="save-entity"
@@ -257,13 +259,6 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   >
                     <FontAwesomeIcon icon="save" />
                     &nbsp; Lưu
-                  </Button>
-                </Col>
-                <Col sm="2">
-                  <Button tag={Link} id="cancel-save" to="/news" replace color="default" className="border-secondary" block>
-                    <FontAwesomeIcon icon="arrow-left" />
-                    &nbsp;
-                    <span className="d-none d-md-inline">Hủy</span>
                   </Button>
                 </Col>
               </Row>
