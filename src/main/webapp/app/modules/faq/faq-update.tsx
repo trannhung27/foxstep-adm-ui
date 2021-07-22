@@ -225,7 +225,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                       type="datetime-local"
                       className="form-control"
                       name="datePublished"
-                      placeholder={'YYYY-MM-DD HH:mm'}
+                      onKeyDown={e => e.preventDefault()}
                       value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.faqEntity.datePublished)}
                       validate={{
                         required: { value: true, errorMessage: 'Không được để trống.' },
