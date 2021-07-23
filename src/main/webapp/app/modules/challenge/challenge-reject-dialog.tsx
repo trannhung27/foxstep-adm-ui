@@ -36,7 +36,7 @@ export const ChallengeRejectDialog = (props: IChallengeRejectDialogProps) => {
       requestData: '',
       actionNote: actionMessage,
     };
-    props.reject(challengeEntity.id, entity);
+    props.reject(entity);
   };
   const { challengeEntity } = props;
   const [actionMessage, setActionMessage] = useState('');
