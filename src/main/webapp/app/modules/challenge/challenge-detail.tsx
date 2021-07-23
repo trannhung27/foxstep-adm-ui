@@ -18,7 +18,7 @@ import {} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { approveChallenge, getEntity } from './challenge.reducer';
+import { approveChallenge, getEntity, endChallenge } from './challenge.reducer';
 import moment from 'moment';
 import {
   APP_DATE_FORMAT,
@@ -46,6 +46,31 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   const { challengeEntity } = props;
   return (
     <Row>
+      <Col md="12">
+        <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
+          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
+        </Button>
+        &nbsp;
+        <Button
+          onClick={() => {
+            setShowApproveModal(true);
+          }}
+          replace
+          color="primary"
+        >
+          <span className="d-none d-md-inline">Duyệt</span>
+        </Button>
+        &nbsp;
+        <Button
+          onClick={() => {
+            setShowRejectModal(true);
+          }}
+          replace
+          color="primary"
+        >
+          <span className="d-none d-md-inline">Từ chối</span>
+        </Button>
+      </Col>
       <ChallengeApproveDialog
         showModal={showApproveModal}
         onClose={() => {
@@ -67,7 +92,6 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
         updateSuccess={props.updateSuccess}
       />
       <Col md="12">
-        <h2 data-cy="challengeDetailsHeading">Challenge</h2>
         <AvForm model={challengeEntity} readOnly>
           <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
           <Row>
@@ -300,29 +324,6 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Trở lại</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
-        </Button>
-        &nbsp;
-        <Button
-          onClick={() => {
-            setShowApproveModal(true);
-          }}
-          replace
-          color="primary"
-        >
-          <span className="d-none d-md-inline">Duyệt</span>
-        </Button>
-        &nbsp;
-        <Button
-          onClick={() => {
-            setShowRejectModal(true);
-          }}
-          replace
-          color="primary"
-        >
-          <span className="d-none d-md-inline">Từ chối</span>
-        </Button>
       </Col>
     </Row>
   );
@@ -335,7 +336,7 @@ const mapStateToProps = ({ challenge, wfAction }: IRootState) => ({
   updateSuccess: challenge.updateSuccess,
 });
 
-const mapDispatchToProps = { getEntity, getActions, approveChallenge };
+const mapDispatchToProps = { getEntity, getActions, approveChallenge, endChallenge };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

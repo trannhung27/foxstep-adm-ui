@@ -6,6 +6,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 
 import { IChallenge, defaultValue } from 'app/shared/model/challenge.model';
 import { IWfRequest } from 'app/shared/model/workflow/wf-request.model';
+import { getEntities as getActions } from 'app/modules/workflow/wf-action/wf-action-reducer';
 
 export const ACTION_TYPES = {
   FETCH_CHALLENGE_LIST: 'challenge/FETCH_CHALLENGE_LIST',
@@ -119,11 +120,18 @@ export const getEntities: ICrudGetAllWithCriteriaAction<IChallenge> = (criteria,
   };
 };
 
-export const approveChallenge: ICrudPutActionRequest<IWfRequest> = (challengeId, entity) => {
-  return {
+export const approveChallenge: ICrudPutAction<IWfRequest> = entity => async dispatch => {
+  const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CHALLENGE,
-    payload: axios.post(`${apiUrl}/${challengeId}/approval`, cleanEntity(entity)),
+    payload: axios.post(`${apiUrl}/${entity.contentId}/approval`, cleanEntity(entity)),
+  });
+  const criteria = {
+    contentId: entity.contentId,
+    groupId: entity.processGroupId,
   };
+  dispatch(getActions(criteria));
+  dispatch(getEntity(entity.contentId));
+  return result;
 };
 
 export const getEntity: ICrudGetAction<IChallenge> = id => {
@@ -164,6 +172,16 @@ export const deleteEntity: ICrudDeleteAction<IChallenge> = id => async dispatch 
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_CHALLENGE,
     payload: axios.delete(requestUrl),
+  });
+  dispatch(getEntities());
+  return result;
+};
+
+export const endChallenge: ICrudDeleteAction<IChallenge> = id => async dispatch => {
+  const requestUrl = `${apiUrl}/${id}/end`;
+  const result = await dispatch({
+    type: ACTION_TYPES.DELETE_CHALLENGE,
+    payload: axios.post(requestUrl),
   });
   dispatch(getEntities());
   return result;

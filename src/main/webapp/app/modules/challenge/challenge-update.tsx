@@ -49,6 +49,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [showModal, setShowModal] = useState(false);
   const [isGps, setIsGps] = useState(0);
 
+  const [isOrganization, setIsOrganization] = useState(true);
+
   const [userIdCreated, setUserIdCreated] = useState(0);
   const [emailUser, setEmailUser] = useState('');
   const setGps = () => {
@@ -281,23 +283,52 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row>
                       <Col xs="12" sm="6">
                         <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }}>Cá nhân tổ chức</Label>
-                          <AvField id="challenge-userIdCreated" data-cy="challenge_type" type="string" name="userEmail" value={emailUser} />
-                          <AvInput hidden name="userIdCreated" value={userIdCreated} />
-                          <Button onClick={() => setShowModal(true)} replace color="primary">
-                            <span className="d-none d-md-inline">Tìm</span>
-                          </Button>
+                          <Label style={{ paddingRight: '10px' }}> Người tạo</Label>
+                          <AvField
+                            id="challenge_type"
+                            type="select"
+                            name="challengeType"
+                            onChange={event => {
+                              event.target.value === '1'
+                                ? setIsOrganization(false)
+                                : event.target.value === '0'
+                                ? setIsOrganization(true)
+                                : {};
+                            }}
+                          >
+                            <option value="1">Cá nhân</option>
+                            <option value="0">Ban tổ chức</option>
+                          </AvField>
                         </AvGroup>
                       </Col>
 
                       <Col xs="12" sm="6">
-                        <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />
-                        <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
+                        {isOrganization === false ? (
+                          <AvGroup className="form-group form-inline">
+                            <Label style={{ marginRight: '10px' }}>Cá nhân tổ chức</Label>
+                            <AvField
+                              id="challenge-userIdCreated"
+                              data-cy="challenge_type"
+                              type="string"
+                              name="userEmail"
+                              value={emailUser}
+                            />
+                            <AvInput hidden name="userIdCreated" value={userIdCreated} />
+                            <Button onClick={() => setShowModal(true)} replace color="primary">
+                              <span className="d-none d-md-inline">Tìm</span>
+                            </Button>
+                          </AvGroup>
+                        ) : null}
                       </Col>
+
+                      {/*<Col xs="12" sm="6">*/}
+                      {/*  <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />*/}
+                      {/*  <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />*/}
+                      {/*</Col>*/}
                     </Row>
 
                     <Row>
-                      <Col xs="12" sm="5">
+                      <Col xs="12" sm="6">
                         <AvGroup className="form-group form-inline">
                           <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
                             Tên thử thách <RedAsterisk />
@@ -322,29 +353,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         </AvGroup>
                       </Col>
 
-                      <Col xs="12" sm="5">
+                      <Col xs="12" sm="6">
                         <AvGroup className="form-group form-inline">
                           <Label style={{ marginRight: '10px' }}>Gắn thẻ:</Label>
                           <AvInput name="challenge-tag" />
-                        </AvGroup>
-                      </Col>
-
-                      <Col xs="12" sm="3">
-                        <AvGroup className="form-group form-inline">
-                          <Label hidden style={{ marginRight: '10px' }}>
-                            Ban tổ chức khởi tạo
-                          </Label>
-                          <AvField
-                            id="challenge-challengeType"
-                            data-cy="challengeType"
-                            hidden
-                            type="radio"
-                            name="challengeType"
-                            required
-                            defaultChecked
-                            disabled
-                            value="0"
-                          />
                         </AvGroup>
                       </Col>
                     </Row>

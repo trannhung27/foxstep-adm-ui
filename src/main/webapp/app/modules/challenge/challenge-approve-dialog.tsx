@@ -37,7 +37,7 @@ export const ChallengeApproveDialog = (props: IChallengeApproveDialogProps) => {
       requestData: '',
       actionNote: '',
     };
-    props.approve(challengeEntity.id, entity);
+    props.approve(entity);
   };
 
   return (
