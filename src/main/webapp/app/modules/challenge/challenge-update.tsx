@@ -322,11 +322,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           </AvGroup>
                         ) : null}
                       </Col>
+                    </Row>
 
-                      {/*<Col xs="12" sm="6">*/}
-                      {/*  <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />*/}
-                      {/*  <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />*/}
-                      {/*</Col>*/}
+                    <Row>
+                      <Col xs="12" sm="6">
+                        <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />
+                        <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
+                      </Col>
                     </Row>
 
                     <Row>
