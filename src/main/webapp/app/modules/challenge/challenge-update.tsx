@@ -318,15 +318,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         ) : isOrganization === 0 ? (
                           <AvGroup className="form-group form-inline">
                             <Label style={{ marginRight: '10px' }}>Ban tổ chức</Label>
-                            <AvInput defaultValue="FoxStep" name="organizationName" />
+                            <AvInput defaultValue="Foxsteps" name="organizationName" />
                           </AvGroup>
                         ) : null}
                       </Col>
+                    </Row>
 
-                      {/*<Col xs="12" sm="6">*/}
-                      {/*  <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />*/}
-                      {/*  <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />*/}
-                      {/*</Col>*/}
+                    <Row>
+                      <Col xs="12" sm="6">
+                        <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />
+                        <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
+                      </Col>
                     </Row>
 
                     <Row>
