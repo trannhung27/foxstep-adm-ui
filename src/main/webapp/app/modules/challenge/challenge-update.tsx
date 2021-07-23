@@ -49,7 +49,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [showModal, setShowModal] = useState(false);
   const [isGps, setIsGps] = useState(0);
 
-  const [isOrganization, setIsOrganization] = useState(true);
+  const [isOrganization, setIsOrganization] = useState(-1);
 
   const [userIdCreated, setUserIdCreated] = useState(0);
   const [emailUser, setEmailUser] = useState('');
@@ -289,13 +289,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             type="select"
                             name="challengeType"
                             onChange={event => {
-                              event.target.value === '1'
-                                ? setIsOrganization(false)
-                                : event.target.value === '0'
-                                ? setIsOrganization(true)
-                                : {};
+                              event.target.value === '1' ? setIsOrganization(1) : event.target.value === '0' ? setIsOrganization(0) : {};
                             }}
                           >
+                            <option></option>
                             <option value="1">Cá nhân</option>
                             <option value="0">Ban tổ chức</option>
                           </AvField>
@@ -303,7 +300,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       </Col>
 
                       <Col xs="12" sm="6">
-                        {isOrganization === false ? (
+                        {isOrganization === 1 ? (
                           <AvGroup className="form-group form-inline">
                             <Label style={{ marginRight: '10px' }}>Cá nhân tổ chức</Label>
                             <AvField
@@ -317,6 +314,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <Button onClick={() => setShowModal(true)} replace color="primary">
                               <span className="d-none d-md-inline">Tìm</span>
                             </Button>
+                          </AvGroup>
+                        ) : isOrganization === 0 ? (
+                          <AvGroup className="form-group form-inline">
+                            <Label style={{ marginRight: '10px' }}>Ban tổ chức</Label>
+                            <AvInput defaultValue="FoxStep" name="organizationName" />
                           </AvGroup>
                         ) : null}
                       </Col>
