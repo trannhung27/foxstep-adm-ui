@@ -34,6 +34,7 @@ export const WfAction = (props: IWfActionProps) => {
               <th>Hành động</th>
               <th>Trạng thái yêu cầu</th>
               <th>Thời gian</th>
+              {/*<th>Ghi chú</th>*/}
             </tr>
           </thead>
           <tbody>
@@ -45,6 +46,7 @@ export const WfAction = (props: IWfActionProps) => {
                 <td>{action.actionType}</td>
                 <td>{action.requestStatus}</td>
                 <td>{action.datCreated ? <TextFormat type="date" value={action.datCreated} format={APP_TIMESTAMP_FORMAT} /> : null}</td>
+                {/*<td>{action.actionNote}</td>*/}
               </tr>
             ))}
           </tbody>

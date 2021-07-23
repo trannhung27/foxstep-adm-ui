@@ -154,7 +154,7 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
           <Col sm={2}>
             <Button color="primary" type="submit" block>
               <FontAwesomeIcon icon="search" />
-              <span className="d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
             </Button>
           </Col>
           <Col sm={2}>
@@ -168,7 +168,7 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
               block
             >
               <FontAwesomeIcon icon="ban" />
-              <span className="d-md-none d-lg-inline">&nbsp; Hủy</span>
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Hủy</span>
             </Button>
           </Col>
         </Row>

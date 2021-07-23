@@ -100,7 +100,7 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
           <Col sm={2}>
             <Button color="primary" type="submit" block>
               <FontAwesomeIcon icon="search" />
-              <span className="d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
             </Button>
           </Col>
           <Col sm={2}>
@@ -114,7 +114,7 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
               block
             >
               <FontAwesomeIcon icon="ban" />
-              <span className="d-md-none d-lg-inline">&nbsp; Hủy</span>
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Hủy</span>
             </Button>
           </Col>
         </Row>

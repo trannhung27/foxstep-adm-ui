@@ -36,13 +36,17 @@ $header-color-hover: darken($header-color, 100%);
   height: 30px;
   line-height: 15px;
   text-align: center;
-  color: #fff;
+  color: gray;
   background: #404040;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
   .anticon {
     line-height: 25px;
   }
+}
+
+.sider-trigger:hover {
+  color: white;
 }
 
 .ant-menu-item-selected {
