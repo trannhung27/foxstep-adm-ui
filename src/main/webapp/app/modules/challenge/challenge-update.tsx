@@ -296,6 +296,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                 : {};
                             }}
                           >
+                            <option></option>
                             <option value="1">Cá nhân</option>
                             <option value="0">Ban tổ chức</option>
                           </AvField>
