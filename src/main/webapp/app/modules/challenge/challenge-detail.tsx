@@ -148,6 +148,21 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
 
           <Row>
             <Col xs="12" sm="6">
+              {challengeEntity.challengeType === 0 ? (
+                <AvGroup className="form-group form-inline">
+                  <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                    Tên tổ chức: &nbsp; &nbsp;
+                  </Label>
+                  <div>{challengeEntity.organizationName}</div>
+                </AvGroup>
+              ) : (
+                <AvGroup className="form-group form-inline">
+                  <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                    Cá nhân tổ chức: &nbsp; &nbsp;
+                  </Label>
+                  <div>{challengeEntity.userCreated ? challengeEntity.userCreated.name : ''}</div>
+                </AvGroup>
+              )}
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Cá nhân tổ chức: &nbsp; &nbsp;
