@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
 
 const initialState = {
   loading: false,
+  searching: false,
   errorMessage: null,
   entities: [] as ReadonlyArray<IBanner>,
   searchList: [] as ReadonlyArray<IBanner>,
@@ -31,12 +32,18 @@ export type BannerState = Readonly<typeof initialState>;
 export default (state: BannerState = initialState, action): BannerState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_BANNER_LIST):
-    case REQUEST(ACTION_TYPES.FETCH_SEARCH_BANNER_LIST):
       return {
         ...state,
         errorMessage: null,
         updateSuccess: false,
         loading: true,
+      };
+    case REQUEST(ACTION_TYPES.FETCH_SEARCH_BANNER_LIST):
+      return {
+        ...state,
+        errorMessage: null,
+        updateSuccess: false,
+        searching: true,
       };
     case REQUEST(ACTION_TYPES.CREATE_BANNER):
       return {
@@ -64,7 +71,7 @@ export default (state: BannerState = initialState, action): BannerState => {
     case SUCCESS(ACTION_TYPES.FETCH_SEARCH_BANNER_LIST):
       return {
         ...state,
-        loading: false,
+        searching: false,
         searchList: action.payload.data,
         totalItems: parseInt(action.payload.headers['xTotalCount'], 10),
       };

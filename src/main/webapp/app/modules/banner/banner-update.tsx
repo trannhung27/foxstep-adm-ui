@@ -17,7 +17,7 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
   const { updating, banners, loading, totalItems } = props;
 
   const [paginationState, setPaginationState] = useState({
-    itemsPerPage: 10,
+    itemsPerPage: 5,
     sort: 'dateStart',
     order: 'desc',
     activePage: 1,
@@ -65,7 +65,6 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
       ...paginationState,
       activePage: currentPage,
     });
-    search();
   };
 
   return (
@@ -172,7 +171,7 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
 const mapStateToProps = (storeState: IRootState) => ({
   updating: storeState.banner.updating,
   updateSuccess: storeState.banner.updateSuccess,
-  loading: storeState.banner.loading,
+  loading: storeState.banner.searching,
   banners: storeState.banner.searchList,
   totalItems: storeState.banner.totalItems,
 });
