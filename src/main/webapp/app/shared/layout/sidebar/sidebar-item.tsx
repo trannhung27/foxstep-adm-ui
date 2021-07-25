@@ -17,6 +17,7 @@ import {
   DingtalkOutlined,
   AppstoreOutlined,
   TrophyOutlined,
+  FireOutlined,
 } from '@ant-design/icons';
 
 export const menuItems = [
@@ -123,31 +124,37 @@ export const menuItems = [
   },
   {
     key: 3,
+    title: 'Quản lý thử thách',
+    icon: <AppstoreOutlined />,
+    url: '/challenges',
+    isAuthenticated: true,
+  },
+  {
+    key: 4,
     title: 'Quản lý khách hàng',
     icon: <TeamOutlined />,
     isAuthenticated: true,
     url: '/users',
   },
   {
-    key: 4,
+    key: 5,
     title: 'Quản lý tin tức',
     icon: <EditOutlined />,
     url: '/news',
     isAuthenticated: true,
   },
   {
-    key: 5,
+    key: 6,
     title: 'FAQ, Hướng dẫn',
     icon: <QuestionCircleOutlined />,
     url: '/faqs',
     isAuthenticated: true,
   },
-
   {
-    key: 6,
-    title: 'Quản lý thử thách',
-    icon: <AppstoreOutlined />,
-    url: '/challenges',
+    key: 7,
+    title: 'Quản lý banner',
+    icon: <FireOutlined />,
+    url: '/banner',
     isAuthenticated: true,
   },
 ];
