@@ -1,7 +1,7 @@
 import { isPromise } from 'react-jhipster';
 
 const getErrorMessage = errorData => {
-  let message = errorData.message;
+  let message = errorData.detail;
   if (errorData.fieldErrors) {
     errorData.fieldErrors.forEach(fErr => {
       message += `\nfield: ${fErr.field},  Object: ${fErr.objectName}, message: ${fErr.message}\n`;
