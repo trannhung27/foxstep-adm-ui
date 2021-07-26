@@ -39,7 +39,7 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
     }
   }, [props.updateSuccess]);
 
-  const { customer } = props;
+  const { customers } = props;
 
   const [searchValue, setSearchValue] = useState('');
   return (
@@ -65,7 +65,7 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
 
         <hr style={{ backgroundColor: 'DodgerBlue', height: '2px' }} />
         <div className="table-responsive">
-          {customer ? (
+          {customers ? (
             <Table responsive>
               <thead>
                 <tr>
@@ -84,31 +84,31 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
                 </tr>
               </thead>
               <tbody>
-                <tr data-cy="entityTable">
-                  <td>{customer.id}</td>
-                  <td>{customer.email}</td>
-                  <td>{customer.fullName}</td>
-                  <td>{customer.mobilePhone}</td>
-                  <td>{customer.bib}</td>
-                  <td>{customer.strAddress}</td>
-                  <td className="text-right">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button
-                        // tag={Link}
-                        // to={{ pathname: `/challenges/new`, state: { email: customer.email, userId: customer.id } }}
-                        onClick={() => {
-                          props.choose(customer.email, customer.id);
-                          handleClose();
-                        }}
-                        color="info"
-                        size="sm"
-                        data-cy="entityDetailsButton"
-                      >
-                        <span className="d-none d-md-inline">Chọn</span>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
+                {customers.map((customer, i) => (
+                  <tr data-cy="entityTable" key={`customer-${i}`}>
+                    <td>{customer.id}</td>
+                    <td>{customer.email}</td>
+                    <td>{customer.fullName}</td>
+                    <td>{customer.mobilePhone}</td>
+                    <td>{customer.bib}</td>
+                    <td>{customer.strAddress}</td>
+                    <td className="text-right">
+                      <div className="btn-group flex-btn-group-container">
+                        <Button
+                          onClick={() => {
+                            props.choose(customer.email, customer.id);
+                            handleClose();
+                          }}
+                          color="info"
+                          size="sm"
+                          data-cy="entityDetailsButton"
+                        >
+                          <span className="d-none d-md-inline">Chọn</span>
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           ) : (
@@ -116,20 +116,13 @@ export const ChallengeUserDialog = (props: IChallengeUserDialogProps) => {
           )}
         </div>
       </ModalBody>
-      <ModalFooter>
-        {/*<Button id="jhi-confirm-delete-challenge" data-cy="entityApproveChallengeButton" color="danger" onClick={approveChallenge}>*/}
-        {/*  &nbsp; Có*/}
-        {/*</Button>*/}
-        {/*<Button color="secondary" onClick={handleClose}>*/}
-        {/*  &nbsp; Không*/}
-        {/*</Button>*/}
-      </ModalFooter>
+      <ModalFooter></ModalFooter>
     </Modal>
   );
 };
 
 const mapStateToProps = ({ users, wfRequest }: IRootState) => ({
-  customer: users.entity,
+  customers: users.entities,
   updateSuccess: wfRequest.updateSuccess,
 });
 

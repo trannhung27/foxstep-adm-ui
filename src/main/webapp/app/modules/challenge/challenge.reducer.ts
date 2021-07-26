@@ -183,7 +183,8 @@ export const endChallenge: ICrudDeleteAction<IChallenge> = id => async dispatch 
     type: ACTION_TYPES.DELETE_CHALLENGE,
     payload: axios.post(requestUrl),
   });
-  dispatch(getEntities());
+  dispatch(getEntity(id));
+  dispatch(getActions());
   return result;
 };
 

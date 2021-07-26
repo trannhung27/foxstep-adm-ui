@@ -108,7 +108,7 @@ export const getChallengesOfUser: ICrudGetAllWithCriteriaAction<IChallengesOfUse
 export const getCustomer: ICrudGetWithParam<IUsers> = search => {
   const requestUrl = `${apiUrl}/search?searchValue=${search}`;
   return {
-    type: ACTION_TYPES.FETCH_USERS,
+    type: ACTION_TYPES.FETCH_USERS_LIST,
     payload: axios.get<IUsers>(requestUrl),
   };
 };

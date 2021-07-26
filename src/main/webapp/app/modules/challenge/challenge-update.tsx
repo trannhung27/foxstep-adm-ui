@@ -53,6 +53,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   const [userIdCreated, setUserIdCreated] = useState(0);
   const [emailUser, setEmailUser] = useState('');
+  const [calValue, setCalValue] = useState(0);
   const setGps = () => {
     if (isGps === 0) {
       setIsGps(1);
@@ -215,7 +216,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
           setShowModal(false);
         }}
         showModal={showModal}
-        customer={props.customer}
+        customers={props.customers}
         updateSuccess={props.updateWfSuccess}
         updateWorkflow={props.updateWorkflow}
         getCustomer={props.getCustomer}
@@ -304,6 +305,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <AvGroup className="form-group form-inline">
                             <Label style={{ marginRight: '10px' }}>Cá nhân tổ chức</Label>
                             <AvField
+                              disabled
                               id="challenge-userIdCreated"
                               data-cy="challenge_type"
                               type="string"
@@ -474,7 +476,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         </AvGroup>
                       </Col>
                     </Row>
-                    <AvRadioGroup name="calType" label="Cách tính thành tích" required>
+                    <AvRadioGroup
+                      name="calType"
+                      label="Cách tính thành tích"
+                      onChange={event => {
+                        setCalValue(Number(event.target.value));
+                      }}
+                      required
+                    >
                       <AvRadio label="Có MỘT LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value="1" />
                       <AvRadio label="Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value="2" />
                     </AvRadioGroup>
@@ -492,12 +501,18 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         <Col xs="12" sm="6" key={i}>
                           <AvGroup className="form-group">
                             <Label style={{ marginRight: '10px' }}>
-                              Hạng mục {i + 1}:<RedAsterisk />
+                              {i === 0 ? (
+                                <div>
+                                  Hạng mục {i + 1}: <RedAsterisk />
+                                </div>
+                              ) : (
+                                <div>Hạng mục {i + 1}:</div>
+                              )}
                             </Label>
                             <AvField
                               type="number"
                               name={'distanceInput' + i}
-                              disabled={false}
+                              disabled={i === 0 && calValue === 1 ? true : false}
                               // disabled={challengeDistanceList[i].isDisabled}
                               onChange={e => {
                                 handleChallengeDistance(e, i);
@@ -620,8 +635,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             id="challenge-validity_min_distance"
                             data-cy="challengeValidity.minDistance"
                             type="number"
-                            disabled={minDistance.isDisabled}
-                            value={minDistance.value}
+                            disabled={calValue === 1 ? true : minDistance.isDisabled}
+                            value={calValue === 1 ? challengeDistanceList[0].distance : minDistance.value}
                             step="0.1"
                             min="0"
                             max="50"
@@ -771,9 +786,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvField
                               id="challenge-num_of_participant"
                               data-cy="num_of_participant"
-                              type="string"
+                              type="number"
                               className="form-control"
                               name="numOfParticipant"
+                              validate={{ max: { value: 100, errorMessage: 'Tối đa 100 người' } }}
                             />
                           </AvGroup>
                         </Row>
@@ -787,15 +803,16 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             Phạm vi tham gia:
                             <RedAsterisk /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                           </Label>
-                          <AvRadioGroup name="objectType" required>
+
+                          <AvRadioGroup
+                            name="objectType"
+                            onChange={event => {
+                              setObjectType(event.target.value);
+                            }}
+                            required
+                          >
                             <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
-                            <AvRadio
-                              label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia"
-                              value="2"
-                              onChange={event => {
-                                setObjectType(event.target.value);
-                              }}
-                            />
+                            <AvRadio label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia" value="2" />
                             {objectType === '2' ? (
                               <Col xs="12" sm="8">
                                 <Row style={{ paddingTop: '6px' }}>
@@ -910,7 +927,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   loading: storeState.challenge.loading,
   updating: storeState.challenge.updating,
   updateSuccess: storeState.challenge.updateSuccess,
-  customer: storeState.users.entity,
+  customers: storeState.users.entities,
   updateWfSuccess: storeState.wfRequest.updateSuccess,
 });
 

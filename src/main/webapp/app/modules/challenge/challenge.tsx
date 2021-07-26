@@ -307,9 +307,15 @@ export const Challenge = (props: IChallengeProps) => {
                       <div></div>
                     )}
                   </td>
-                  <td>{moment.utc(challenge.dateStart).format(APP_TIMESTAMP_FORMAT)}</td>
-                  <td>{moment.utc(challenge.dateFinish).format(APP_TIMESTAMP_FORMAT)}</td>
-                  <td>{moment.utc(challenge.dateCreated).format(APP_TIMESTAMP_FORMAT)}</td>
+                  <td>
+                    {challenge.dateStart ? <TextFormat type="date" value={challenge.dateStart} format={APP_TIMESTAMP_FORMAT} /> : null}
+                  </td>
+                  <td>
+                    {challenge.dateFinish ? <TextFormat type="date" value={challenge.dateFinish} format={APP_TIMESTAMP_FORMAT} /> : null}
+                  </td>
+                  <td>
+                    {challenge.dateCreated ? <TextFormat type="date" value={challenge.dateFinish} format={APP_TIMESTAMP_FORMAT} /> : null}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -70,6 +70,16 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
         >
           <span className="d-none d-md-inline">Từ chối</span>
         </Button>
+        &nbsp;
+        <Button
+          onClick={() => {
+            props.endChallenge(props.challengeEntity.id);
+          }}
+          replace
+          color="primary"
+        >
+          <span className="d-none d-md-inline">Kết thúc</span>
+        </Button>
       </Col>
       <ChallengeApproveDialog
         showModal={showApproveModal}
