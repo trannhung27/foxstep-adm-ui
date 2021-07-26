@@ -186,18 +186,21 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const saveEntity = (event, errors, values) => {
     values.challengeValidity.avgCadenceFrom = Number(values.challengeValidity.avgCadenceFrom);
     values.challengeValidity.avgCadenceTo = Number(values.challengeValidity.avgCadenceTo);
-    values.challengeValidity.avgPaceFrom = Number(values.challengeValidity.avgPaceFrom);
-    values.challengeValidity.avgPaceTo = Number(values.challengeValidity.avgPaceTo);
+    values.challengeValidity.avgPaceFrom = Number(16.6667 / Number(values.challengeValidity.avgPaceFrom));
+    values.challengeValidity.avgPaceTo = Number(16.6667 / Number(values.challengeValidity.avgPaceTo));
     values.challengeValidity.elevationGain = Number(values.challengeValidity.elevationGain);
     values.challengeValidity.completionCriteria = Number(values.challengeValidity.completionCriteria);
-    values.challengeValidity.minDistance = Number(values.challengeValidity.minDistance);
+    values.challengeValidity.minDistance = Number(values.challengeValidity.minDistance) * 1000;
     values.challengeValidity.gps = Number(values.challengeValidity.gps);
+
     values.dateStart = convertDateTimeToServer(values.dateStart);
     values.dateRegisDeadline = convertDateTimeToServer(values.dateRegisDeadline);
     values.dateFinish = convertDateTimeToServer(values.dateFinish);
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    // let availableDistance = 0;
-    // values.challengeDistance.splice(availableDistance,values.challengeDistance.length - availableDistance -1);
+
+    values.challengeDistance.map((challenge, i) => {
+      challenge.distance = challenge.distance / 1000;
+    });
     if (values.challengeValidity.checkTime === true) {
       values.challengeValidity.checkTime = 0;
     } else values.challengeValidity.checkTime = 1;
@@ -903,23 +906,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   </CardBody>
                 </Card>
               </Collapse>
+
+              <Row style={{ paddingBottom: '40px' }}>
+                <Col xs="12" sm="4">
+                  <Button tag={Link} id="cancel-save" to="/challenges" replace color="info">
+                    <FontAwesomeIcon icon="arrow-left" />
+                    &nbsp;
+                    <span className="d-none d-md-inline">Hủy</span>
+                  </Button>
+                  &nbsp;
+                  <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+                    <FontAwesomeIcon icon="save" />
+                    &nbsp; Lưu
+                  </Button>
+                </Col>
+              </Row>
             </AvForm>
           )}
-        </Col>
-      </Row>
-
-      <Row style={{ paddingBottom: '40px' }}>
-        <Col xs="12" sm="4">
-          <Button tag={Link} id="cancel-save" to="/challenges" replace color="info">
-            <FontAwesomeIcon icon="arrow-left" />
-            &nbsp;
-            <span className="d-none d-md-inline">Hủy</span>
-          </Button>
-          &nbsp;
-          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-            <FontAwesomeIcon icon="save" />
-            &nbsp; Lưu
-          </Button>
         </Col>
       </Row>
     </div>
