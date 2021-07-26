@@ -97,13 +97,19 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [validityCriteria, setValidityCriteria] = useState([1, 2, 3]);
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [avgPace, setAvgPace] = useState({ from: 0, to: 0, isDisabled: false });
-  const [minDistance, setMinDistance] = useState({ value: 0, isDisabled: false });
-  const [elevationGain, setElevationGain] = useState({ value: 0, isDisabled: false });
-  const [avgCadence, setAvgCadence] = useState({ from: 0, to: 0, isDisabled: false });
+  const [editorChanged, setEditorChanged] = useState(false);
+  const [editorError, setEditorErrorState] = useState(false);
+
+  const [avgPace, setAvgPace] = useState({ from: '4.0', to: '15.0', required: true });
+  const [minDistance, setMinDistance] = useState({ value: '1.0', required: false });
+  const [elevationGain, setElevationGain] = useState({ value: '100', required: false });
+  const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false });
   // const
 
   const onEditorStateChange = editor => {
+    setEditorState(editor);
+    setEditorChanged(true);
+    setEditorErrorState(!editorState.getCurrentContent().hasText());
     setEditorState(editor);
   };
 
@@ -180,18 +186,21 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const saveEntity = (event, errors, values) => {
     values.challengeValidity.avgCadenceFrom = Number(values.challengeValidity.avgCadenceFrom);
     values.challengeValidity.avgCadenceTo = Number(values.challengeValidity.avgCadenceTo);
-    values.challengeValidity.avgPaceFrom = Number(values.challengeValidity.avgPaceFrom);
-    values.challengeValidity.avgPaceTo = Number(values.challengeValidity.avgPaceTo);
+    values.challengeValidity.avgPaceFrom = Number(16.6667 / Number(values.challengeValidity.avgPaceFrom));
+    values.challengeValidity.avgPaceTo = Number(16.6667 / Number(values.challengeValidity.avgPaceTo));
     values.challengeValidity.elevationGain = Number(values.challengeValidity.elevationGain);
     values.challengeValidity.completionCriteria = Number(values.challengeValidity.completionCriteria);
-    values.challengeValidity.minDistance = Number(values.challengeValidity.minDistance);
+    values.challengeValidity.minDistance = Number(values.challengeValidity.minDistance) * 1000;
     values.challengeValidity.gps = Number(values.challengeValidity.gps);
+
     values.dateStart = convertDateTimeToServer(values.dateStart);
     values.dateRegisDeadline = convertDateTimeToServer(values.dateRegisDeadline);
     values.dateFinish = convertDateTimeToServer(values.dateFinish);
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    // let availableDistance = 0;
-    // values.challengeDistance.splice(availableDistance,values.challengeDistance.length - availableDistance -1);
+
+    values.challengeDistance.map((challenge, i) => {
+      challenge.distance = challenge.distance / 1000;
+    });
     if (values.challengeValidity.checkTime === true) {
       values.challengeValidity.checkTime = 0;
     } else values.challengeValidity.checkTime = 1;
@@ -259,20 +268,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   <AvInput id="challenge-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
-              <Row style={{ paddingBottom: '40px' }}>
-                <Col xs="12" sm="4">
-                  <Button tag={Link} id="cancel-save" to="/challenges" replace color="info">
-                    <FontAwesomeIcon icon="arrow-left" />
-                    &nbsp;
-                    <span className="d-none d-md-inline">Hủy</span>
-                  </Button>
-                  &nbsp;
-                  <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                    <FontAwesomeIcon icon="save" />
-                    &nbsp; Lưu
-                  </Button>
-                </Col>
-              </Row>
 
               <Row>
                 <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
@@ -328,7 +323,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
                     <Row>
                       <Col xs="12" sm="6">
-                        <UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.loading} />
+                        <UploadImageInput
+                          entity={props.uploadImageEntity}
+                          upload={props.uploadImage}
+                          loading={props.loading}
+                          initImage=""
+                          label="Ảnh đại diện TT: "
+                        />
                         <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
                       </Col>
                     </Row>
@@ -369,25 +370,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
                     <Row>
                       <Col xs="12" sm="4">
-                        {/* <AvGroup>
-                          <Label>
-                            Thời gian bắt đầu
-                            <RedAsterisk />
-                          </Label>
-                          <DateTime
-                            data-cy="num_of_participant"
-                            value={localState['dateStart']}
-                            onChange={date => (localState['date_start'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
-                            initialValue={!isNew ? moment.utc(props.challengeEntity.dateStart).format(APP_TIMESTAMP_FORMAT) : null}
-                            inputProps={{ name: 'dateStart', id: 'challenge-numOfParticipant', required: true }}
-                            dateFormat="DD/MM/YYYY"
-                            timeFormat="HH:mm:ss"
-                            closeOnSelect={true}
-                          />
-                        </AvGroup> */}
                         <AvGroup>
                           <Label id="dateStartLabel" for="challenge-dateStart">
-                            Thời gian bắt đầu
+                            Từ ngày
                           </Label>
                           <AvInput
                             id="challenge-dateStart"
@@ -406,7 +391,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <Col xs="12" sm="4">
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateFinish">
-                            Thời gian kết thúc
+                            Đến ngày
                           </Label>
                           <AvInput
                             id="challenge-dateFinish"
@@ -452,7 +437,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       wrapperStyle={{ textDecoration: 'none !important' }}
                       editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
                     />
-                    {!editorState.getCurrentContent().hasText() && <p className="invalid-feedback">Không được để trống.</p>}
+                    {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
                   </CardBody>
                 </Card>
               </Collapse>
@@ -512,8 +497,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvField
                               type="number"
                               name={'distanceInput' + i}
-                              disabled={i === 0 && calValue === 1 ? true : false}
-                              // disabled={challengeDistanceList[i].isDisabled}
                               onChange={e => {
                                 handleChallengeDistance(e, i);
                               }}
@@ -569,52 +552,54 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             checked
                             disabled
                             className="mr-2"
-                            onChange={() => setAvgPace({ from: 0, to: 0, isDisabled: !avgPace.isDisabled })}
+                            // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
                           />
+                          <Label>Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp;</Label>
                           <AvField
-                            label="Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp;  Từ &nbsp;"
                             id="challengeValidity.avgPaceFrom"
-                            // defaultValue="3.0"
-                            data-cy="challengeValidity.avgPaceFrom"
+                            label=" Từ &nbsp;"
                             type="number"
-                            step="1"
-                            min="0"
-                            max="20"
+                            step="0.1"
+                            min="0.0"
+                            max="99.0"
                             className="form-control"
                             value={avgPace.from}
-                            disabled={avgPace.isDisabled}
                             onChange={event => {
                               const avgpace = {
                                 from: event.target.value,
                                 to: avgPace.to,
-                                isDisabled: avgPace.isDisabled,
+                                required: avgPace.required,
                               };
                               setAvgPace(avgpace);
                             }}
                             name="challengeValidity.avgPaceFrom"
+                            validate={{
+                              required: { value: avgPace.required, errorMessage: 'Không để trống' },
+                            }}
                           />
 
                           <AvField
                             label="&nbsp; - Đến &nbsp; "
                             id="challenge-validity_avg_pace_to"
-                            // defaultValue="12.0"
-                            data-cy="challengeValidity.avg_pace_to"
                             type="number"
                             step="0.1"
-                            min="0"
-                            max="20"
+                            min="0.0"
+                            max="99.0"
                             className="form-control"
                             value={avgPace.to}
-                            disabled={avgPace.isDisabled}
                             onChange={event => {
                               const avgpace = {
                                 from: avgPace.from,
                                 to: event.target.value,
-                                isDisabled: avgPace.isDisabled,
+                                required: avgPace.required,
                               };
                               setAvgPace(avgpace);
                             }}
                             name="challengeValidity.avgPaceTo"
+                            validate={{
+                              required: { value: true, errorMessage: 'Không để trống' },
+                              min: { value: avgPace.from, errorMessage: 'Giá trị đến không thể nhỏ hơn giá trị từ ' },
+                            }}
                           />
                           <text> &nbsp; (phút/km)</text>
                         </AvGroup>
@@ -627,21 +612,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            checked={!minDistance.isDisabled}
-                            onChange={() => setMinDistance({ value: 0, isDisabled: !minDistance.isDisabled })}
+                            onChange={() => setMinDistance({ value: minDistance.value, required: !minDistance.required })}
                           />
                           <AvField
                             label="Bài chạy có quãng đường tối thiểu &nbsp; &nbsp;"
                             id="challenge-validity_min_distance"
                             data-cy="challengeValidity.minDistance"
                             type="number"
-                            disabled={calValue === 1 ? true : minDistance.isDisabled}
+                            disabled={calValue === 1 ? true : false}
                             value={calValue === 1 ? challengeDistanceList[0].distance : minDistance.value}
                             step="0.1"
-                            min="0"
-                            max="50"
+                            min="0.0"
+                            max="300.0"
                             className="form-control"
                             name="challengeValidity.minDistance"
+                            validate={{
+                              required: { value: minDistance.required, errorMessage: 'Không để trống' },
+                            }}
                           />
 
                           <text> &nbsp; (km)</text>
@@ -655,21 +642,20 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            checked={!elevationGain.isDisabled}
-                            onChange={() => setElevationGain({ value: 0, isDisabled: !elevationGain.isDisabled })}
+                            onChange={() => setElevationGain({ value: elevationGain.value, required: !elevationGain.required })}
                           />
                           <AvField
                             label="Bài chạy có độ cao đạt được (elevation gain) tối thiểu: &nbsp; &nbsp;"
-                            id="challenge-validity_elevation_gain"
-                            data-cy="challengeValidity.elevationGain"
-                            disabled={elevationGain.isDisabled}
                             type="number"
                             step="0.1"
-                            min="1"
-                            max="50"
+                            min="0.0"
+                            max="300.0"
                             value={elevationGain.value}
                             className="form-control"
                             name="challengeValidity.elevationGain"
+                            validate={{
+                              required: { value: elevationGain.required, errorMessage: 'Không để trống' },
+                            }}
                           />
 
                           <text> &nbsp; (m)</text>
@@ -683,8 +669,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            checked={!avgCadence.isDisabled}
-                            onChange={() => setAvgCadence({ from: 0, to: 0, isDisabled: !avgCadence.isDisabled })}
+                            onChange={() => setAvgCadence({ from: avgCadence.from, to: avgCadence.to, required: !avgCadence.required })}
                           />
                           <AvField
                             label="Bài chạy có nhịp chân trung bình(avg cadence) &nbsp; &nbsp;  Từ &nbsp;"
@@ -692,26 +677,31 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             // defaultValue="50"
                             data-cy="validity.avgCadenceFrom"
                             type="number"
-                            disabled={avgCadence.isDisabled}
                             value={avgCadence.from}
                             step="1"
-                            min="10"
+                            min="0"
                             max="300"
                             className="form-control"
                             name="challengeValidity.avgCadenceFrom"
+                            validate={{
+                              required: { value: avgCadence.required, errorMessage: 'Không để trống' },
+                            }}
                           />
                           <AvField
                             label="&nbsp; - Đến &nbsp; "
                             id="challenge-validity_avg_cadence_to"
-                            disabled={avgCadence.isDisabled}
                             data-cy="challenge_validity.avg_cadence_to"
-                            value={avgCadence.from}
+                            value={avgCadence.to}
                             type="number"
                             step="1"
-                            min="10"
+                            min="0"
                             max="300"
                             className="form-control"
                             name="challengeValidity.avgCadenceTo"
+                            validate={{
+                              required: { value: avgCadence.required, errorMessage: 'Không để trống' },
+                              min: { value: avgCadence.from, errorMessage: 'Giá trị đến không thể nhỏ hơn giá trị từ' },
+                            }}
                           />
                           <text> &nbsp; (bước/phút)</text>
                         </AvGroup>
@@ -789,7 +779,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               type="number"
                               className="form-control"
                               name="numOfParticipant"
-                              validate={{ max: { value: 100, errorMessage: 'Tối đa 100 người' } }}
+                              validate={{
+                                max: {
+                                  value: 100,
+                                  errorMessage:
+                                    'Tối đa 100 thành viên đối với thử thách từ cá nhân. Để tạo thử thách với số lượng thành viên lớn hơn, vui lòng liên hệ 19006600',
+                                },
+                              }}
                             />
                           </AvGroup>
                         </Row>
@@ -809,22 +805,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             onChange={event => {
                               setObjectType(event.target.value);
                             }}
+                            defaultValue="1"
                             required
                           >
                             <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
                             <AvRadio label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia" value="2" />
-                            {objectType === '2' ? (
-                              <Col xs="12" sm="8">
-                                <Row style={{ paddingTop: '6px' }}>
-                                  <label>
-                                    Mã đăng kí
-                                    <RedAsterisk /> &nbsp;
-                                  </label>
-                                  <AvField type="text" name="code" />
-                                </Row>
-                              </Col>
-                            ) : null}
                           </AvRadioGroup>
+                          {objectType === '2' ? (
+                            <Col xs="12" sm="8">
+                              <Row style={{ paddingTop: '6px' }}>
+                                <label>
+                                  Mã đăng kí
+                                  <RedAsterisk /> &nbsp;
+                                </label>
+                                <AvInput type="text" name="code" required />
+                              </Row>
+                            </Col>
+                          ) : null}
                         </Row>
                       </Col>
                     </Row>
@@ -862,10 +859,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <AvGroup className="form-group">
                         <Row>
                           <Col xs="12" sm="2">
-                            <Label>
-                              Giới hạn thành viên:
-                              <RedAsterisk />
-                            </Label>
+                            <Label>Giới hạn thành viên:</Label>
                           </Col>
                           <Col xs="12" sm="2">
                             <AvInput style={{ paddingLeft: '6px' }} type="number" name="numPerTeam" step="1" min="1" />
@@ -912,6 +906,21 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   </CardBody>
                 </Card>
               </Collapse>
+
+              <Row style={{ paddingBottom: '40px' }}>
+                <Col xs="12" sm="4">
+                  <Button tag={Link} id="cancel-save" to="/challenges" replace color="info">
+                    <FontAwesomeIcon icon="arrow-left" />
+                    &nbsp;
+                    <span className="d-none d-md-inline">Hủy</span>
+                  </Button>
+                  &nbsp;
+                  <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+                    <FontAwesomeIcon icon="save" />
+                    &nbsp; Lưu
+                  </Button>
+                </Col>
+              </Row>
             </AvForm>
           )}
         </Col>

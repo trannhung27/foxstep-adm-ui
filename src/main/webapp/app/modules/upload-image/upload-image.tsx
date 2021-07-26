@@ -14,8 +14,13 @@ import {
   AvCheckboxGroup,
   AvCheckbox,
 } from 'availity-reactstrap-validation';
+import { faCheck, faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export interface IUploadImage extends StateProps, DispatchProps {}
+export interface IUploadImage extends StateProps, DispatchProps {
+  label: string;
+  initImage: string;
+}
 
 export const UploadImageInput = (props: IUploadImage) => {
   const { entity, loading } = props;
@@ -36,16 +41,16 @@ export const UploadImageInput = (props: IUploadImage) => {
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
     reader.onload = function () {
-      // uploadImageToServer(btoa(reader.result.toString()));
       setBase64File(reader.result.toString());
     };
-    reader.onerror = function () {
-      // eslint-disable-next-line no-console
-      console.log('there are some problems');
-    };
+    // reader.onerror = function() {
+    //   console.log('there are some problems');
+    // };
   };
 
-  useEffect(() => {}, [base64File]);
+  useEffect(() => {
+    setBase64File(props.initImage);
+  }, []);
 
   const uploadHandler = () => {
     const reader = new FileReader();
@@ -54,31 +59,32 @@ export const UploadImageInput = (props: IUploadImage) => {
       const imageString = reader.result.toString();
       const imageBase64 = imageString.slice(23, imageString.length);
       uploadImageToServer(imageBase64);
-      // setBase64File(btoa(reader.result.toString()));
     };
     reader.onerror = function () {
       // eslint-disable-next-line no-console
       console.log('there are some problems');
     };
-    // console.log(base64File);
   };
-
-  // useEffect(() => {
-  //   props.getEntities(criteria);
-  // }, []);
 
   return (
     <div>
-      <Row>
-        <Label>Ảnh đại diện TT:</Label>
-      </Row>
-      <img style={{ width: '300px', height: '240px' }} src={base64File} />
-      <AvGroup className="form-group form-inline">
+      <AvGroup className="form-group">
+        <Label>{props.label}</Label>
+      </AvGroup>
+
+      <AvGroup className="form-group">
+        <img style={{ width: '300px', height: '240px' }} src={base64File} />
         <AvInput type="file" name="file" className="upload-file" id="file" onChange={handleChangeImage} required />
         <Button color="info" onClick={uploadHandler}>
           Upload!
         </Button>
       </AvGroup>
+      {props.entity.url ? (
+        <text>
+          <FontAwesomeIcon icon={faCheck} />
+          Thành công
+        </text>
+      ) : null}
     </div>
   );
 };
