@@ -265,20 +265,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   <AvInput id="challenge-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
-              <Row style={{ paddingBottom: '40px' }}>
-                <Col xs="12" sm="4">
-                  <Button tag={Link} id="cancel-save" to="/challenges" replace color="info">
-                    <FontAwesomeIcon icon="arrow-left" />
-                    &nbsp;
-                    <span className="d-none d-md-inline">Hủy</span>
-                  </Button>
-                  &nbsp;
-                  <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                    <FontAwesomeIcon icon="save" />
-                    &nbsp; Lưu
-                  </Button>
-                </Col>
-              </Row>
 
               <Row>
                 <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
@@ -383,7 +369,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <Col xs="12" sm="4">
                         <AvGroup>
                           <Label id="dateStartLabel" for="challenge-dateStart">
-                            Thời gian bắt đầu
+                            Từ ngày
                           </Label>
                           <AvInput
                             id="challenge-dateStart"
@@ -402,7 +388,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <Col xs="12" sm="4">
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateFinish">
-                            Thời gian kết thúc
+                            Đến ngày
                           </Label>
                           <AvInput
                             id="challenge-dateFinish"
@@ -508,8 +494,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvField
                               type="number"
                               name={'distanceInput' + i}
-                              disabled={i === 0 && calValue === 1 ? true : false}
-                              // disabled={challengeDistanceList[i].isDisabled}
                               onChange={e => {
                                 handleChallengeDistance(e, i);
                               }}
@@ -662,7 +646,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             type="number"
                             step="0.1"
                             min="0.0"
-                            max="99.0"
+                            max="300.0"
                             value={elevationGain.value}
                             className="form-control"
                             name="challengeValidity.elevationGain"
@@ -707,12 +691,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             value={avgCadence.to}
                             type="number"
                             step="1"
-                            min="10"
+                            min="0"
                             max="300"
                             className="form-control"
                             name="challengeValidity.avgCadenceTo"
                             validate={{
                               required: { value: avgCadence.required, errorMessage: 'Không để trống' },
+                              min: { value: avgCadence.from, errorMessage: 'Giá trị đến không thể nhỏ hơn giá trị từ' },
                             }}
                           />
                           <text> &nbsp; (bước/phút)</text>
@@ -791,7 +776,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               type="number"
                               className="form-control"
                               name="numOfParticipant"
-                              validate={{ max: { value: 100, errorMessage: 'Tối đa 100 người' } }}
+                              validate={{
+                                max: {
+                                  value: 100,
+                                  errorMessage:
+                                    'Tối đa 100 thành viên đối với thử thách từ cá nhân. Để tạo thử thách với số lượng thành viên lớn hơn, vui lòng liên hệ 19006600',
+                                },
+                              }}
                             />
                           </AvGroup>
                         </Row>
@@ -811,6 +802,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             onChange={event => {
                               setObjectType(event.target.value);
                             }}
+                            defaultValue="1"
                             required
                           >
                             <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
@@ -864,10 +856,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <AvGroup className="form-group">
                         <Row>
                           <Col xs="12" sm="2">
-                            <Label>
-                              Giới hạn thành viên:
-                              <RedAsterisk />
-                            </Label>
+                            <Label>Giới hạn thành viên:</Label>
                           </Col>
                           <Col xs="12" sm="2">
                             <AvInput style={{ paddingLeft: '6px' }} type="number" name="numPerTeam" step="1" min="1" />
@@ -916,6 +905,21 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               </Collapse>
             </AvForm>
           )}
+        </Col>
+      </Row>
+
+      <Row style={{ paddingBottom: '40px' }}>
+        <Col xs="12" sm="4">
+          <Button tag={Link} id="cancel-save" to="/challenges" replace color="info">
+            <FontAwesomeIcon icon="arrow-left" />
+            &nbsp;
+            <span className="d-none d-md-inline">Hủy</span>
+          </Button>
+          &nbsp;
+          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+            <FontAwesomeIcon icon="save" />
+            &nbsp; Lưu
+          </Button>
         </Col>
       </Row>
     </div>
