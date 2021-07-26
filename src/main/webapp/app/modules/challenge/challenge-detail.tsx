@@ -14,7 +14,7 @@ import {
   AvCheckbox,
   AvInputContainer,
 } from 'availity-reactstrap-validation';
-import {} from 'react-jhipster';
+import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -217,7 +217,11 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Thời gian bắt đầu: &nbsp; &nbsp;
                 </Label>
-                <div>{moment.utc(challengeEntity.dateStart).format(APP_DATE_FORMAT)}</div>
+                <div>
+                  {challengeEntity.dateStart ? (
+                    <TextFormat type="date" value={challengeEntity.dateStart} format={APP_TIMESTAMP_FORMAT} />
+                  ) : null}
+                </div>
               </AvGroup>
             </Col>
 
@@ -226,7 +230,11 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Thời gian kết thúc: &nbsp; &nbsp;
                 </Label>
-                <div>{moment.utc(challengeEntity.dateFinish).format(APP_DATE_FORMAT)}</div>
+                <div>
+                  {challengeEntity.dateFinish ? (
+                    <TextFormat type="date" value={challengeEntity.dateFinish} format={APP_TIMESTAMP_FORMAT} />
+                  ) : null}
+                </div>
               </AvGroup>
             </Col>
           </Row>
