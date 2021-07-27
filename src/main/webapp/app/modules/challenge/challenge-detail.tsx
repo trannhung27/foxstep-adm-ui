@@ -276,7 +276,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                     <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                       Hạng mục {i + 1}: &nbsp; &nbsp;
                     </Label>
-                    <div className="content">{challengeDistance.distance}</div>
+                    <div className="content">{challengeDistance.distance / 1000}</div>
                   </AvGroup>
                 </Col>
               ))
@@ -306,22 +306,41 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceFrom).toFixed(1) : ''}</div>
             <Label>&nbsp; - Đến &nbsp; </Label>
             <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceTo).toFixed(1) : ''}</div>
+            <text> &nbsp; (phút/km)</text>
           </AvGroup>
 
           <AvGroup inline name="mínDistance" className="form-group form-inline">
-            <input
-              type="checkbox"
-              className="mr-2"
-              // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
-            />
+            <input type="checkbox" className="mr-2" />
             <Label>Bài chạy có quãng đường tối thiểu &nbsp; &nbsp; </Label>
             <div>{challengeEntity.challengeValidity ? Number((challengeEntity.challengeValidity.minDistance / 1000).toFixed(1)) : ''}</div>
+            <text> &nbsp; (km)</text>
+          </AvGroup>
+
+          <AvGroup inline name="elevationGain" className="form-group form-inline">
+            <input type="checkbox" className="mr-2" />
+            <Label>Bài chạy có độ cao đạt được (elevation gain) tối thiểu &nbsp; &nbsp; </Label>
+            <div>{challengeEntity.challengeValidity ? Number(challengeEntity.challengeValidity.elevationGain.toFixed(1)) : ''}</div>
+            <text> &nbsp; (m)</text>
+          </AvGroup>
+
+          <AvGroup inline name="avgCadence" className="form-group form-inline">
+            <input type="checkbox" className="mr-2" />
+            <Label>Bài chạy có nhịp chân trung bình(avg cadence) &nbsp; &nbsp; Từ &nbsp;</Label>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgCadenceFrom : ''}</div>
+            <Label>&nbsp; - Đến &nbsp; </Label>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgCadenceTo : ''}</div>
+            <text> &nbsp; (bước/phút)</text>
           </AvGroup>
 
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hoàn thành:</text>
           <Row></Row>
 
+          {challengeEntity.calType === 1
+            ? 'Có MỘT LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký'
+            : challengeEntity.calType === 2
+            ? 'Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký'
+            : ''}
           <text style={{ fontWeight: 'bold' }}>Thứ tự các tiêu chí xếp hạng:</text>
 
           <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>3. Cài đặt thành viên</h4>
