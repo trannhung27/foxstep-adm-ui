@@ -199,7 +199,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
     values.challengeDistance.map((challenge, i) => {
-      challenge.distance = challenge.distance / 1000;
+      challenge.distance = challenge.distance * 1000;
     });
     if (values.challengeValidity.checkTime === true) {
       values.challengeValidity.checkTime = 0;
@@ -436,6 +436,22 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       onEditorStateChange={onEditorStateChange}
                       wrapperStyle={{ textDecoration: 'none !important' }}
                       editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
+                      toolbar={{
+                        options: [
+                          'inline',
+                          'blockType',
+                          'fontSize',
+                          'list',
+                          'textAlign',
+                          'colorPicker',
+                          'link',
+                          'embedded',
+                          'emoji',
+                          'image',
+                          'remove',
+                          'history',
+                        ],
+                      }}
                     />
                     {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
                   </CardBody>
@@ -777,6 +793,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               id="challenge-num_of_participant"
                               data-cy="num_of_participant"
                               type="number"
+                              step="1"
                               className="form-control"
                               name="numOfParticipant"
                               validate={{

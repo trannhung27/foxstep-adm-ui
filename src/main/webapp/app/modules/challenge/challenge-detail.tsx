@@ -173,12 +173,6 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                   <div>{challengeEntity.userCreated ? challengeEntity.userCreated.name : ''}</div>
                 </AvGroup>
               )}
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
-                  Cá nhân tổ chức: &nbsp; &nbsp;
-                </Label>
-                <div>{challengeEntity.userCreated ? challengeEntity.userCreated.name : ''}</div>
-              </AvGroup>
             </Col>
 
             <Col xs="12" sm="6">
@@ -257,10 +251,10 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Bộ môn: &nbsp; &nbsp;
                 </Label>
-                <div className="content" dangerouslySetInnerHTML={{ __html: challengeEntity.content }}></div>
+                <div>{challengeEntity.sport && challengeEntity.sport.name}</div>
               </AvGroup>
               <AvGroup classname="form-inline">
-                <AvRadioGroup name="cal_type">
+                <AvRadioGroup name="calType" value={challengeEntity.calType}>
                   <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                     Cách tính thành tích: &nbsp; &nbsp;
                   </Label>
@@ -275,45 +269,43 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km){' '}
           </text>
 
-          <Row>
-            <Col xs="12" sm="6">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
-                  Hạng mục 1: &nbsp; &nbsp;
-                </Label>
-                <div className="content">{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.rankCriteria1 : ''}</div>
-              </AvGroup>
-            </Col>
-            <Col xs="12" sm="6">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
-                  Hạng mục 2: &nbsp; &nbsp;
-                </Label>
-                <div className="content">{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.rankCriteria2 : ''}</div>
-              </AvGroup>
-            </Col>
-          </Row>
+          {challengeEntity.challengeDistance
+            ? challengeEntity.challengeDistance.map((challengeDistance, i) => (
+                <Col xs="12" sm="6" key={i}>
+                  <AvGroup className="form-group form-inline">
+                    <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                      Hạng mục {i + 1}: &nbsp; &nbsp;
+                    </Label>
+                    <div className="content">{challengeDistance.distance}</div>
+                  </AvGroup>
+                </Col>
+              ))
+            : null}
 
-          <Row>
-            <Col xs="12" sm="6">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
-                  Hạng mục 3: &nbsp; &nbsp;
-                </Label>
-                <div className="content">Not done yet</div>
-              </AvGroup>
-            </Col>
-            <Col xs="12" sm="6">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
-                  Hạng mục 4: &nbsp; &nbsp;
-                </Label>
-                <div className="content">Not done yet</div>
-              </AvGroup>
-            </Col>
-          </Row>
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ:</text>
+          <AvField
+            type="checkbox"
+            disabled
+            check
+            name="challengeValidity.checkTime"
+            label=" Thời gian bắt đầu diễn ra thử thách từ thời gian bắt đầu tới thời gian kết thúc"
+            value={true}
+          />
+
+          <AvGroup inline name="validation_list" className="form-group form-inline">
+            <input
+              type="checkbox"
+              checked
+              disabled
+              className="mr-2"
+              // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
+            />
+            <Label>Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp; Từ &nbsp;</Label>
+            <div>{challengeEntity.challengeValidity.avgCadenceFrom}</div>
+            <Label>&nbsp; - Đến &nbsp; </Label>
+            <div>{challengeEntity.challengeValidity.avgCadenceTo}</div>
+          </AvGroup>
 
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hoàn thành:</text>
