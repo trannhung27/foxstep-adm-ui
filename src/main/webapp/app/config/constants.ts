@@ -5,6 +5,7 @@ const config = {
 export default config;
 
 export const SERVER_API_URL = process.env.SERVER_API_URL;
+export const AUTH_API_URL = process.env.AUTH_API_URL;
 
 export const AUTHORITIES = {
   USER: { id: 1, name: 'ROLE_USER' },
