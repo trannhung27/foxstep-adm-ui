@@ -302,9 +302,9 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
             />
             <Label>Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp; Từ &nbsp;</Label>
-            <div>{challengeEntity.challengeValidity.avgCadenceFrom}</div>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgPaceFrom : ''}</div>
             <Label>&nbsp; - Đến &nbsp; </Label>
-            <div>{challengeEntity.challengeValidity.avgCadenceTo}</div>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgPaceTo : ''}</div>
           </AvGroup>
 
           <Row></Row>
