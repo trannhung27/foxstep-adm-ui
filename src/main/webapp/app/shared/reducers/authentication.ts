@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Storage } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { USER_STATUS } from 'app/config/constants';
+import { AUTH_API_URL, USER_STATUS } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -105,16 +105,13 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
 ) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
-    payload: axios.post('api/authenticate', { username, password, rememberMe }),
+    payload: axios.post(AUTH_API_URL, { username, password, rememberMe }),
   });
-  const bearerToken = result.value.headers.authorization;
-  if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
-    const jwt = bearerToken.slice(7, bearerToken.length);
-    if (rememberMe) {
-      Storage.local.set(AUTH_TOKEN_KEY, jwt);
-    } else {
-      Storage.session.set(AUTH_TOKEN_KEY, jwt);
-    }
+  const bearerToken = result.value.data.idToken;
+  if (rememberMe) {
+    Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
+  } else {
+    Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
   }
   await dispatch(getSession());
 };

@@ -11,10 +11,11 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
+const AUTH_URL = 'http://foxstep-api-stag.fpt.net/auth/api/adm/authenticate';
 const API_URL = 'http://foxstep-api-stag.fpt.net/adm';
 
 module.exports = options =>
-  webpackMerge(commonConfig({ env: ENV, api_url: API_URL }), {
+  webpackMerge(commonConfig({ env: ENV, api_url: API_URL, auth_url: AUTH_URL }), {
     devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
     mode: ENV,
     entry: ['./src/main/webapp/app/index'],

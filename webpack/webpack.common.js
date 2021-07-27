@@ -100,6 +100,7 @@ module.exports = options =>
             DEBUG_INFO_ENABLED: options.env === 'development',
             // The root URL for API calls, ending with a '/'
             SERVER_API_URL: `'${options.api_url}/'`,
+            AUTH_API_URL: `'${options.auth_url}'`,
           },
         }),
         new ESLintPlugin({
