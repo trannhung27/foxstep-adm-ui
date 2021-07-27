@@ -284,6 +284,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
 
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ:</text>
+
           <AvField
             type="checkbox"
             disabled
@@ -293,7 +294,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             value={true}
           />
 
-          <AvGroup inline name="validation_list" className="form-group form-inline">
+          <AvGroup inline name="avgPace" className="form-group form-inline">
             <input
               type="checkbox"
               checked
@@ -302,9 +303,19 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
             />
             <Label>Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp; Từ &nbsp;</Label>
-            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgPaceFrom : ''}</div>
+            <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceFrom).toFixed(1) : ''}</div>
             <Label>&nbsp; - Đến &nbsp; </Label>
-            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgPaceTo : ''}</div>
+            <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceTo).toFixed(1) : ''}</div>
+          </AvGroup>
+
+          <AvGroup inline name="mínDistance" className="form-group form-inline">
+            <input
+              type="checkbox"
+              className="mr-2"
+              // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
+            />
+            <Label>Bài chạy có quãng đường tối thiểu &nbsp; &nbsp; </Label>
+            <div>{challengeEntity.challengeValidity ? Number((challengeEntity.challengeValidity.minDistance / 1000).toFixed(1)) : ''}</div>
           </AvGroup>
 
           <Row></Row>
