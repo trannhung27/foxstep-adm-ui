@@ -3,7 +3,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
@@ -19,7 +19,10 @@ import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
 import { uploadImage } from 'app/modules/upload-image/upload-image-reducer';
 import { PageHeader } from 'antd';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import { UploadImageInput } from 'app/modules/upload-image/upload-image';
+import axios from 'axios';
+import { cleanEntity } from 'app/shared/util/entity-utils';
+import { uploadImageCallBack } from 'app/shared/util/editor-utils';
 
 export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -104,15 +107,14 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
               ) : null}
               <Row className="justify-content-between">
                 <Col>
-                  <AvGroup>
-                    <Label id="imgUrlLabel" for="news-imgUrl">
-                      Ảnh:*
-                    </Label>
-                    <AvField id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" />
-                  </AvGroup>
-                  {/*<AvField id='news-imgUrl' data-cy='imgUrl' type='text' name='imgUrl'*/}
-                  {/*         value={props.uploadImageEntity.url} />*/}
-                  {/*<UploadImageInput entity={props.uploadImageEntity} upload={props.uploadImage} loading={props.uploadingImage} />*/}
+                  <UploadImageInput
+                    entity={props.uploadImageEntity}
+                    upload={props.uploadImage}
+                    loading={props.uploadingImage}
+                    label="Ảnh:"
+                    initImage={isNew ? null : newsEntity.imgUrl}
+                  />
+                  <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
                 </Col>
                 <Col>
                   <AvGroup>
@@ -188,6 +190,12 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                       'remove',
                       'history',
                     ],
+                    image: {
+                      uploadCallback: uploadImageCallBack,
+                      previewImage: true,
+                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                      alt: { present: true, mandatory: false },
+                    },
                   }}
                 />
                 {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
