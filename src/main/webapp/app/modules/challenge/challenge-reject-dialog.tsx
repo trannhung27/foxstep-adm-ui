@@ -32,7 +32,7 @@ export const ChallengeRejectDialog = (props: IChallengeRejectDialogProps) => {
       contentId: Number(challengeEntity.id),
 
       attachmentUrl: '',
-      requestNote: '',
+      requestNote: actionMessage,
       requestData: '',
       actionNote: actionMessage,
     };

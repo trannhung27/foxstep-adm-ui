@@ -1,8 +1,8 @@
-import { IUserTeam } from './userTeam.model';
+import { IUsers } from 'app/shared/model/users.model';
 export interface ITeam {
   id?: number;
   name?: string | null;
-  user_teams?: IUserTeam[];
+  users?: IUsers[];
 }
 
 export const defaultValue: Readonly<ITeam> = {};

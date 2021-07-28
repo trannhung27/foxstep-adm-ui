@@ -25,6 +25,7 @@ import wfAction, { WfActionState } from 'app/modules/workflow/wf-action/wf-actio
 import uploadImage, { UploadImageState } from 'app/modules/upload-image/upload-image-reducer';
 import sport, { SportState } from 'app/modules/sport/sport.reducer';
 import banner, { BannerState } from 'app/modules/banner/banner.reducer';
+import challengeParticipant, { JoinChallengeRequestState } from 'app/modules/challenge/challenge-participants/cp-reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -51,6 +52,7 @@ export interface IRootState {
   readonly uploadImage: UploadImageState;
   readonly sport: SportState;
   readonly banner: BannerState;
+  readonly challengeParticipant: JoinChallengeRequestState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -78,6 +80,7 @@ const rootReducer = combineReducers<IRootState>({
   uploadImage,
   sport,
   banner,
+  challengeParticipant,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

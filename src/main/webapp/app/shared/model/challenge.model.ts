@@ -17,6 +17,7 @@ export interface IChallenge {
   dateFinish?: string | null;
   numOfParticipant?: number | null;
   numOfRegis?: number | null;
+  numPerTeam?: number | null;
   userIdCreated?: number | null;
   challengeType?: number | null;
   dateUpdated?: string | null;

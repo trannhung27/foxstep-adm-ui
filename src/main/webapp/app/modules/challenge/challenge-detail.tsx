@@ -51,10 +51,14 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/challenges/${challengeEntity.id}/participants`} replace color="primary">
-          <span className="d-none d-md-inline">Danh sách thành viên</span>
-        </Button>
-        &nbsp;
+        {[1, 12, 2].includes(challengeEntity.status) && (
+          <>
+            <Button tag={Link} to={`/challenges/${challengeEntity.id}/participants`} replace color="primary">
+              <span className="d-none d-md-inline">Danh sách thành viên</span>
+            </Button>
+            &nbsp;
+          </>
+        )}
         <Button
           onClick={() => {
             setShowApproveModal(true);
