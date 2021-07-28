@@ -27,7 +27,6 @@ export interface IChallenge {
   challengeDistance?: IChallengeDistance[] | [];
   teams?: ITeam[] | [];
   organizationName?: string | null;
-  numPerTeam?: number | null;
   userCreated?: IUserCreated | null;
 }
 
