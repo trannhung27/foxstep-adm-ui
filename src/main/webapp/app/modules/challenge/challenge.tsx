@@ -22,6 +22,7 @@ import {
   ChallengeStatuses,
 } from 'app/config/constants';
 import dayjs from 'dayjs';
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -104,9 +105,6 @@ export const Challenge = (props: IChallengeProps) => {
       <h2 id="challenge-heading" data-cy="ChallengeHeading">
         Quản lý thử thách
         <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh
-          </Button>
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp; Tạo thử thách
@@ -175,7 +173,7 @@ export const Challenge = (props: IChallengeProps) => {
         <Row>
           <Col xs="12" sm="4">
             <Row>
-              <Col xs="12" sm="8">
+              <Col xs="12" sm="12">
                 <AvGroup>
                   <AvField
                     type="select"
@@ -203,7 +201,7 @@ export const Challenge = (props: IChallengeProps) => {
 
           <Col xs="12" sm="4">
             <Row>
-              <Col xs="12" sm="8">
+              <Col xs="12" sm="12">
                 <AvGroup>
                   <Label>Từ ngày</Label>
                   <DateTime
@@ -221,7 +219,7 @@ export const Challenge = (props: IChallengeProps) => {
 
           <Col xs="12" sm="4">
             <Row>
-              <Col xs="12" sm="8">
+              <Col xs="12" sm="12">
                 <AvGroup>
                   <Label>Đến ngày</Label>
                   <DateTime
@@ -237,10 +235,28 @@ export const Challenge = (props: IChallengeProps) => {
             </Row>
           </Col>
         </Row>
-        <Button color="primary" type="submit">
-          <FontAwesomeIcon icon="search" />
-          &nbsp; Search
-        </Button>
+        <Row>
+          <Col sm={2}>
+            <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={loading} block>
+              <FontAwesomeIcon icon="search" />
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
+            </Button>
+          </Col>
+          <Col sm={2}>
+            <Button
+              color="default"
+              className="border-secondary"
+              id="cancel-button"
+              data-cy="cancelFilterButton"
+              type="reset"
+              value="Reset"
+              block
+            >
+              <FontAwesomeIcon icon={faWindowClose} />
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Hủy</span>
+            </Button>
+          </Col>
+        </Row>
       </AvForm>
 
       <hr style={{ backgroundColor: 'DodgerBlue', height: '2px' }} />

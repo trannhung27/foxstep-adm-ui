@@ -16,6 +16,7 @@ import {
 } from 'availity-reactstrap-validation';
 import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import parse from 'html-react-parser';
 
 import { IRootState } from 'app/shared/reducers';
 import { approveChallenge, getEntity, endChallenge } from './challenge.reducer';
@@ -242,7 +243,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Nội dung: &nbsp; &nbsp;
                 </Label>
-                <div className="content" dangerouslySetInnerHTML={{ __html: challengeEntity.content }}></div>
+                <div>{challengeEntity.content && parse(challengeEntity.content)}</div>
               </AvGroup>
             </Col>
           </Row>
@@ -306,9 +307,9 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
             />
             <Label>Bài chạy có tốc độ trung bình(avg pace) &nbsp; &nbsp; Từ &nbsp;</Label>
-            <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceFrom).toFixed(1) : ''}</div>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgPaceFrom : ''}</div>
             <Label>&nbsp; - Đến &nbsp; </Label>
-            <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceTo).toFixed(1) : ''}</div>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgPaceTo : ''}</div>
             <text> &nbsp; (phút/km)</text>
           </AvGroup>
 
@@ -322,7 +323,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <AvGroup inline name="elevationGain" className="form-group form-inline">
             <input type="checkbox" className="mr-2" />
             <Label>Bài chạy có độ cao đạt được (elevation gain) tối thiểu &nbsp; &nbsp; </Label>
-            <div>{challengeEntity.challengeValidity ? Number(challengeEntity.challengeValidity.elevationGain.toFixed(1)) : ''}</div>
+            <div>{challengeEntity.challengeValidity ? Number(challengeEntity.challengeValidity.elevationGain) : ''}</div>
             <text> &nbsp; (m)</text>
           </AvGroup>
 
