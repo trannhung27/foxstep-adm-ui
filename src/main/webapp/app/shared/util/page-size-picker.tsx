@@ -16,7 +16,7 @@ export class PageSizePicker extends React.Component<IPageSizePickerProps> {
     const { pageSize, handleSelect } = this.props;
     return (
       <FormGroup>
-        <Row className="justify-content-end align-items-center" style={{ margin: '0 0' }}>
+        <Row className="justify-content-end align-items-center m-0 p-0">
           <Col sm="2" md="2" lg="2" className="text-right p-0">
             <Label for="pagesizePicker">Dòng/Trang</Label>
           </Col>
