@@ -314,7 +314,7 @@ export const Challenge = (props: IChallengeProps) => {
                     {challenge.dateFinish ? <TextFormat type="date" value={challenge.dateFinish} format={APP_TIMESTAMP_FORMAT} /> : null}
                   </td>
                   <td>
-                    {challenge.dateCreated ? <TextFormat type="date" value={challenge.dateFinish} format={APP_TIMESTAMP_FORMAT} /> : null}
+                    {challenge.dateCreated ? <TextFormat type="date" value={challenge.dateCreated} format={APP_TIMESTAMP_FORMAT} /> : null}
                   </td>
                 </tr>
               ))}
