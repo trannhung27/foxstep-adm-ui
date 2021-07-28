@@ -50,36 +50,42 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
         <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
         </Button>
-        &nbsp;
-        <Button
-          onClick={() => {
-            setShowApproveModal(true);
-          }}
-          replace
-          color="primary"
-        >
-          <span className="d-none d-md-inline">Duyệt</span>
-        </Button>
-        &nbsp;
-        <Button
-          onClick={() => {
-            setShowRejectModal(true);
-          }}
-          replace
-          color="primary"
-        >
-          <span className="d-none d-md-inline">Từ chối</span>
-        </Button>
-        &nbsp;
-        <Button
-          onClick={() => {
-            props.endChallenge(props.challengeEntity.id);
-          }}
-          replace
-          color="primary"
-        >
-          <span className="d-none d-md-inline">Kết thúc</span>
-        </Button>
+        &nbsp; &nbsp;
+        {challengeEntity.status === ChallengeStatuses[0].id ? (
+          <Button
+            onClick={() => {
+              setShowApproveModal(true);
+            }}
+            replace
+            color="success"
+          >
+            <span className="d-none d-md-inline">Duyệt</span>
+          </Button>
+        ) : null}
+        &nbsp; &nbsp;
+        {challengeEntity.status === ChallengeStatuses[0].id ? (
+          <Button
+            onClick={() => {
+              setShowRejectModal(true);
+            }}
+            replace
+            color="danger"
+          >
+            <span className="d-none d-md-inline">Từ chối</span>
+          </Button>
+        ) : null}
+        &nbsp; &nbsp;
+        {challengeEntity.status === ChallengeStatuses[1].id || challengeEntity.status === ChallengeStatuses[3].id ? (
+          <Button
+            onClick={() => {
+              props.endChallenge(props.challengeEntity.id);
+            }}
+            replace
+            color="secondary"
+          >
+            <span className="d-none d-md-inline">Kết thúc</span>
+          </Button>
+        ) : null}
       </Col>
       <ChallengeApproveDialog
         showModal={showApproveModal}
@@ -132,28 +138,10 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                   Thành viên: &nbsp; &nbsp;
                 </Label>
                 <div style={{ fontWeight: 'bold' }}>
-                  {challengeEntity.numOfParticipant}/{challengeEntity.numOfRegis}
+                  {challengeEntity.numOfRegis}/{challengeEntity.numOfParticipant}
                 </div>
               </AvGroup>
             </Col>
-
-            {/* <Col xs="12" sm="5">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px' }} id="img_urlLabel" for="challenge-img_url">
-                  Ban tổ chức khởi tạo
-                </Label>
-                <AvField
-                  id="challenge-challenge_type"
-                  data-cy="challenge_type"
-                  type="radio"
-                  name="challenge_type"
-                  required
-                  defaultChecked
-                  disabled
-                  value="0"
-                />
-              </AvGroup>
-            </Col> */}
           </Row>
 
           <Row>
@@ -180,7 +168,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Ảnh đại diện TT(tỉ lệ 2x1): &nbsp; &nbsp;
                 </Label>
-                <div>Not done yet</div>
+                <img style={{ width: '240px', height: '180px' }} src={challengeEntity.imgUrl} />
               </AvGroup>
             </Col>
           </Row>
@@ -276,7 +264,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                     <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                       Hạng mục {i + 1}: &nbsp; &nbsp;
                     </Label>
-                    <div className="content">{challengeDistance.distance}</div>
+                    <div className="content">{challengeDistance.distance / 1000}</div>
                   </AvGroup>
                 </Col>
               ))
@@ -306,23 +294,85 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceFrom).toFixed(1) : ''}</div>
             <Label>&nbsp; - Đến &nbsp; </Label>
             <div>{challengeEntity.challengeValidity ? Number(16.667 / challengeEntity.challengeValidity.avgPaceTo).toFixed(1) : ''}</div>
+            <text> &nbsp; (phút/km)</text>
           </AvGroup>
 
           <AvGroup inline name="mínDistance" className="form-group form-inline">
-            <input
-              type="checkbox"
-              className="mr-2"
-              // onChange={() => setAvgPace({ from: avgPace.from, to: avgPace.to, required: !avgPace.required })}
-            />
+            <input type="checkbox" className="mr-2" />
             <Label>Bài chạy có quãng đường tối thiểu &nbsp; &nbsp; </Label>
             <div>{challengeEntity.challengeValidity ? Number((challengeEntity.challengeValidity.minDistance / 1000).toFixed(1)) : ''}</div>
+            <text> &nbsp; (km)</text>
+          </AvGroup>
+
+          <AvGroup inline name="elevationGain" className="form-group form-inline">
+            <input type="checkbox" className="mr-2" />
+            <Label>Bài chạy có độ cao đạt được (elevation gain) tối thiểu &nbsp; &nbsp; </Label>
+            <div>{challengeEntity.challengeValidity ? Number(challengeEntity.challengeValidity.elevationGain.toFixed(1)) : ''}</div>
+            <text> &nbsp; (m)</text>
+          </AvGroup>
+
+          <AvGroup inline name="avgCadence" className="form-group form-inline">
+            <input type="checkbox" className="mr-2" />
+            <Label>Bài chạy có nhịp chân trung bình(avg cadence) &nbsp; &nbsp; Từ &nbsp;</Label>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgCadenceFrom : ''}</div>
+            <Label>&nbsp; - Đến &nbsp; </Label>
+            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgCadenceTo : ''}</div>
+            <text> &nbsp; (bước/phút)</text>
           </AvGroup>
 
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hoàn thành:</text>
           <Row></Row>
 
+          {challengeEntity.calType === 1
+            ? 'Có MỘT LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký'
+            : challengeEntity.calType === 2
+            ? 'Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký'
+            : ''}
+          <Row></Row>
           <text style={{ fontWeight: 'bold' }}>Thứ tự các tiêu chí xếp hạng:</text>
+
+          <AvGroup>
+            <text>1. &nbsp;</text>
+            <input type="checkbox" disabled checked className="mr-2" />
+            <text>
+              {' '}
+              &nbsp;{' '}
+              {challengeEntity.challengeValidity
+                ? challengeEntity.challengeValidity.rankCriteria1 === 1
+                  ? 'Số km thực hiện nhiều nhất'
+                  : challengeEntity.challengeValidity.rankCriteria1 === 2
+                  ? 'Avg Pace thấp nhất'
+                  : ''
+                : ''}
+            </text>
+          </AvGroup>
+
+          <AvGroup>
+            <text>1. &nbsp;</text>
+            <input type="checkbox" disabled checked className="mr-2" />
+            <text>
+              {' '}
+              &nbsp;{' '}
+              {challengeEntity.challengeValidity
+                ? challengeEntity.challengeValidity.rankCriteria2 === 1
+                  ? 'Số km thực hiện nhiều nhất'
+                  : challengeEntity.challengeValidity.rankCriteria2 === 2
+                  ? 'Avg Pace thấp nhất'
+                  : ''
+                : ''}
+            </text>
+          </AvGroup>
+
+          <AvGroup>
+            <text>1. &nbsp;</text>
+            <input type="checkbox" disabled checked className="mr-2" />
+            <text>
+              {' '}
+              &nbsp;{' '}
+              {challengeEntity.challengeValidity ? (challengeEntity.challengeValidity.rankCriteria3 === 3 ? 'Avg HR thấp nhất' : '') : ''}
+            </text>
+          </AvGroup>
 
           <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>3. Cài đặt thành viên</h4>
           <Row>
@@ -336,16 +386,39 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             </Col>
           </Row>
 
-          <Row>
-            <Col xs="12" sm="6">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
-                  Phạm vi: &nbsp; &nbsp;
-                </Label>
-                <div className="content">{challengeEntity.numOfParticipant}</div>
+          <AvGroup className="form-group">
+            <Label>Phạm vi :</Label>
+
+            <AvRadioGroup name="objectType" value={challengeEntity.objectType}>
+              <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value={Number('1')} />
+              <AvRadio label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia" value={Number('2')} />
+            </AvRadioGroup>
+          </AvGroup>
+
+          <input type="checkbox" checked={challengeEntity.teams ? challengeEntity.teams.length > 0 : false} className="mr-2" />
+          <Label>Thi đấu theo nhóm</Label>
+          <Row></Row>
+          {challengeEntity.teams && challengeEntity.teams.length > 0 && (
+            <AvGroup>
+              &nbsp; &nbsp; <input type="checkbox" className="mr-2" />
+              <Label>Giới hạn thành viên mỗi nhóm: </Label>
+              <text> &nbsp; &nbsp; {challengeEntity.numPerTeam}</text>
+              <Row></Row>
+              <AvGroup>
+                <Row></Row>
+                &nbsp; &nbsp;
+                <text style={{ fontWeight: 'bold' }}>Tên nhóm:</text>
+                {challengeEntity.teams.map((team, index) => (
+                  <AvGroup key={index}>
+                    <Label>
+                      &nbsp; &nbsp; &nbsp; Nhóm {index + 1}: &nbsp; {team.name}
+                      <br />
+                    </Label>
+                  </AvGroup>
+                ))}
               </AvGroup>
-            </Col>
-          </Row>
+            </AvGroup>
+          )}
 
           <hr color="lightblue" style={{ height: '3px' }} />
           <WfAction
