@@ -20,18 +20,11 @@ import category, {
   CategoryState
 } from 'app/entities/category/category.reducer';
 
-import news_categories, {
-  News_categoriesState
-} from 'app/entities/news_categories/news_categories.reducer';
+import news_categories, { News_categoriesState } from 'app/entities/news_categories/news_categories.reducer';
 
-import news, {
-  NewsState
-} from 'app/entities/news/news.reducer';
+import news, { NewsState } from 'app/entities/news/news.reducer';
 
-import banners, {
-  BannersState
-} from 'app/entities/banners/banners.reducer';
-
+import banners, { BannersState } from 'app/modules/banners/banners.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 

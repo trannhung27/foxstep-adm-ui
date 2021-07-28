@@ -9,8 +9,8 @@ export interface INews {
   typeId?: number;
   desc?: string;
   title?: string;
-  dateCreated?:string;
-  dateUpdated?:string;
+  dateCreated?: string;
+  dateUpdated?: string;
   status?: number;
   user?: IUser;
   category?: INewsCategories;

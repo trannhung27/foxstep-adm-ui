@@ -9,10 +9,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
-import { ICategory } from 'app/shared/model/category.model';
 import { getEntities as getCategories } from 'app/entities/news_categories/news_categories.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './news.reducer';
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { convertDateTimeToServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
 
 export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -98,22 +96,8 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="titleLabel" for="post-title">
-                  Type
-                </Label>
-                <AvField
-                  id="post-title"
-                  data-cy="typeId"
-                  type="text"
-                  name="typeId"
-                />
+                <AvInput id="post-id" value="0" type="hidden" data="1" className="form-control" name="status" required readOnly />
               </AvGroup>
-
-              <AvGroup>
-                  {/* <Label for="post-id">status</Label> */}
-                  <AvInput id="post-id" value="0" type="hidden" data="1" className="form-control" name="status" required readOnly />
-              </AvGroup>
-
               <AvGroup>
                 <Label id="titleLabel" for="post-title">
                   Desc
@@ -132,14 +116,8 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 <Label id="contentLabel" for="post-content">
                   Content
                 </Label>
-                <AvField
-                  id="post-content"
-                  data-cy="content"
-                  type="text"
-                  name="content"
-                />
+                <AvField id="post-content" data-cy="content" type="text" name="content" />
               </AvGroup>
-              
               <AvGroup>
                 <Label id="creationDateLabel" for="post-creationDate">
                   Creation Date
@@ -150,7 +128,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   type="datetime-local"
                   className="form-control"
                   name="dateCreated"
-                  value={isNew ?'':convertDateTimeFromServer(newsEntity.dateCreated)}
+                  value={isNew ? '' : convertDateTimeFromServer(newsEntity.dateCreated)}
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' },
                   }}
@@ -166,7 +144,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   type="datetime-local"
                   className="form-control"
                   name="dateUpdated"
-                  value={isNew ?'':convertDateTimeFromServer(newsEntity.dateUpdated)}
+                  value={isNew ? '' : convertDateTimeFromServer(newsEntity.dateUpdated)}
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' },
                   }}
@@ -187,7 +165,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 <AvFeedback>This field is required.</AvFeedback>
               </AvGroup>
               <AvGroup>
-                <Label for="post-category">Category</Label>
+                <Label for="post-category">News Categories</Label>
                 <AvInput id="post-category" data-cy="category" type="select" className="form-control" name="categoryId" required>
                   <option value="" key="0" />
                   {categories
