@@ -99,8 +99,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [editorChanged, setEditorChanged] = useState(false);
   const [editorError, setEditorErrorState] = useState(false);
+  const [updatedEntity, setUpdatedEntity] = useState(challengeEntity);
 
-  const [avgPace, setAvgPace] = useState({ from: '4.0', to: '15.0', required: true });
+  const [avgPace, setAvgPace] = useState({ from: '15.0', to: '4.0', required: true });
   const [minDistance, setMinDistance] = useState({ value: '1.0', required: false });
   const [elevationGain, setElevationGain] = useState({ value: '100', required: false });
   const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false });
@@ -162,32 +163,55 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   }, [props.updateSuccess]);
 
   useEffect(() => {
-    if (challengeEntity.content)
+    if (challengeEntity.content && !isNew)
       setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(challengeEntity.content))));
 
-    if (challengeEntity.challengeDistance) {
+    const entity = Object.assign({}, challengeEntity);
+    if (entity.challengeDistance) {
+      entity.challengeDistance.map((entityDistance, index) => {
+        entityDistance.distance = entityDistance.distance / 1000;
+      });
+    }
+    setUpdatedEntity(entity);
+
+    if (challengeEntity.challengeDistance && !isNew) {
       const list = [{ distance: 0, isDisabled: false }];
       challengeEntity.challengeDistance.map((challengeDistance, i) => {
         list[i] = { distance: challengeDistance.distance, isDisabled: false };
       });
       setChallengeDistanceList(list);
     }
-    // if (challengeEntity.challengeDistance) {
-    //   setChallengeDistanceList(challengeEntity.challengeDistance);
-    //   challengeEntity.challengeDistance.map((distance, index) => {
-    //     const distanceVar = {label: distance['distance'], value: Number(distance['distance'])};
-    //     const list = [...distanceValue];
-    //     list[index] = distanceVar;
-    //     setDistanceValue(list);
-    //   })
-    // }
+
+    if (challengeEntity.challengeValidity && !isNew) {
+      setAvgPace({
+        from: challengeEntity.challengeValidity.avgPaceFrom.toString(),
+        to: challengeEntity.challengeValidity.avgPaceTo.toString(),
+        required: avgPace.required,
+      });
+
+      setMinDistance({
+        value: (challengeEntity.challengeValidity.minDistance / 1000).toString(),
+        required: minDistance.required,
+      });
+
+      setElevationGain({
+        value: challengeEntity.challengeValidity.elevationGain.toString(),
+        required: elevationGain.required,
+      });
+
+      setAvgCadence({
+        from: challengeEntity.challengeValidity.avgCadenceFrom.toString(),
+        to: challengeEntity.challengeValidity.avgCadenceTo.toString(),
+        required: avgCadence.required,
+      });
+    }
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
     values.challengeValidity.avgCadenceFrom = Number(values.challengeValidity.avgCadenceFrom);
     values.challengeValidity.avgCadenceTo = Number(values.challengeValidity.avgCadenceTo);
-    values.challengeValidity.avgPaceFrom = Number(16.6667 / Number(values.challengeValidity.avgPaceFrom));
-    values.challengeValidity.avgPaceTo = Number(16.6667 / Number(values.challengeValidity.avgPaceTo));
+    values.challengeValidity.avgPaceFrom = Number(values.challengeValidity.avgPaceFrom);
+    values.challengeValidity.avgPaceTo = Number(values.challengeValidity.avgPaceTo);
     values.challengeValidity.elevationGain = Number(values.challengeValidity.elevationGain);
     values.challengeValidity.completionCriteria = Number(values.challengeValidity.completionCriteria);
     values.challengeValidity.minDistance = Number(values.challengeValidity.minDistance) * 1000;
@@ -261,7 +285,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <AvForm model={isNew ? {} : challengeEntity} onSubmit={saveEntity}>
+            <AvForm model={isNew ? {} : updatedEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup>
                   <Label for="challenge-id">ID</Label>
@@ -331,6 +355,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           label="Ảnh đại diện TT: "
                         />
                         <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
+                        {/*add feedback for not upload image*/}
                       </Col>
                     </Row>
 
@@ -482,6 +507,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       label="Cách tính thành tích"
                       onChange={event => {
                         setCalValue(Number(event.target.value));
+                        if (Number(event.target.value) === 1 && !isNew) {
+                          setChallengeDistanceList(challengeDistanceList.slice(0, 1));
+                        }
                       }}
                       required
                     >
@@ -535,7 +563,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                 type="input"
                                 hidden
                                 name={'challengeDistance[' + i + '].distance'}
-                                value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
+                                value={
+                                  challengeEntity.challengeDistance && challengeEntity.challengeDistance[i]
+                                    ? challengeEntity.challengeDistance[i].distance / 1000
+                                    : challengeDistanceList[i]
+                                    ? challengeDistanceList[i].distance
+                                    : 0
+                                }
                               />
                               <AvField type="input" hidden name={'challengeDistance[' + i + '].orderId'} value={i + 1} />
                             </AvGroup>
@@ -614,7 +648,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             name="challengeValidity.avgPaceTo"
                             validate={{
                               required: { value: true, errorMessage: 'Không để trống' },
-                              min: { value: avgPace.from, errorMessage: 'Giá trị đến không thể nhỏ hơn giá trị từ ' },
+                              max: { value: avgPace.from, errorMessage: 'Giá trị đến không thể lớn hơn giá trị từ ' },
                             }}
                           />
                           <text> &nbsp; (phút/km)</text>
@@ -628,7 +662,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            onChange={() => setMinDistance({ value: minDistance.value, required: !minDistance.required })}
+                            onChange={() =>
+                              setMinDistance({
+                                value: minDistance.value,
+                                required: !minDistance.required,
+                              })
+                            }
                           />
                           <AvField
                             label="Bài chạy có quãng đường tối thiểu &nbsp; &nbsp;"
@@ -658,7 +697,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            onChange={() => setElevationGain({ value: elevationGain.value, required: !elevationGain.required })}
+                            onChange={() =>
+                              setElevationGain({
+                                value: elevationGain.value,
+                                required: !elevationGain.required,
+                              })
+                            }
                           />
                           <AvField
                             label="Bài chạy có độ cao đạt được (elevation gain) tối thiểu: &nbsp; &nbsp;"
@@ -685,12 +729,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            onChange={() => setAvgCadence({ from: avgCadence.from, to: avgCadence.to, required: !avgCadence.required })}
+                            onChange={() =>
+                              setAvgCadence({
+                                from: avgCadence.from,
+                                to: avgCadence.to,
+                                required: !avgCadence.required,
+                              })
+                            }
                           />
                           <AvField
                             label="Bài chạy có nhịp chân trung bình(avg cadence) &nbsp; &nbsp;  Từ &nbsp;"
                             id="challenge-validity_avgCadenceFrom"
-                            // defaultValue="50"
                             data-cy="validity.avgCadenceFrom"
                             type="number"
                             value={avgCadence.from}
