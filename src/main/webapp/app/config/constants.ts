@@ -52,6 +52,7 @@ export const NEWS_STATUSES = [
 
 export const WfProcessGroup = {
   CHALLENGE: 1,
+  CHALLENGE_USER: 2,
 };
 
 export const WfProcessType = {
@@ -63,6 +64,7 @@ export const WfActionType = {
   REQ: 0,
   APPV: 1,
   DENY: -1,
+  CANCEL: -2,
 };
 
 export const ChallengeTypes = {

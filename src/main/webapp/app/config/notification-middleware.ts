@@ -85,7 +85,9 @@ export default () => next => action => {
               break;
 
             default:
-              if (data !== '' && data.message) {
+              if (data !== '' && data.detail) {
+                addErrorAlert(data.detail);
+              } else if (data !== '' && data.message) {
                 addErrorAlert(data.message);
               } else {
                 addErrorAlert(data);
@@ -95,6 +97,8 @@ export default () => next => action => {
       } else if (error && error.config && error.config.url === 'api/account' && error.config.method === 'get') {
         /* eslint-disable no-console */
         console.log('Authentication Error: Trying to access url api/account with GET.');
+      } else if (error && error.detail) {
+        toast.error(error.detail);
       } else if (error && error.message) {
         toast.error(error.message);
       } else {

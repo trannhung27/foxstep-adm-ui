@@ -17,6 +17,7 @@ export interface IChallenge {
   dateFinish?: string | null;
   numOfParticipant?: number | null;
   numOfRegis?: number | null;
+  numPerTeam?: number | null;
   userIdCreated?: number | null;
   challengeType?: number | null;
   dateUpdated?: string | null;
@@ -26,7 +27,6 @@ export interface IChallenge {
   challengeDistance?: IChallengeDistance[] | [];
   teams?: ITeam[] | [];
   organizationName?: string | null;
-  numPerTeam?: number | null;
   userCreated?: IUserCreated | null;
 }
 

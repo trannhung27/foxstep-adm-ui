@@ -7,7 +7,6 @@ export interface IWfRequest {
   attachmentUrl?: string;
   requestNote?: string;
   requestData?: string;
-  actionNote?: string;
 }
 
 export const defaultValue: Readonly<IWfRequest> = {};

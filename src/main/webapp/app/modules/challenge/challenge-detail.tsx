@@ -51,41 +51,56 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
         <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
         </Button>
-        &nbsp; &nbsp;
+        &nbsp;
+        {[ChallengeStatuses[1].id, ChallengeStatuses[2].id, ChallengeStatuses[3].id].includes(challengeEntity.status) && (
+          <>
+            <Button tag={Link} to={`/challenges/${challengeEntity.id}/participants`} replace color="primary">
+              <span className="d-none d-md-inline">Danh sách thành viên</span>
+            </Button>
+            &nbsp;
+          </>
+        )}
         {challengeEntity.status === ChallengeStatuses[0].id ? (
-          <Button
-            onClick={() => {
-              setShowApproveModal(true);
-            }}
-            replace
-            color="success"
-          >
-            <span className="d-none d-md-inline">Duyệt</span>
-          </Button>
+          <>
+            <Button
+              onClick={() => {
+                setShowApproveModal(true);
+              }}
+              replace
+              color="success"
+            >
+              <span className="d-none d-md-inline">Duyệt</span>
+            </Button>
+            &nbsp;
+          </>
         ) : null}
-        &nbsp; &nbsp;
         {challengeEntity.status === ChallengeStatuses[0].id ? (
-          <Button
-            onClick={() => {
-              setShowRejectModal(true);
-            }}
-            replace
-            color="danger"
-          >
-            <span className="d-none d-md-inline">Từ chối</span>
-          </Button>
+          <>
+            <Button
+              onClick={() => {
+                setShowRejectModal(true);
+              }}
+              replace
+              color="danger"
+            >
+              <span className="d-none d-md-inline">Từ chối</span>
+            </Button>
+            &nbsp;
+          </>
         ) : null}
-        &nbsp; &nbsp;
         {challengeEntity.status === ChallengeStatuses[1].id || challengeEntity.status === ChallengeStatuses[3].id ? (
-          <Button
-            onClick={() => {
-              props.endChallenge(props.challengeEntity.id);
-            }}
-            replace
-            color="secondary"
-          >
-            <span className="d-none d-md-inline">Kết thúc</span>
-          </Button>
+          <>
+            <Button
+              onClick={() => {
+                props.endChallenge(props.challengeEntity.id);
+              }}
+              replace
+              color="secondary"
+            >
+              <span className="d-none d-md-inline">Kết thúc</span>
+            </Button>
+            &nbsp;
+          </>
         ) : null}
       </Col>
       <ChallengeApproveDialog
