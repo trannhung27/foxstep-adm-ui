@@ -6,7 +6,6 @@ export interface IBanner {
   imgUrl?: string | null;
   dateStart?: string | null;
   dateFinish?: string | null;
-  datePublished?: string | null;
   status?: number;
 }
 
