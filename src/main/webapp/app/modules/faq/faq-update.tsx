@@ -16,6 +16,9 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { PageHeader } from 'antd';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { UploadImageInput } from 'app/modules/upload-image/upload-image';
+import { uploadImageCallBack } from 'app/shared/util/editor-utils';
+import { uploadImage } from 'app/modules/upload-image/upload-image-reducer';
 
 export interface IFaqUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -104,12 +107,14 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
               ) : null}
               <Row className="justify-content-between">
                 <Col>
-                  <AvGroup>
-                    <Label id="imgUrlLabel" for="faq-imgUrl">
-                      Ảnh:*
-                    </Label>
-                    <AvField id="faq-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" />
-                  </AvGroup>
+                  <UploadImageInput
+                    entity={props.uploadImageEntity}
+                    upload={props.uploadImage}
+                    loading={props.uploadingImage}
+                    label="Ảnh:"
+                    initImage={isNew ? null : faqEntity.imgUrl}
+                  />
+                  <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
                 </Col>
                 <Col>
                   <AvGroup>
@@ -197,6 +202,12 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                       'remove',
                       'history',
                     ],
+                    image: {
+                      uploadCallback: uploadImageCallBack,
+                      previewImage: true,
+                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                      alt: { present: true, mandatory: false },
+                    },
                   }}
                 />
                 {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
@@ -272,6 +283,8 @@ const mapStateToProps = (storeState: IRootState) => ({
   loading: storeState.faqs.loading,
   updating: storeState.faqs.updating,
   updateSuccess: storeState.faqs.updateSuccess,
+  uploadImageEntity: storeState.uploadImage.entity,
+  uploadingImage: storeState.uploadImage.loading,
 });
 
 const mapDispatchToProps = {
@@ -281,6 +294,7 @@ const mapDispatchToProps = {
   updateEntity,
   createEntity,
   reset,
+  uploadImage,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

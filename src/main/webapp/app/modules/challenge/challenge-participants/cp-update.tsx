@@ -88,7 +88,7 @@ export const ParticipantUpdate = (props: IParticipantUpdateProps) => {
               {challenge && challenge.challengeDistance
                 ? challenge.challengeDistance.map(otherEntity => (
                     <option value={otherEntity.distance} key={otherEntity.id}>
-                      {otherEntity.distance}&nbsp;km
+                      {otherEntity.distance / 1000}&nbsp;km
                     </option>
                   ))
                 : null}
