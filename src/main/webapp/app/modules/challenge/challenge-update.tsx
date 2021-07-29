@@ -494,8 +494,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <Col xs="12" sm="6">
                         <AvGroup>
                           <AvField id="challenge_sport" type="select" name="sport.name" label="Bộ môn">
-                            <option>Run</option>
-                            <option>Ride</option>
+                            <option>Chạy bộ</option>
                           </AvField>
                           <AvField hidden name="sport.id" type="text" value="1"></AvField>
                           {isNew ? null : <AvField hidden name="challengeValidity.id" value={challengeEntity.id} />}
@@ -562,7 +561,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvGroup>
                               <AvField
                                 type="input"
-                                // hidden
+                                hidden
                                 name={'challengeDistance[' + i + '].distance'}
                                 value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
                               />
