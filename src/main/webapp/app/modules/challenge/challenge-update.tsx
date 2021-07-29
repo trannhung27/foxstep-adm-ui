@@ -562,7 +562,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvGroup>
                               <AvField
                                 type="input"
-                                // hidden
+                                hidden
                                 name={'challengeDistance[' + i + '].distance'}
                                 value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
                               />
