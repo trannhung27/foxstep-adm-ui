@@ -540,6 +540,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             </Label>
                             <AvField
                               type="number"
+                              step="1"
                               name={'distanceInput' + i}
                               onChange={e => {
                                 handleChallengeDistance(e, i);
@@ -561,15 +562,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvGroup>
                               <AvField
                                 type="input"
-                                hidden
+                                // hidden
                                 name={'challengeDistance[' + i + '].distance'}
-                                value={
-                                  challengeEntity.challengeDistance && challengeEntity.challengeDistance[i]
-                                    ? challengeEntity.challengeDistance[i].distance / 1000
-                                    : challengeDistanceList[i]
-                                    ? challengeDistanceList[i].distance
-                                    : 0
-                                }
+                                value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
                               />
                               <AvField type="input" hidden name={'challengeDistance[' + i + '].orderId'} value={i + 1} />
                             </AvGroup>
@@ -648,7 +643,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             name="challengeValidity.avgPaceTo"
                             validate={{
                               required: { value: true, errorMessage: 'Không để trống' },
-                              max: { value: avgPace.from, errorMessage: 'Giá trị đến không thể lớn hơn giá trị từ ' },
+                              min: { value: avgPace.from, errorMessage: 'Giá trị từ không thể lớn hơn giá trị đến ' },
                             }}
                           />
                           <text> &nbsp; (phút/km)</text>
