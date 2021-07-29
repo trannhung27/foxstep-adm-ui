@@ -6,7 +6,7 @@ import { getSortState, JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './users.reducer';
+import { getEntities, reset } from './users.reducer';
 import { APP_USER_STATUS } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
@@ -120,7 +120,14 @@ export const Users = (props: IUsersProps) => {
     <div>
       <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý khách hàng" />
       <hr />
-      <UsersFilterForm usersCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
+      <UsersFilterForm
+        usersCriteria={criteriaState}
+        handleFilter={handleFilter}
+        clear={() => {
+          props.reset();
+        }}
+        updating={loading}
+      />
 
       <div className="table-responsive pt-2">
         {usersList && usersList.length > 0 ? (
@@ -165,8 +172,14 @@ export const Users = (props: IUsersProps) => {
                     <td>{users.nationalIdNumber}</td>
                     <td>{users.mobilePhone}</td>
                     <td className="text-center">
-                      {APP_USER_STATUS.map(status =>
-                        users.status === status.id ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
+                      {APP_USER_STATUS.map((status, j) =>
+                        users.status === status.id ? (
+                          <Badge key={j} color={status.id === 1 ? 'success' : 'danger'}>
+                            {status.name}
+                          </Badge>
+                        ) : (
+                          ''
+                        )
                       )}
                     </td>
                     <td className="text-right">
@@ -182,7 +195,7 @@ export const Users = (props: IUsersProps) => {
             </Table>
           </div>
         ) : (
-          !loading && <div className="alert alert-warning">Không tìm thấy khách hàng!</div>
+          !loading && <div className="alert alert-warning">Không có dữ liệu!</div>
         )}
       </div>
       {props.totalItems ? (
@@ -213,6 +226,7 @@ const mapStateToProps = ({ users }: IRootState) => ({
 
 const mapDispatchToProps = {
   getEntities,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

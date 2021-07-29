@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, NavLink as Link } from 'react-router-dom';
-import { getChallengesOfUser } from 'app/modules/users/users.reducer';
+import { getChallengesOfUser, reset } from 'app/modules/users/users.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { JhiPagination, TextFormat } from 'react-jhipster';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
-import { convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { PageHeader } from 'antd';
 import ChallengesOfUserFilterForm from 'app/modules/users/challenges-of-user/cou-filter';
 import { Button, Row, Table } from 'reactstrap';
@@ -42,7 +42,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
       chalType: criteria.chalType,
       sportId: criteria.sportId,
       fromDate: criteria.fromDate ? convertDateTimeToServer(criteria.fromDate).toISOString() : null,
-      toDate: criteria.toDate ? convertDateTimeToServer(criteria.toDate).toISOString() : null,
+      toDate: criteria.toDate ? addDays(convertDateTimeToServer(criteria.toDate), 1).toISOString() : null,
       chalUserStatus: criteria.chalUserStatus,
       chalStatus: criteria.chalStatus,
     });
@@ -135,7 +135,14 @@ export const ChallengesOfUser = (props: ICOUProps) => {
         }
       />
       <hr />
-      <ChallengesOfUserFilterForm couCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
+      <ChallengesOfUserFilterForm
+        couCriteria={criteriaState}
+        handleFilter={handleFilter}
+        clear={() => {
+          props.reset();
+        }}
+        updating={loading}
+      />
 
       <div className="table-responsive pt-2">
         {couList && couList.length > 0 ? (
@@ -198,7 +205,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
             </Table>
           </div>
         ) : (
-          !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
+          !loading && <div className="alert alert-warning">Không có dữ liệu!</div>
         )}
       </div>
       {props.totalItems ? (
@@ -229,6 +236,7 @@ const mapStateToProps = ({ users }: IRootState) => ({
 
 const mapDispatchToProps = {
   getChallengesOfUser,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

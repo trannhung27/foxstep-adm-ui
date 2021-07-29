@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 import { TextFormat } from 'react-jhipster';
 
@@ -18,6 +18,8 @@ export const UsersDetail = (props: IUsersDetailProps) => {
   }, []);
 
   const { usersEntity } = props;
+  const history = useHistory();
+
   return (
     <div>
       <PageHeader
@@ -29,16 +31,16 @@ export const UsersDetail = (props: IUsersDetailProps) => {
             {/*<Button color="danger" className="m-1">*/}
             {/*  Khóa*/}
             {/*</Button>*/}
-            <Button tag={Link} to={`/users/${usersEntity.id}/challenges-of-user`} replace color="info" className="m-1">
+            <Button tag={Link} to={`/users/${usersEntity.id}/challenges-of-user`} color="info" className="m-1">
               Thử thách của KH
             </Button>
             {/*<Button color="info" className="m-1">*/}
             {/*  Hoạt động*/}
             {/*</Button>*/}
-            {/*<Button tag={Link} to={`/users/${usersEntity.id}/edit`} replace color="info" className="m-1">*/}
+            {/*<Button tag={Link} to={`/users/${usersEntity.id}/edit`}  color="info" className="m-1">*/}
             {/*  Chỉnh sửa*/}
             {/*</Button>*/}
-            <Button tag={Link} to="/users" replace color="default" className="border-secondary m-1">
+            <Button onClick={() => history.goBack()} color="default" className="border-secondary m-1">
               Quay lại
             </Button>
           </>

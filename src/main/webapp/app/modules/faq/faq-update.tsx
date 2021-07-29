@@ -38,7 +38,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   const { adminUser, faqEntity, newsCategories, users, loading, updating } = props;
 
   const handleClose = () => {
-    props.history.push('/faqs' + props.location.search);
+    props.history.goBack();
   };
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
 
   useEffect(() => {
     if (props.updateSuccess) {
-      handleClose();
+      props.history.push('/faqs');
     }
   }, [props.updateSuccess]);
 
@@ -98,7 +98,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <AvForm model={isNew ? {} : faqEntity} onSubmit={saveEntity}>
+            <AvForm model={isNew ? { status: 1 } : faqEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup hidden>
                   <Label for="faqs-id">ID</Label>
@@ -144,6 +144,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                   data-cy="title"
                   type="text"
                   name="title"
+                  placeholder="Aa"
                   validate={{
                     required: { value: true, errorMessage: 'Không được để trống.' },
                     maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
@@ -187,6 +188,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                   onEditorStateChange={onEditorStateChange}
                   wrapperStyle={{ textDecoration: 'none !important' }}
                   editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
+                  placeholder="Aa"
                   toolbar={{
                     options: [
                       'inline',
@@ -246,7 +248,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                 </Col>
                 <Col sm="3">
                   <Label for="save-entity">&nbsp;</Label>
-                  <Button tag={Link} id="cancel-save" to="/faqs" color="default" className="border-secondary" replace block>
+                  <Button id="cancel-save" color="default" className="border-secondary" onClick={handleClose} block>
                     <FontAwesomeIcon icon={faWindowClose} />
                     &nbsp;
                     <span className="d-none d-md-inline">Hủy</span>

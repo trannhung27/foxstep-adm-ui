@@ -57,8 +57,8 @@ export default (state: AuthenticationState = initialState, action): Authenticati
       return {
         ...state,
         loading: false,
-        loginError: false,
-        loginSuccess: true,
+        loginError: action.payload.error !== null,
+        loginSuccess: action.payload.error === null,
       };
     case ACTION_TYPES.LOGOUT:
       return {
@@ -107,20 +107,17 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
     type: ACTION_TYPES.LOGIN,
     payload: axios.post(AUTH_API_URL, { username, password, rememberMe }),
   });
-  if (result.value.data.error)
-    dispatch({
-      type: `${ACTION_TYPES.LOGIN}_REJECTED`,
-      payload: result.value.data,
-    });
-  const bearerToken = result.value.data.idToken;
-  if (bearerToken) {
-    if (rememberMe) {
-      Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
-    } else {
-      Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+  if (!result.value.data.error) {
+    const bearerToken = result.value.data.idToken;
+    if (bearerToken) {
+      if (rememberMe) {
+        Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
+      } else {
+        Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+      }
     }
+    await dispatch(getSession());
   }
-  await dispatch(getSession());
 };
 
 export const clearAuthToken = () => {

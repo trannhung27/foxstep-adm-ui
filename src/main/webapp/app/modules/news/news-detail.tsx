@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import parse from 'html-react-parser';
@@ -19,6 +19,7 @@ export const NewsDetail = (props: INewsDetailProps) => {
   }, []);
 
   const { newsEntity } = props;
+  const history = useHistory();
 
   return (
     <div>
@@ -27,10 +28,10 @@ export const NewsDetail = (props: INewsDetailProps) => {
         title={newsEntity.title}
         className="site-page-header"
         extra={[
-          <Button key="0" tag={Link} to={`/news/${newsEntity.id}/edit`} replace color="primary">
+          <Button key="0" tag={Link} to={`/news/${newsEntity.id}/edit`} color="primary">
             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
           </Button>,
-          <Button key="1" tag={Link} to="/news" replace color="info" data-cy="entityDetailsBackButton">
+          <Button key="1" onClick={() => history.goBack()} color="info" data-cy="entityDetailsBackButton">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Quay lại</span>
           </Button>,
         ]}
@@ -38,8 +39,12 @@ export const NewsDetail = (props: INewsDetailProps) => {
         <Descriptions size="small" column={1}>
           <Descriptions.Item label="Người tạo">{newsEntity.user ? newsEntity.user.firstName : ''}</Descriptions.Item>
           <Descriptions.Item label="Trạng thái">
-            {NEWS_STATUSES.map(status =>
-              status.id === newsEntity.status ? <Tag color={status.id === 1 ? 'green' : 'red'}>{status.name}</Tag> : null
+            {NEWS_STATUSES.map((status, i) =>
+              status.id === newsEntity.status ? (
+                <Tag key={i} color={status.id === 1 ? 'green' : 'red'}>
+                  {status.name}
+                </Tag>
+              ) : null
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Thời gian đăng">

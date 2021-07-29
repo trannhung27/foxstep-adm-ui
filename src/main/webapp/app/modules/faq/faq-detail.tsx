@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -19,6 +19,8 @@ export const FaqDetail = (props: IFaqDetailProps) => {
   }, []);
 
   const { faqEntity } = props;
+  const history = useHistory();
+
   return (
     <div>
       <PageHeader
@@ -29,7 +31,7 @@ export const FaqDetail = (props: IFaqDetailProps) => {
           <Button key="0" tag={Link} to={`/faqs/${faqEntity.id}/edit`} replace color="primary">
             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
           </Button>,
-          <Button key="1" tag={Link} to="/faqs" replace color="info" data-cy="entityDetailsBackButton">
+          <Button key="1" onClick={() => history.goBack()} replace color="info" data-cy="entityDetailsBackButton">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Quay lại</span>
           </Button>,
         ]}
