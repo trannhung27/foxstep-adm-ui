@@ -17,7 +17,7 @@ export class PaginationItemCount extends React.Component<IJhiItemCountProps> {
     return (
       <div>
         <span>
-          Hiện {(page - 1) * itemsPerPage === 0 ? 1 : (page - 1) * itemsPerPage + 1} -{' '}
+          Hiển thị {(page - 1) * itemsPerPage === 0 ? 1 : (page - 1) * itemsPerPage + 1} -{' '}
           {page * itemsPerPage < total ? page * itemsPerPage : total} của {total}.
         </span>
       </div>

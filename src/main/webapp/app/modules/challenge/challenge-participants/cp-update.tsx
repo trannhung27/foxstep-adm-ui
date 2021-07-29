@@ -96,15 +96,7 @@ export const ParticipantUpdate = (props: IParticipantUpdateProps) => {
           </AvGroup>
           <AvGroup>
             <Label for="teamId">Nhóm:</Label>
-            <AvInput
-              id="teamId"
-              type="select"
-              className="form-control"
-              name="teamId"
-              validate={{
-                required: { value: true, errorMessage: 'Không được để trống.' },
-              }}
-            >
+            <AvInput id="teamId" type="select" className="form-control" name="teamId">
               <option value="" key="0">
                 --Chọn nhóm--
               </option>

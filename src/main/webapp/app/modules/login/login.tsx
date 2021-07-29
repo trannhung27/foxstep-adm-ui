@@ -30,7 +30,7 @@ export const Login = (props: ILoginProps) => {
               <Col md="12">
                 {props.loginError ? (
                   <Alert color="danger" data-cy="loginError">
-                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                    <strong>Đăng nhập thất bại!</strong> Sai tên tài khoản hoặc mật khẩu.
                   </Alert>
                 ) : null}
               </Col>
