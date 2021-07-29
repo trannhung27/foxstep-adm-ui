@@ -107,11 +107,18 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
     type: ACTION_TYPES.LOGIN,
     payload: axios.post(AUTH_API_URL, { username, password, rememberMe }),
   });
+  if (result.value.data.error)
+    dispatch({
+      type: `${ACTION_TYPES.LOGIN}_REJECTED`,
+      payload: result.value.data,
+    });
   const bearerToken = result.value.data.idToken;
-  if (rememberMe) {
-    Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
-  } else {
-    Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+  if (bearerToken) {
+    if (rememberMe) {
+      Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
+    } else {
+      Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+    }
   }
   await dispatch(getSession());
 };
