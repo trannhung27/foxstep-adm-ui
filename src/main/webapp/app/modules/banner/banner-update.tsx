@@ -17,14 +17,14 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
   const { updating, banners, loading, totalItems } = props;
 
   const [paginationState, setPaginationState] = useState({
-    itemsPerPage: 5,
+    itemsPerPage: 20,
     sort: 'dateStart',
     order: 'desc',
     activePage: 1,
   });
 
   const [searchState, setSearchState] = useState({
-    title: 'dontSearchThis',
+    title: null,
   });
 
   const handleClose = () => {
@@ -81,7 +81,7 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
                 name="title"
                 placeHolder="Nhập tên thử thách/tin tức"
                 validate={{
-                  required: { value: true, errorMessage: 'This field is required.' },
+                  required: { value: true, errorMessage: 'Giá trị bắt buộc' },
                 }}
               />
             </Col>
@@ -121,8 +121,8 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
                           - <TextFormat type="date" value={b.dateFinish} format={APP_TIMESTAMP_FORMAT} />
                         </span>
                       ) : null
-                    ) : b.datePublished ? (
-                      <TextFormat type="date" value={b.datePublished} format={APP_TIMESTAMP_FORMAT} />
+                    ) : b.dateStart ? (
+                      <TextFormat type="date" value={b.dateStart} format={APP_TIMESTAMP_FORMAT} />
                     ) : null}
                   </td>
                   <td>{b.bannerTypeId === 1 ? 'Thử thách' : 'Tin tức'}</td>

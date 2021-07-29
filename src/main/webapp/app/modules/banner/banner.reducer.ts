@@ -106,9 +106,7 @@ export const searchBanners: ICrudGetAllWithCriteriaAction<IBanner> = (criteria, 
     if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
   });
 
-  const requestUrl = `${apiUrl}/search${
-    sort ? `${criteriaParams}page=${page}&size=${size}&sort=dateStart,desc&sort=dateFinish,desc&sort=datePublished,desc` : ''
-  }`;
+  const requestUrl = `${apiUrl}/search${sort ? `${criteriaParams}page=${page}&size=${size}&sort=dateStart,desc&sort=dateFinish,desc` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_SEARCH_BANNER_LIST,
     payload: axios.get<IBanner>(`${requestUrl}`),
