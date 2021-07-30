@@ -176,7 +176,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                         : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
                     </td>
                     <td>{participant.name}</td>
-                    <td>{participant.distanceTarget}</td>
+                    <td>{participant.distanceTarget / 1000}</td>
                     <td>{/*TODO team*/}</td>
                     <td>{participant.vo2Max}</td>
                     <td>{participant.email}</td>
@@ -189,39 +189,41 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                       ) : null}
                     </td>
                     <td>
-                      {participant.status === 1 ? (
-                        <Button
-                          tag={Link}
-                          to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/remove`}
-                          replace
-                          color="danger"
-                        >
-                          <FontAwesomeIcon icon={faTimes} />
-                        </Button>
-                      ) : (
-                        <Row className="p-0 m-0">
-                          <Col xs="6" className="py-0 pl-0 pr-1">
-                            <Button
-                              tag={Link}
-                              to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/reject`}
-                              replace
-                              color="secondary"
-                            >
-                              <FontAwesomeIcon icon={faTimes} />
-                            </Button>
-                          </Col>
-                          <Col xs="6" className="py-0 pl-1 pr-0">
-                            <Button
-                              tag={Link}
-                              to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/approve`}
-                              replace
-                              color="danger"
-                            >
-                              <FontAwesomeIcon icon={faCheck} />
-                            </Button>
-                          </Col>
-                        </Row>
-                      )}
+                      {[1, 12].includes(challenge.status) &&
+                        new Date(challenge.dateRegisDeadline) > new Date() &&
+                        (participant.status === 1 ? (
+                          <Button
+                            tag={Link}
+                            to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/remove`}
+                            replace
+                            color="danger"
+                          >
+                            <FontAwesomeIcon icon={faTimes} />
+                          </Button>
+                        ) : (
+                          <Row className="p-0 m-0">
+                            <Col xs="6" className="py-0 pl-0 pr-1">
+                              <Button
+                                tag={Link}
+                                to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/reject`}
+                                replace
+                                color="secondary"
+                              >
+                                <FontAwesomeIcon icon={faTimes} />
+                              </Button>
+                            </Col>
+                            <Col xs="6" className="py-0 pl-1 pr-0">
+                              <Button
+                                tag={Link}
+                                to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/approve`}
+                                replace
+                                color="danger"
+                              >
+                                <FontAwesomeIcon icon={faCheck} />
+                              </Button>
+                            </Col>
+                          </Row>
+                        ))}
                     </td>
                   </tr>
                 ))}
