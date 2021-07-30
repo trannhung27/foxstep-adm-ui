@@ -7,6 +7,7 @@ export interface IParticipantsFilterFormProps {
   participantsCriteria: Record<string, unknown>;
   handleFilter: (participants: Record<string, unknown>) => void;
   updating: boolean;
+  clear: () => void;
 }
 
 class ParticipantsFilterForm extends React.Component<IParticipantsFilterFormProps> {
@@ -22,6 +23,7 @@ class ParticipantsFilterForm extends React.Component<IParticipantsFilterFormProp
   };
 
   cancelFilter = (event, fields) => {
+    this.props.clear();
     this.form && this.form.reset();
   };
 
@@ -36,7 +38,7 @@ class ParticipantsFilterForm extends React.Component<IParticipantsFilterFormProp
               <Label id="nameLabel" for="name">
                 Họ tên
               </Label>
-              <AvField id="name" type="text" name="name" placeHolder="Aa" value={participantsCriteria['name']} />
+              <AvField id="name" type="text" name="name" placeholder="Aa" value={participantsCriteria['name']} />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -44,7 +46,7 @@ class ParticipantsFilterForm extends React.Component<IParticipantsFilterFormProp
               <Label id="emailLabel" for="email">
                 Email
               </Label>
-              <AvField id="email" type="text" name="email" placeHolder="Aa" value={participantsCriteria['email']} />
+              <AvField id="email" type="text" name="email" placeholder="Aa" value={participantsCriteria['email']} />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">

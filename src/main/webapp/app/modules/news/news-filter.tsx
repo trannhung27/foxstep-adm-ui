@@ -1,7 +1,7 @@
 import React from 'react';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
-import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateFromServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NEWS_STATUSES } from 'app/config/constants';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,7 @@ export interface INewsFilterFormProps {
   newsCriteria: Record<string, unknown>;
   handleFilter: (newsCriteria: Record<string, unknown>) => void;
   updating: boolean;
+  clear: () => void;
 }
 
 class NewsFilterForm extends React.Component<INewsFilterFormProps> {
@@ -25,6 +26,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
   };
 
   cancelFilter = (event, fields) => {
+    this.props.clear();
     this.form && this.form.reset();
   };
 
@@ -43,6 +45,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 id="news-title"
                 type="text"
                 name="title.contains"
+                placeholder="Aa"
                 value={newsCriteria['title.contains']}
                 validate={{
                   maxLength: { value: 500, errorMessage: 'Tối đa 500 ký tự.' },
@@ -83,10 +86,10 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               <AvInput
                 id="news-datePublishedFrom"
                 data-cy="datePublished.greaterThanOrEqual"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
-                value={convertDateTimeFromServer(newsCriteria['datePublished.greaterThanOrEqual'])}
+                value={convertDateFromServer(newsCriteria['datePublished.greaterThanOrEqual'])}
               />
             </AvGroup>
           </Col>
@@ -98,10 +101,10 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               <AvInput
                 id="news-datePublishedTo"
                 data-cy="datePublished.lessThanOrEqual"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
-                value={convertDateTimeFromServer(newsCriteria['datePublished.lessThanOrEqual'])}
+                value={convertDateFromServer(newsCriteria['datePublished.lessThanOrEqual'])}
               />
             </AvGroup>
           </Col>

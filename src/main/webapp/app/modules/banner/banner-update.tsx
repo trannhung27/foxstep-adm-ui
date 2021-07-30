@@ -79,7 +79,7 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
                 type="string"
                 className="form-control"
                 name="title"
-                placeHolder="Nhập tên thử thách/tin tức"
+                placeholder="Nhập tên thử thách/tin tức"
                 validate={{
                   required: { value: true, errorMessage: 'Giá trị bắt buộc' },
                 }}
@@ -139,7 +139,7 @@ export const BannerUpdate = (props: IBannerUpdateProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
+          !loading && <div className="alert alert-warning">Không có dữ liệu!</div>
         )}
         {props.totalItems ? (
           <div className={banners && banners.length > 0 ? 'px-4' : 'd-none'}>

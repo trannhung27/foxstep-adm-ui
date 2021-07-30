@@ -1,15 +1,16 @@
 import React from 'react';
 import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
-import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateFromServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NEWS_STATUSES } from 'app/config/constants';
+import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 export interface IFaqFilterFormProps {
   faqCriteria: Record<string, unknown>;
   handleFilter: (faqCriteria: Record<string, unknown>) => void;
   updating: boolean;
+  clear: () => void;
 }
 
 class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
@@ -25,6 +26,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
   };
 
   cancelFilter = (event, fields) => {
+    this.props.clear();
     this.form && this.form.reset();
   };
 
@@ -44,6 +46,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 data-cy="title.contains"
                 type="text"
                 name="title.contains"
+                placeholder="Aa"
                 value={faqCriteria['title.contains']}
                 validate={{
                   maxLength: { value: 500, errorMessage: 'Tối đa 500 ký tự.' },
@@ -92,11 +95,11 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 <option value="" key="0">
                   --Tất cả--
                 </option>
-                <option value="2" key="1">
-                  FAQ
+                <option value={NEWS_CATEGORY_TYPES.FAQ.id} key="1">
+                  {NEWS_CATEGORY_TYPES.FAQ.name}
                 </option>
-                <option value="3" key="2">
-                  Hướng dẫn
+                <option value={NEWS_CATEGORY_TYPES.TUTORIAL.id} key="2">
+                  {NEWS_CATEGORY_TYPES.TUTORIAL.name}
                 </option>
               </AvInput>
             </AvGroup>
@@ -109,10 +112,10 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
               <AvInput
                 id="faq-datePublishedFrom"
                 data-cy="datePublished.greaterThanOrEqual"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
-                value={convertDateTimeFromServer(faqCriteria['datePublished.greaterThanOrEqual'])}
+                value={convertDateFromServer(faqCriteria['datePublished.greaterThanOrEqual'])}
               />
             </AvGroup>
           </Col>
@@ -124,10 +127,10 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
               <AvInput
                 id="faq-datePublishedTo"
                 data-cy="datePublished.lessThanOrEqual"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
-                value={convertDateTimeFromServer(faqCriteria['datePublished.lessThanOrEqual'])}
+                value={convertDateFromServer(faqCriteria['datePublished.greaterThanOrEqual'])}
               />
             </AvGroup>
           </Col>

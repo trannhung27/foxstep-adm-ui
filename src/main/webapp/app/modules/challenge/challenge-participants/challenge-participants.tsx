@@ -7,14 +7,15 @@ import { Badge, Button, Col, Row, Table } from 'reactstrap';
 import ParticipantsFilterForm from 'app/modules/challenge/challenge-participants/cp-filter';
 import { PageSizePicker } from 'app/shared/util/page-size-picker';
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from 'app/modules/challenge/challenge-participants/cp-reducer';
+import { getEntities, reset } from 'app/modules/challenge/challenge-participants/cp-reducer';
 import { connect } from 'react-redux';
 import { JhiPagination, TextFormat } from 'react-jhipster';
 import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
-import { faCheck, faTimes, faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 import { matchPath } from 'react-router';
+import { getEntity } from 'app/modules/challenge/challenge.reducer';
 
 export interface IChallengeParticipantsProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -67,6 +68,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
   };
 
   useEffect(() => {
+    props.getEntity(currentMatch.params.challengesId);
     sortEntities();
   }, []);
 
@@ -112,7 +114,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
     });
   };
 
-  const { participants, match, loading, totalItems } = props;
+  const { participants, challenge, match, loading, totalItems } = props;
 
   return (
     <div>
@@ -129,18 +131,27 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
         }
       />
       <hr />
-      <ParticipantsFilterForm participantsCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
+      <ParticipantsFilterForm
+        participantsCriteria={criteriaState}
+        handleFilter={handleFilter}
+        clear={() => {
+          props.reset();
+        }}
+        updating={loading}
+      />
 
       <div className="table-responsive pt-2">
         {participants && participants.length > 0 ? (
           <div>
             <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>
-              <Col sm="3">
-                <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
-                  <FontAwesomeIcon icon="plus" />
-                  <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Thêm thành viên</span>
-                </Button>
-              </Col>
+              {[1, 12].includes(challenge.status) && new Date(challenge.dateRegisDeadline) > new Date() && (
+                <Col sm="3">
+                  <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                    <FontAwesomeIcon icon="plus" />
+                    <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Thêm thành viên</span>
+                  </Button>
+                </Col>
+              )}
             </PageSizePicker>
             <Table responsive hover striped>
               <thead>
@@ -165,7 +176,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                         : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
                     </td>
                     <td>{participant.name}</td>
-                    <td>{participant.distanceTarget}</td>
+                    <td>{participant.distanceTarget / 1000}</td>
                     <td>{/*TODO team*/}</td>
                     <td>{participant.vo2Max}</td>
                     <td>{participant.email}</td>
@@ -178,39 +189,41 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                       ) : null}
                     </td>
                     <td>
-                      {participant.status === 1 ? (
-                        <Button
-                          tag={Link}
-                          to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/remove`}
-                          replace
-                          color="danger"
-                        >
-                          <FontAwesomeIcon icon={faTimes} />
-                        </Button>
-                      ) : (
-                        <Row className="p-0 m-0">
-                          <Col xs="6" className="py-0 pl-0 pr-1">
-                            <Button
-                              tag={Link}
-                              to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/reject`}
-                              replace
-                              color="secondary"
-                            >
-                              <FontAwesomeIcon icon={faTimes} />
-                            </Button>
-                          </Col>
-                          <Col xs="6" className="py-0 pl-1 pr-0">
-                            <Button
-                              tag={Link}
-                              to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/approve`}
-                              replace
-                              color="danger"
-                            >
-                              <FontAwesomeIcon icon={faCheck} />
-                            </Button>
-                          </Col>
-                        </Row>
-                      )}
+                      {[1, 12].includes(challenge.status) &&
+                        new Date(challenge.dateRegisDeadline) > new Date() &&
+                        (participant.status === 1 ? (
+                          <Button
+                            tag={Link}
+                            to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/remove`}
+                            replace
+                            color="danger"
+                          >
+                            <FontAwesomeIcon icon={faTimes} />
+                          </Button>
+                        ) : (
+                          <Row className="p-0 m-0">
+                            <Col xs="6" className="py-0 pl-0 pr-1">
+                              <Button
+                                tag={Link}
+                                to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/reject`}
+                                replace
+                                color="secondary"
+                              >
+                                <FontAwesomeIcon icon={faTimes} />
+                              </Button>
+                            </Col>
+                            <Col xs="6" className="py-0 pl-1 pr-0">
+                              <Button
+                                tag={Link}
+                                to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/approve`}
+                                replace
+                                color="danger"
+                              >
+                                <FontAwesomeIcon icon={faCheck} />
+                              </Button>
+                            </Col>
+                          </Row>
+                        ))}
                     </td>
                   </tr>
                 ))}
@@ -218,7 +231,17 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
             </Table>
           </div>
         ) : (
-          !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
+          !loading && (
+            <>
+              <div className="alert alert-warning">Không có dữ liệu!</div>
+              {[1, 12].includes(challenge.status) && new Date(challenge.dateRegisDeadline) > new Date() && (
+                <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                  <FontAwesomeIcon icon="plus" />
+                  <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Thêm thành viên</span>
+                </Button>
+              )}
+            </>
+          )
         )}
       </div>
       {props.totalItems ? (
@@ -241,14 +264,17 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
   );
 };
 
-const mapStateToProps = ({ challengeParticipant }: IRootState) => ({
+const mapStateToProps = ({ challengeParticipant, challenge }: IRootState) => ({
   participants: challengeParticipant.entities,
   loading: challengeParticipant.loading,
   totalItems: challengeParticipant.totalItems,
+  challenge: challenge.entity,
 });
 
 const mapDispatchToProps = {
   getEntities,
+  getEntity,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

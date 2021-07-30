@@ -42,7 +42,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   const { adminUser, newsEntity, newsCategories, users, loading, updating } = props;
 
   const handleClose = () => {
-    props.history.push('/news' + props.location.search);
+    props.history.goBack();
   };
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
 
   useEffect(() => {
     if (props.updateSuccess) {
-      handleClose();
+      props.history.push('/news');
     }
   }, [props.updateSuccess]);
 
@@ -98,7 +98,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <AvForm model={isNew ? {} : newsEntity} onSubmit={saveEntity}>
+            <AvForm model={isNew ? { status: 1 } : newsEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup hidden>
                   <Label for="news-id">ID</Label>
@@ -144,6 +144,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   data-cy="title"
                   type="text"
                   name="title"
+                  placeholder="Aa"
                   validate={{
                     required: { value: true, errorMessage: 'Không được để trống.' },
                     maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
@@ -159,6 +160,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   data-cy="description"
                   type="textarea"
                   name="description"
+                  placeholder="Aa"
                   validate={{
                     required: { value: true, errorMessage: 'Không được để trống.' },
                     maxLength: { value: 1000, errorMessage: 'Tối đa 1000 ký tự.' },
@@ -175,6 +177,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   onEditorStateChange={onEditorStateChange}
                   wrapperStyle={{ textDecoration: 'none !important' }}
                   editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
+                  placeholder="Aa"
                   toolbar={{
                     options: [
                       'inline',
@@ -249,7 +252,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 </Col>
                 <Col sm="3">
                   <Label for="save-entity">&nbsp;</Label>
-                  <Button tag={Link} id="cancel-save" to="/news" color="default" className="border-secondary" replace block>
+                  <Button id="cancel-save" color="default" className="border-secondary" onClick={handleClose} block>
                     <FontAwesomeIcon icon={faWindowClose} />
                     &nbsp;
                     <span className="d-none d-md-inline">Hủy</span>

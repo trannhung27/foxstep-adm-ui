@@ -6,11 +6,11 @@ import { JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './news.reducer';
+import { getEntities, reset } from './news.reducer';
 import { APP_TIMESTAMP_FORMAT, NEWS_STATUSES } from 'app/config/constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import NewsFilterForm from 'app/modules/news/news-filter';
-import { convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
@@ -39,7 +39,7 @@ export const News = (props: INewsProps) => {
         ? convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString()
         : null,
       'datePublished.lessThanOrEqual': criteria.datePublished.lessThanOrEqual
-        ? convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString()
+        ? addDays(convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual), 1).toISOString()
         : null,
     });
   };
@@ -120,7 +120,14 @@ export const News = (props: INewsProps) => {
     <div>
       <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý tin tức" />
       <hr />
-      <NewsFilterForm newsCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
+      <NewsFilterForm
+        newsCriteria={criteriaState}
+        handleFilter={handleFilter}
+        clear={() => {
+          props.reset();
+        }}
+        updating={loading}
+      />
 
       <div className="table-responsive pt-2">
         {newsList && newsList.length > 0 ? (
@@ -163,8 +170,14 @@ export const News = (props: INewsProps) => {
                     <td>{news.title}</td>
                     <td>{news.user ? news.user.firstName : ''}</td>
                     <td className="text-center">
-                      {NEWS_STATUSES.map(status =>
-                        status.id === news.status ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
+                      {NEWS_STATUSES.map((status, j) =>
+                        status.id === news.status ? (
+                          <Badge key={j} color={status.id === 1 ? 'success' : 'danger'}>
+                            {status.name}
+                          </Badge>
+                        ) : (
+                          ''
+                        )
                       )}
                     </td>
                     <td>
@@ -192,7 +205,15 @@ export const News = (props: INewsProps) => {
             </Table>
           </div>
         ) : (
-          !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
+          !loading && (
+            <>
+              <div className="alert alert-warning">Không có dữ liệu!</div>
+              <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                <FontAwesomeIcon icon="plus" />
+                <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
+              </Button>
+            </>
+          )
         )}
       </div>
       {props.totalItems ? (
@@ -223,6 +244,7 @@ const mapStateToProps = ({ news }: IRootState) => ({
 
 const mapDispatchToProps = {
   getEntities,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

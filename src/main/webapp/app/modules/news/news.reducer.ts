@@ -132,7 +132,7 @@ export const createEntity: ICrudPutAction<INews> = entity => async dispatch => {
     type: ACTION_TYPES.CREATE_NEWS,
     payload: axios.post(apiUrl, cleanEntity(entity)),
   });
-  dispatch(getEntities());
+  // dispatch(getEntities());
   return result;
 };
 

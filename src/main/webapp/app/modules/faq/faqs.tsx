@@ -6,10 +6,10 @@ import { JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './faq.reducer';
+import { getEntities, reset } from './faq.reducer';
 import { APP_TIMESTAMP_FORMAT, NEWS_STATUSES } from 'app/config/constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import FaqFilterForm from 'app/modules/faq/faq-filter';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
@@ -41,7 +41,7 @@ export const Faq = (props: IFaqsProps) => {
         ? convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString()
         : null,
       'datePublished.lessThanOrEqual': criteria.datePublished.lessThanOrEqual
-        ? convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString()
+        ? addDays(convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual), 1).toISOString()
         : null,
     });
   };
@@ -123,7 +123,14 @@ export const Faq = (props: IFaqsProps) => {
     <div>
       <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý Câu hỏi thường gặp/Hướng dẫn" />
       <hr />
-      <FaqFilterForm faqCriteria={criteriaState} handleFilter={handleFilter} updating={loading} />
+      <FaqFilterForm
+        faqCriteria={criteriaState}
+        handleFilter={handleFilter}
+        clear={() => {
+          props.reset();
+        }}
+        updating={loading}
+      />
 
       <div className="table-responsive pt-2">
         {faqsList && faqsList.length > 0 ? (
@@ -169,8 +176,14 @@ export const Faq = (props: IFaqsProps) => {
                     <td>{faq.title}</td>
                     <td>{faq.newsCategory ? faq.user.firstName : ''}</td>
                     <td className="text-center">
-                      {NEWS_STATUSES.map(status =>
-                        status.id === faq.status ? <Badge color={status.id === 1 ? 'success' : 'danger'}>{status.name}</Badge> : ''
+                      {NEWS_STATUSES.map((status, j) =>
+                        status.id === faq.status ? (
+                          <Badge key={j} color={status.id === 1 ? 'success' : 'danger'}>
+                            {status.name}
+                          </Badge>
+                        ) : (
+                          ''
+                        )
                       )}
                     </td>
                     <td>{faq.datePublished ? <TextFormat type="date" value={faq.datePublished} format={APP_TIMESTAMP_FORMAT} /> : null}</td>
@@ -197,7 +210,15 @@ export const Faq = (props: IFaqsProps) => {
             </Table>
           </div>
         ) : (
-          !loading && <div className="alert alert-warning">Không tìm thấy dữ liệu</div>
+          !loading && (
+            <>
+              <div className="alert alert-warning">Không có dữ liệu!</div>
+              <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                <FontAwesomeIcon icon="plus" />
+                <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
+              </Button>
+            </>
+          )
         )}
       </div>
       {props.totalItems ? (
@@ -228,6 +249,7 @@ const mapStateToProps = ({ faqs }: IRootState) => ({
 
 const mapDispatchToProps = {
   getEntities,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

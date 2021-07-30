@@ -7,13 +7,14 @@ import { IRootState } from 'app/shared/reducers';
 import { getEntities as getSportList } from 'app/modules/sport/sport.reducer';
 import { connect } from 'react-redux';
 import { ISport } from 'app/shared/model/sport.model';
-import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateFromServer } from 'app/shared/util/date-utils';
 
 export interface ICOUTFilterFormProps {
   couCriteria: Record<string, unknown>;
   handleFilter: (couCriteria: Record<string, unknown>) => void;
   updating: boolean;
   sportList: ReadonlyArray<ISport>;
+  clear: () => void;
 }
 
 class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
@@ -29,6 +30,7 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
   };
 
   cancelFilter = (event, fields) => {
+    this.props.clear();
     this.form && this.form.reset();
   };
 
@@ -43,7 +45,7 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
               <Label id="titleLabel" for="title">
                 Tên thử thách
               </Label>
-              <AvField id="title" type="text" name="title" value={couCriteria['title']} />
+              <AvField id="title" type="text" name="title" placeholder="Aa" value={couCriteria['title']} />
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -93,10 +95,10 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
               <AvInput
                 id="fromDate"
                 data-cy="fromDate"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="fromDate"
-                value={convertDateTimeFromServer(couCriteria['fromDate'])}
+                value={convertDateFromServer(couCriteria['fromDate'])}
               />
             </AvGroup>
           </Col>
@@ -108,10 +110,10 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
               <AvInput
                 id="toDate"
                 data-cy="toDate"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="toDate"
-                value={convertDateTimeFromServer(couCriteria['toDate'])}
+                value={convertDateFromServer(couCriteria['toDate'])}
               />
             </AvGroup>
           </Col>
