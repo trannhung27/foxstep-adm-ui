@@ -7,6 +7,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IChallenge, defaultValue } from 'app/shared/model/challenge.model';
 import { IWfRequest } from 'app/shared/model/workflow/wf-request.model';
 import { getEntities as getActions } from 'app/modules/workflow/wf-action/wf-action-reducer';
+import { WfProcessGroup } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   FETCH_CHALLENGE_LIST: 'challenge/FETCH_CHALLENGE_LIST',
@@ -183,8 +184,12 @@ export const endChallenge: ICrudDeleteAction<IChallenge> = id => async dispatch 
     type: ACTION_TYPES.DELETE_CHALLENGE,
     payload: axios.post(requestUrl),
   });
+  const criteria = {
+    contentId: id,
+    groupId: WfProcessGroup.CHALLENGE,
+  };
   dispatch(getEntity(id));
-  dispatch(getActions());
+  dispatch(getActions(criteria));
   return result;
 };
 
