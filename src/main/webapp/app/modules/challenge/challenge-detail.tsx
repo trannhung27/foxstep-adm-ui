@@ -365,7 +365,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           </AvGroup>
 
           <AvGroup>
-            <text>1. &nbsp;</text>
+            <text>2. &nbsp;</text>
             <input type="checkbox" disabled checked className="mr-2" />
             <text>
               {' '}
@@ -381,13 +381,14 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           </AvGroup>
 
           <AvGroup>
-            <text>1. &nbsp;</text>
-            <input type="checkbox" disabled checked className="mr-2" />
-            <text>
-              {' '}
-              &nbsp;{' '}
-              {challengeEntity.challengeValidity ? (challengeEntity.challengeValidity.rankCriteria3 === 3 ? 'Avg HR thấp nhất' : '') : ''}
-            </text>
+            <text>3. &nbsp;</text>
+            <input
+              type="checkbox"
+              disabled
+              checked={challengeEntity.challengeValidity ? challengeEntity.challengeValidity.rankCriteria3 === 3 : false}
+              className="mr-2"
+            />
+            <text> &nbsp; {'Avg HR thấp nhất'}</text>
           </AvGroup>
 
           <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>3. Cài đặt thành viên</h4>
