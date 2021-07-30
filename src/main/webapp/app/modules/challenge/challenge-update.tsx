@@ -79,6 +79,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     { distance: 0, isDisabled: true },
   ]);
   const [distanceInputCount, setDistanceInputCount] = useState(0);
+  const [criteria3Checked, setCriteria3Checked] = useState(false);
 
   class RedAsterisk extends React.Component {
     render() {
@@ -792,11 +793,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       <Row className="justify-content-right" key={index}>
                         <Col xs="12" sm="7">
                           <AvGroup className="form-group form-inline">
-                            <input type="checkbox" disabled defaultChecked={criteria !== 3} className="mr-1" />
+                            <input
+                              type="checkbox"
+                              disabled={criteria !== 3}
+                              defaultChecked={criteria !== 3}
+                              onChange={() => setCriteria3Checked(!criteria3Checked)}
+                              className="mr-1"
+                            />
                             <AvField
                               type="string"
                               name={'challengeValidity.rankCriteria' + (index + 1)}
-                              disabled
+                              disabled={criteria !== 3}
                               style={{ width: '250px' }}
                               value={
                                 criteria === 1
@@ -808,7 +815,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   : ''
                               }
                             />
-                            <AvInput hidden name={'challengeValidity.rankCriteria' + (index + 1)} value={criteria} />
+                            <AvInput
+                              hidden
+                              name={'challengeValidity.rankCriteria' + (index + 1)}
+                              value={criteria === 3 ? (criteria3Checked ? 3 : 0) : criteria}
+                            />
                             {index !== 2 ? <Button onClick={swapPosition}> Đổi </Button> : null}
                           </AvGroup>
                         </Col>
