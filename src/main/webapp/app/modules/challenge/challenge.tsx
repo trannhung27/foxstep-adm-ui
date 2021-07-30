@@ -23,12 +23,15 @@ import {
 } from 'app/config/constants';
 import dayjs from 'dayjs';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
+import { PageSizePicker } from 'app/shared/util/page-size-picker';
+import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Challenge = (props: IChallengeProps) => {
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
+    overridePaginationStateWithQueryParams(getSortStateCustom(props.location, 'id', 'desc'), props.location.search)
   );
 
   const [criteriaState, setCriteriaState] = useState({
@@ -56,7 +59,15 @@ export const Challenge = (props: IChallengeProps) => {
 
   const sortEntities = () => {
     getAllEntities();
-    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    let endURL = `?size=${paginationState.itemsPerPage}&page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+
+    if (criteriaState['title.contains']) endURL += '&title.contains=' + criteriaState['title.contains'];
+    if (criteriaState['status.equals']) endURL += '&status.equals=' + criteriaState['status.equals'];
+    // if (criteriaState['datePublished.greaterThanOrEqual'])
+    //   endURL += '&datePublished.greaterThanOrEqual=' + criteriaState['datePublished.greaterThanOrEqual'];
+    // if (criteriaState['datePublished.lessThanOrEqual'])
+    //   endURL += '&datePublished.lessThanOrEqual=' + criteriaState['datePublished.lessThanOrEqual'];
+
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
     }
@@ -64,16 +75,18 @@ export const Challenge = (props: IChallengeProps) => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [criteriaState, paginationState.itemsPerPage, paginationState.activePage, paginationState.order, paginationState.sort]);
 
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
     const sort = params.get('sort');
+    const size = params.get('size');
     if (page && sort) {
       const sortSplit = sort.split(',');
       setPaginationState({
         ...paginationState,
+        itemsPerPage: parseInt(size, 10),
         activePage: +page,
         sort: sortSplit[0],
         order: sortSplit[1],
@@ -94,6 +107,13 @@ export const Challenge = (props: IChallengeProps) => {
       ...paginationState,
       activePage: currentPage,
     });
+
+  const handlePageSize = size => {
+    setPaginationState({
+      ...paginationState,
+      itemsPerPage: size,
+    });
+  };
 
   const handleSyncList = () => {
     sortEntities();
@@ -262,90 +282,100 @@ export const Challenge = (props: IChallengeProps) => {
       <hr style={{ backgroundColor: 'DodgerBlue', height: '2px' }} />
       <div className="table-responsive">
         {challengeList && challengeList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="hand">STT</th>
-                <th className="hand" onClick={sort('title')}>
-                  Tên thử thách <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('sport.name')}>
-                  Bộ môn <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('challengeType')}>
-                  Loại thử thách <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand">Trạng thái</th>
-                <th className="hand" onClick={sort('dateStart')}>
-                  Ngày bắt đầu <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('dateFinish')}>
-                  Ngày kết thúc <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('dateCreated')}>
-                  Ngày tạo <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {challengeList.map((challenge, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
-                      ? 1 + i
-                      : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
-                  </td>
-                  <td>
-                    <Button tag={Link} to={`${match.url}/${challenge.id}`} color="link" size="sm">
-                      {challenge.title}
-                    </Button>
-                  </td>
-                  <td>{challenge.sport.name === 'Run' ? 'Chạy bộ' : ''}</td>
-                  <td>
-                    {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
-                    {challenge.challengeType === 1 && <div>Cá nhân</div>}
-                  </td>
-                  <td>
-                    {challenge.status === 0 ? (
-                      <Badge color="dark">{ChallengeStatuses[0].name}</Badge>
-                    ) : challenge.status === 1 ? (
-                      <Badge color="primary">{ChallengeStatuses[1].name}</Badge>
-                    ) : challenge.status === 2 ? (
-                      <Badge color="danger">{ChallengeStatuses[2].name}</Badge>
-                    ) : challenge.status === 12 ? (
-                      <Badge color="success">{ChallengeStatuses[3].name}</Badge>
-                    ) : challenge.status === -1 ? (
-                      <Badge color="secondary">{ChallengeStatuses[4].name}</Badge>
-                    ) : challenge.status === -2 ? (
-                      <Badge color="info">{ChallengeStatuses[5].name}</Badge>
-                    ) : (
-                      <div></div>
-                    )}
-                  </td>
-                  <td>
-                    {challenge.dateStart ? <TextFormat type="date" value={challenge.dateStart} format={APP_TIMESTAMP_FORMAT} /> : null}
-                  </td>
-                  <td>
-                    {challenge.dateFinish ? <TextFormat type="date" value={challenge.dateFinish} format={APP_TIMESTAMP_FORMAT} /> : null}
-                  </td>
-                  <td>
-                    {challenge.dateCreated ? <TextFormat type="date" value={challenge.dateCreated} format={APP_TIMESTAMP_FORMAT} /> : null}
-                  </td>
+          <div>
+            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>
+              <Col sm="2">
+                <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                  <FontAwesomeIcon icon="plus" />
+                  <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
+                </Button>
+              </Col>
+            </PageSizePicker>
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th className="hand">STT</th>
+                  <th className="hand" onClick={sort('title')}>
+                    Tên thử thách <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('sport.name')}>
+                    Bộ môn <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('challengeType')}>
+                    Loại thử thách <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand">Trạng thái</th>
+                  <th className="hand" onClick={sort('dateStart')}>
+                    Ngày bắt đầu <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('dateFinish')}>
+                    Ngày kết thúc <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('dateCreated')}>
+                    Ngày tạo <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th />
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {challengeList.map((challenge, i) => (
+                  <tr key={`entity-${i}`} data-cy="entityTable">
+                    <td>
+                      {(paginationState.activePage - 1) * paginationState.itemsPerPage === 0
+                        ? 1 + i
+                        : (paginationState.activePage - 1) * paginationState.itemsPerPage + 1 + i}
+                    </td>
+                    <td>
+                      <Button tag={Link} to={`${match.url}/${challenge.id}`} color="link" size="sm">
+                        {challenge.title}
+                      </Button>
+                    </td>
+                    <td>{challenge.sport.name === 'Run' ? 'Chạy bộ' : ''}</td>
+                    <td>
+                      {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
+                      {challenge.challengeType === 1 && <div>Cá nhân</div>}
+                    </td>
+                    <td>
+                      {challenge.status === 0 ? (
+                        <Badge color="dark">{ChallengeStatuses[0].name}</Badge>
+                      ) : challenge.status === 1 ? (
+                        <Badge color="primary">{ChallengeStatuses[1].name}</Badge>
+                      ) : challenge.status === 2 ? (
+                        <Badge color="danger">{ChallengeStatuses[2].name}</Badge>
+                      ) : challenge.status === 12 ? (
+                        <Badge color="success">{ChallengeStatuses[3].name}</Badge>
+                      ) : challenge.status === -1 ? (
+                        <Badge color="secondary">{ChallengeStatuses[4].name}</Badge>
+                      ) : challenge.status === -2 ? (
+                        <Badge color="info">{ChallengeStatuses[5].name}</Badge>
+                      ) : (
+                        <div></div>
+                      )}
+                    </td>
+                    <td>
+                      {challenge.dateStart ? <TextFormat type="date" value={challenge.dateStart} format={APP_TIMESTAMP_FORMAT} /> : null}
+                    </td>
+                    <td>
+                      {challenge.dateFinish ? <TextFormat type="date" value={challenge.dateFinish} format={APP_TIMESTAMP_FORMAT} /> : null}
+                    </td>
+                    <td>
+                      {challenge.dateCreated ? (
+                        <TextFormat type="date" value={challenge.dateCreated} format={APP_TIMESTAMP_FORMAT} />
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         ) : (
           !loading && <div className="alert alert-warning">No Challenges found</div>
         )}
       </div>
       {props.totalItems ? (
-        <div className={challengeList && challengeList.length > 0 ? '' : 'd-none'}>
-          <Row className="justify-content-center">
-            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
-          </Row>
-          <Row className="justify-content-center">
+        <div className={challengeList && challengeList.length > 0 ? 'px-4' : 'd-none'}>
+          <Row className="justify-content-between">
+            <PaginationItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
             <JhiPagination
               activePage={paginationState.activePage}
               onSelect={handlePagination}
