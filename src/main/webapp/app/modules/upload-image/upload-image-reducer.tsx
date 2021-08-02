@@ -5,9 +5,11 @@ import { ICrudGetAllWithCriteriaAction, cleanEntity, ICrudPutImageRequest } from
 import { defaultValue, IUploadImageResponse } from 'app/shared/model/upload-image/upload-image-response';
 import { ICrudGetAction } from 'react-jhipster';
 import { IUploadImageRequest } from 'app/shared/model/upload-image/upload-image-request.model';
+import { IChallenge } from 'app/shared/model/challenge.model';
 
 export const ACTION_TYPES = {
-  FETCH_UPLOAD_IMAGES: 'users/FETCH_UPLOAD_IMAGES',
+  FETCH_UPLOAD_IMAGES: 'upload-image/FETCH_UPLOAD_IMAGES',
+  RESET: 'upload-image/RESET',
 };
 
 const initialState = {
@@ -39,6 +41,10 @@ export default (state: UploadImageState = initialState, action): UploadImageStat
         loading: false,
         entity: action.payload.data,
       };
+    case ACTION_TYPES.RESET:
+      return {
+        ...initialState,
+      };
     default:
       return state;
   }
@@ -54,3 +60,7 @@ export const uploadImage: ICrudPutImageRequest<IUploadImageRequest> = entity => 
     payload: axios.post(requestUrl, cleanEntity(entity)),
   };
 };
+
+export const reset = () => ({
+  type: ACTION_TYPES.RESET,
+});

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvFeedback, AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
 import { convertDateFromServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -83,13 +83,6 @@ class ChallengeFilterForm extends React.Component<IChallengeFilterFormProps> {
               </option>
               <option value="1">Cá nhân</option>
               <option value="0">Ban tổ chức</option>
-              {/* {categories
-                ? categories.map(otherEntity => (
-                    <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.name}
-                    </option>
-                  ))
-                : null} */}
             </AvField>
           </Col>
         </Row>
@@ -122,12 +115,13 @@ class ChallengeFilterForm extends React.Component<IChallengeFilterFormProps> {
                 <AvGroup>
                   <Label>Từ ngày</Label>
                   <AvInput
-                    id="news-datePublishedFrom"
-                    data-cy="datePublished.greaterThanOrEqual"
+                    id="news-dateStartFrom"
+                    data-cy="dateStart.greaterThanOrEqual"
                     type="date"
                     className="form-control"
                     name="dateStart.greaterThanOrEqual"
-                    value={convertDateFromServer(challengeCriteria['datePublished.greaterThanOrEqual'])}
+                    onChange={event => (challengeCriteria['dateStart.greaterThanOrEqual'] = event.target.value)}
+                    value={convertDateFromServer(challengeCriteria['dateStart.greaterThanOrEqual'])}
                   />
                 </AvGroup>
               </Col>
@@ -140,12 +134,18 @@ class ChallengeFilterForm extends React.Component<IChallengeFilterFormProps> {
                 <AvGroup>
                   <Label>Đến ngày</Label>
                   <AvInput
-                    id="news-datePublishedTo"
-                    data-cy="dateFinish.lessThanOrEqual"
+                    id="news-dateStartTo"
+                    data-cy="dateStart.lessThanOrEqual"
                     type="date"
                     className="form-control"
-                    name="dateFinish.lessThanOrEqual"
-                    value={convertDateFromServer(challengeCriteria['datePublished.lessThanOrEqual'])}
+                    name="dateStart.lessThanOrEqual"
+                    validate={{
+                      min: {
+                        value: challengeCriteria['dateStart.lessThanOrEqual'],
+                        errorMessage: 'Giá trị đến cần lớn hơn giá trị từ',
+                      },
+                    }}
+                    value={convertDateFromServer(challengeCriteria['dateStart.lessThanOrEqual'])}
                   />
                 </AvGroup>
               </Col>
@@ -154,14 +154,7 @@ class ChallengeFilterForm extends React.Component<IChallengeFilterFormProps> {
         </Row>
         <Row>
           <Col sm={2}>
-            <Button
-              color="primary"
-              id="filter-button"
-              data-cy="entityFilterButton"
-              type="submit"
-              // disabled={loading}
-              block
-            >
+            <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating} block>
               <FontAwesomeIcon icon="search" />
               <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
             </Button>

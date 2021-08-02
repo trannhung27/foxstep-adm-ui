@@ -19,6 +19,7 @@ import { IRootState } from 'app/shared/reducers';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { getEntity, updateEntity, createEntity, reset } from './challenge.reducer';
+import { reset as resetUploadImage } from '../upload-image/upload-image-reducer';
 import { getEntity as getUser } from 'app/modules/users/users.reducer';
 import {
   convertDateTimeFromServer,
@@ -102,7 +103,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [editorError, setEditorErrorState] = useState(false);
   const [updatedEntity, setUpdatedEntity] = useState(challengeEntity);
 
-  const [avgPace, setAvgPace] = useState({ from: '15.0', to: '4.0', required: true });
+  const [avgPace, setAvgPace] = useState({ from: '4.0', to: '15.0', required: true });
   const [minDistance, setMinDistance] = useState({ value: '1.0', required: false });
   const [elevationGain, setElevationGain] = useState({ value: '100', required: false });
   const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false });
@@ -352,8 +353,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           entity={props.uploadImageEntity}
                           upload={props.uploadImage}
                           loading={props.loading}
-                          initImage=""
+                          initImage={isNew ? null : challengeEntity.imgUrl}
                           label="Ảnh đại diện TT: "
+                          reset={props.resetUploadImage}
                         />
                         <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
                         {/*add feedback for not upload image*/}
@@ -371,6 +373,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             data-cy="title"
                             type="text"
                             name="title"
+                            value={challengeEntity ? challengeEntity.title : ''}
                             validate={{
                               required: { value: true, errorMessage: 'This field is required.' },
                               minLength: {
@@ -654,18 +657,21 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-right">
                       <Col xs="12" sm="7">
                         <AvGroup className="form-group form-inline">
-                          <input
-                            type="checkbox"
-                            className="mr-2"
-                            onChange={() =>
-                              setMinDistance({
-                                value: minDistance.value,
-                                required: !minDistance.required,
-                              })
-                            }
-                          />
+                          <Label id="minDistanceLabel" for="challenge-validity_min_distance">
+                            <input
+                              type="checkbox"
+                              className="mr-2"
+                              onChange={() =>
+                                setMinDistance({
+                                  value: minDistance.value,
+                                  required: !minDistance.required,
+                                })
+                              }
+                            />
+                            Bài chạy có quãng đường tối thiểu &nbsp; &nbsp;
+                          </Label>
                           <AvField
-                            label="Bài chạy có quãng đường tối thiểu &nbsp; &nbsp;"
+                            label=""
                             id="challenge-validity_min_distance"
                             data-cy="challengeValidity.minDistance"
                             type="number"
@@ -676,12 +682,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             max="300.0"
                             className="form-control"
                             name="challengeValidity.minDistance"
-                            validate={{
-                              required: { value: minDistance.required, errorMessage: 'Không để trống' },
-                            }}
-                          />
-
-                          <text> &nbsp; (km)</text>
+                            // validate={{
+                            //   required: { value: minDistance.required, errorMessage: 'Không để trống' },
+                            // }}
+                          ></AvField>
+                          {/*<Label> &nbsp; (km)</Label>*/}
+                          {minDistance.value === '' && <p className="invalid-feedback">Không được để trống.</p>}
                         </AvGroup>
                       </Col>
                     </Row>
@@ -802,7 +808,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             />
                             <AvField
                               type="string"
-                              name={'challengeValidity.rankCriteria' + (index + 1)}
+                              name={'rankCriteria' + (index + 1)}
                               disabled={criteria !== 3}
                               style={{ width: '250px' }}
                               value={
@@ -1016,6 +1022,7 @@ const mapDispatchToProps = {
   updateEntity,
   createEntity,
   reset,
+  resetUploadImage,
   getUser,
   updateWorkflow,
   getCustomer,

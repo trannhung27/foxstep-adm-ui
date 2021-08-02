@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IRootState } from 'app/shared/reducers';
 import { connect } from 'react-redux';
-import { uploadImage as upload } from 'app/modules/upload-image/upload-image-reducer';
+import { reset, uploadImage as upload } from 'app/modules/upload-image/upload-image-reducer';
 import { Button, Row, Col, Label, Collapse, CardBody, Card } from 'reactstrap';
 import {
   AvFeedback,
@@ -30,8 +30,8 @@ export const UploadImageInput = (props: IUploadImage) => {
   const uploadImageToServer = (base64Image: string) => {
     const imageEntity = {
       content: base64Image,
-      imageName: 'imageday',
-      url: 'http://abc.com',
+      imageName: 'foxstepsImage',
+      url: '',
     };
     props.upload(imageEntity);
   };
@@ -50,14 +50,18 @@ export const UploadImageInput = (props: IUploadImage) => {
 
   useEffect(() => {
     setBase64File(props.initImage);
+    props.reset();
   }, []);
+
+  useEffect(() => {
+    props.reset();
+  }, [base64File]);
 
   const uploadHandler = () => {
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onload = function () {
-      const imageString = reader.result.toString();
-      const imageBase64 = imageString.slice(23, imageString.length);
+      const imageBase64 = reader.result.toString().split(',')[1];
       uploadImageToServer(imageBase64);
     };
     reader.onerror = function () {
@@ -96,6 +100,7 @@ const mapStateToProps = ({ uploadImage }: IRootState) => ({
 
 const mapDispatchToProps = {
   upload,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
