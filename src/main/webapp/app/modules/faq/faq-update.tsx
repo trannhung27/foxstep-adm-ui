@@ -7,6 +7,7 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
 import { IRootState } from 'app/shared/reducers';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { reset as resetUploadImage } from '../upload-image/upload-image-reducer';
 import { createEntity, getEntity, reset, updateEntity } from 'app/modules/faq/faq.reducer';
 import { getEntities as getNewsCategories } from 'app/modules/news-category/news-category.reducer';
 import { connect } from 'react-redux';
@@ -112,6 +113,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     upload={props.uploadImage}
                     loading={props.uploadingImage}
                     label="Ảnh:"
+                    reset={props.resetUploadImage}
                     initImage={isNew ? null : faqEntity.imgUrl}
                   />
                   <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
@@ -297,6 +299,7 @@ const mapDispatchToProps = {
   createEntity,
   reset,
   uploadImage,
+  resetUploadImage,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

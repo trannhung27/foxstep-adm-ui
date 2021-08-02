@@ -12,6 +12,7 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { IRootState } from 'app/shared/reducers';
 import { getEntities as getNewsCategories } from 'app/modules/news-category/news-category.reducer';
+import { reset as resetUploadImage } from '../upload-image/upload-image-reducer';
 import { createEntity, getEntity, reset, updateEntity } from './news.reducer';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
@@ -113,6 +114,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     loading={props.uploadingImage}
                     label="Ảnh:"
                     initImage={isNew ? null : newsEntity.imgUrl}
+                    reset={props.resetUploadImage}
                   />
                   <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
                 </Col>
@@ -301,6 +303,7 @@ const mapDispatchToProps = {
   createEntity,
   reset,
   uploadImage,
+  resetUploadImage,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

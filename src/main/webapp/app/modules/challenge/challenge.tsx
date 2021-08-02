@@ -1,30 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Row, Table, Label, Badge } from 'reactstrap';
-import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount, TextFormat } from 'react-jhipster';
+import { Button, Col, Row, Table, Badge } from 'reactstrap';
+import { JhiPagination, JhiItemCount, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-
 import { IRootState } from 'app/shared/reducers';
 import { getEntities, reset } from './challenge.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import moment from 'moment';
-import DateTime from 'react-datetime';
-import {
-  APP_DATE_FORMAT,
-  APP_LOCAL_DATE_FORMAT,
-  APP_LOCAL_DATETIME_FORMAT_Z,
-  APP_TIMESTAMP_FORMAT,
-  ChallengeStatuses,
-} from 'app/config/constants';
-import dayjs from 'dayjs';
-import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+
+import { APP_TIMESTAMP_FORMAT, ChallengeStatuses } from 'app/config/constants';
+
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
 import { PageSizePicker } from 'app/shared/util/page-size-picker';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 import ChallengeFilterForm from 'app/modules/challenge/challenge-filter';
-import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -35,7 +25,7 @@ export const Challenge = (props: IChallengeProps) => {
       'title.contains': params.get('title.contains'),
       'status.equals': params.get('status.equals'),
       'dateStart.greaterThanOrEqual': params.get('dateStart.greaterThanOrEqual'),
-      'dateFinish.lessThanOrEqual': params.get('dateFinish.lessThanOrEqual'),
+      'dateStart.lessThanOrEqual': params.get('dateStart.lessThanOrEqual'),
       'challengeType.equals': params.get('challengeType.equals'),
       'sport.name.equals': params.get('sport.name.equals'),
     };
@@ -56,9 +46,20 @@ export const Challenge = (props: IChallengeProps) => {
       'dateStart.greaterThanOrEqual': criteria.dateStart.greaterThanOrEqual
         ? convertDateTimeToServer(criteria.dateStart.greaterThanOrEqual).toISOString()
         : null,
-      'dateFinish.lessThanOrEqual': criteria.dateFinish.lessThanOrEqual
-        ? addDays(convertDateTimeToServer(criteria.dateFinish.lessThanOrEqual), 1).toISOString()
+      'dateStart.lessThanOrEqual': criteria.dateStart.lessThanOrEqual
+        ? convertDateTimeToServer(criteria.dateStart.lessThanOrEqual).toISOString()
         : null,
+    });
+  };
+
+  const resetFilter = () => {
+    setCriteriaState({
+      'title.contains': null,
+      'status.equals': null,
+      'dateStart.greaterThanOrEqual': null,
+      'dateStart.lessThanOrEqual': null,
+      'challengeType.equals': null,
+      'sport.name.equals': null,
     });
   };
 
@@ -81,8 +82,7 @@ export const Challenge = (props: IChallengeProps) => {
     if (criteriaState['sport.name.equals']) endURL += '&sport.name.equals' + criteriaState['sport.name.equals'];
     if (criteriaState['dateStart.greaterThanOrEqual'])
       endURL += '&dateStart.greaterThanOrEqual=' + criteriaState['dateStart.greaterThanOrEqual'];
-    if (criteriaState['dateFinish.lessThanOrEqual'])
-      endURL += '&dateFinish.lessThanOrEqual=' + criteriaState['dateFinish  .lessThanOrEqual'];
+    if (criteriaState['dateStart.lessThanOrEqual']) endURL += '&dateStart.lessThanOrEqual=' + criteriaState['dateStart.lessThanOrEqual'];
 
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
@@ -148,14 +148,7 @@ export const Challenge = (props: IChallengeProps) => {
         </div>
       </h2>
 
-      <ChallengeFilterForm
-        challengeCriteria={criteriaState}
-        handleFilter={handleFilter}
-        updating={loading}
-        clear={() => {
-          props.reset();
-        }}
-      />
+      <ChallengeFilterForm challengeCriteria={criteriaState} handleFilter={handleFilter} updating={loading} clear={resetFilter} />
 
       <hr style={{ backgroundColor: 'DodgerBlue', height: '2px' }} />
       <div className="table-responsive">
