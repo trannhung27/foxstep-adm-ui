@@ -16,7 +16,11 @@ const setupAxiosInterceptors = onUnauthenticated => {
     }
     return config;
   };
-  const onResponseSuccess = response => camelcaseKeys(response, { deep: true });
+  const onResponseSuccess = response => {
+    response = camelcaseKeys(response, { deep: true });
+    if (response.data.error) return Promise.reject(response);
+    return response;
+  };
   const onResponseError = err => {
     const status = err.status || (err.response ? err.response.status : 0);
     if (status === 403 || status === 401) {

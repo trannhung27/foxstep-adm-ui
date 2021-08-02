@@ -39,7 +39,7 @@ export const News = (props: INewsProps) => {
         ? convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString()
         : null,
       'datePublished.lessThanOrEqual': criteria.datePublished.lessThanOrEqual
-        ? addDays(convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual), 1).toISOString()
+        ? addDays(convertDateTimeToServer(criteria.datePublished.lessThanOrEqual), 1).toISOString()
         : null,
     });
   };
