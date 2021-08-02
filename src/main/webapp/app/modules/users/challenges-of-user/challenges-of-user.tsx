@@ -4,7 +4,7 @@ import { getChallengesOfUser } from 'app/modules/users/users.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { JhiPagination, TextFormat } from 'react-jhipster';
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
-import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { PageHeader } from 'antd';
 import ChallengesOfUserFilterForm from 'app/modules/users/challenges-of-user/cou-filter';
 import { Button, Row, Table } from 'reactstrap';
@@ -40,7 +40,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
       chalType: criteria.chalType,
       sportId: criteria.sportId,
       fromDate: criteria.fromDate ? convertDateTimeToServer(criteria.fromDate).toISOString() : null,
-      toDate: criteria.toDate ? addDays(convertDateTimeToServer(criteria.toDate), 1).toISOString() : null,
+      toDate: criteria.toDate ? convertDateTimeToServer(criteria.toDate).toISOString() : null,
       chalUserStatus: criteria.chalUserStatus,
       chalStatus: criteria.chalStatus,
     });
