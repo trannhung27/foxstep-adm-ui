@@ -7,7 +7,7 @@ import { Badge, Button, Col, Row, Table } from 'reactstrap';
 import ParticipantsFilterForm from 'app/modules/challenge/challenge-participants/cp-filter';
 import { PageSizePicker } from 'app/shared/util/page-size-picker';
 import { IRootState } from 'app/shared/reducers';
-import { getEntities, reset } from 'app/modules/challenge/challenge-participants/cp-reducer';
+import { getEntities } from 'app/modules/challenge/challenge-participants/cp-reducer';
 import { connect } from 'react-redux';
 import { JhiPagination, TextFormat } from 'react-jhipster';
 import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
@@ -65,6 +65,15 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
     }
+  };
+
+  const resetFilter = () => {
+    setCriteriaState({
+      ...criteriaState,
+      status: null,
+      name: null,
+      email: null,
+    });
   };
 
   useEffect(() => {
@@ -131,14 +140,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
         }
       />
       <hr />
-      <ParticipantsFilterForm
-        participantsCriteria={criteriaState}
-        handleFilter={handleFilter}
-        clear={() => {
-          props.reset();
-        }}
-        updating={loading}
-      />
+      <ParticipantsFilterForm participantsCriteria={criteriaState} handleFilter={handleFilter} clear={resetFilter} updating={loading} />
 
       <div className="table-responsive pt-2">
         {participants && participants.length > 0 ? (
@@ -177,7 +179,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                     </td>
                     <td>{participant.name}</td>
                     <td>{participant.distanceTarget / 1000}</td>
-                    <td>{/*TODO team*/}</td>
+                    <td>{challenge.teams && challenge.teams.map(t => (t.id === participant.teamId ? t.name : ''))}</td>
                     <td>{participant.vo2Max}</td>
                     <td>{participant.email}</td>
                     <td>
@@ -274,7 +276,6 @@ const mapStateToProps = ({ challengeParticipant, challenge }: IRootState) => ({
 const mapDispatchToProps = {
   getEntities,
   getEntity,
-  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

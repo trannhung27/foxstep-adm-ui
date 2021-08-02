@@ -1,5 +1,7 @@
 export interface IJoinChallengeRequest {
   challengeUserId?: number;
+  userId?: number;
+  teamId?: number;
   name?: string | null;
   email?: string | null;
   status?: number;

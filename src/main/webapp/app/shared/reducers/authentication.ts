@@ -57,8 +57,8 @@ export default (state: AuthenticationState = initialState, action): Authenticati
       return {
         ...state,
         loading: false,
-        loginError: action.payload.error !== null,
-        loginSuccess: action.payload.error === null,
+        loginError: !(action.payload.data.error == null),
+        loginSuccess: action.payload.data.error == null,
       };
     case ACTION_TYPES.LOGOUT:
       return {

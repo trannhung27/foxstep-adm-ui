@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Badge, Button, Col, Row, Table } from 'reactstrap';
-import { getSortState, JhiPagination, TextFormat } from 'react-jhipster';
+import { Badge, Button, Row, Table } from 'reactstrap';
+import { JhiPagination } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities, reset } from './users.reducer';
+import { getEntities } from './users.reducer';
 import { APP_USER_STATUS } from 'app/config/constants';
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import UsersFilterForm from 'app/modules/users/users-filter';
 import { PageHeader } from 'antd';
@@ -73,6 +72,17 @@ export const Users = (props: IUsersProps) => {
     }
   };
 
+  const resetFilter = () => {
+    setCriteriaState({
+      'fullName.contains': null,
+      'email.contains': null,
+      'mobilePhone.contains': null,
+      'nationalIdNumber.contains': null,
+      'status.equals': null,
+      'bib.equals': null,
+    });
+  };
+
   useEffect(() => {
     sortEntities();
   }, [criteriaState, paginationState.itemsPerPage, paginationState.activePage, paginationState.order, paginationState.sort]);
@@ -120,14 +130,7 @@ export const Users = (props: IUsersProps) => {
     <div>
       <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý khách hàng" />
       <hr />
-      <UsersFilterForm
-        usersCriteria={criteriaState}
-        handleFilter={handleFilter}
-        clear={() => {
-          props.reset();
-        }}
-        updating={loading}
-      />
+      <UsersFilterForm usersCriteria={criteriaState} handleFilter={handleFilter} clear={resetFilter} updating={loading} />
 
       <div className="table-responsive pt-2">
         {usersList && usersList.length > 0 ? (
@@ -226,7 +229,6 @@ const mapStateToProps = ({ users }: IRootState) => ({
 
 const mapDispatchToProps = {
   getEntities,
-  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
