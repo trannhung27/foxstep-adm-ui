@@ -77,10 +77,12 @@ export const Challenge = (props: IChallengeProps) => {
 
     if (criteriaState['title.contains']) endURL += '&title.contains=' + criteriaState['title.contains'];
     if (criteriaState['status.equals']) endURL += '&status.equals=' + criteriaState['status.equals'];
-    // if (criteriaState['datePublished.greaterThanOrEqual'])
-    //   endURL += '&datePublished.greaterThanOrEqual=' + criteriaState['datePublished.greaterThanOrEqual'];
-    // if (criteriaState['datePublished.lessThanOrEqual'])
-    //   endURL += '&datePublished.lessThanOrEqual=' + criteriaState['datePublished.lessThanOrEqual'];
+    if (criteriaState['challengeType.equals']) endURL += '&challengeType.equals=' + criteriaState['challengeType.equals'];
+    if (criteriaState['sport.name.equals']) endURL += '&sport.name.equals' + criteriaState['sport.name.equals'];
+    if (criteriaState['dateStart.greaterThanOrEqual'])
+      endURL += '&dateStart.greaterThanOrEqual=' + criteriaState['dateStart.greaterThanOrEqual'];
+    if (criteriaState['dateFinish.lessThanOrEqual'])
+      endURL += '&dateFinish.lessThanOrEqual=' + criteriaState['dateFinish  .lessThanOrEqual'];
 
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
