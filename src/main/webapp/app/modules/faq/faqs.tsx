@@ -9,7 +9,7 @@ import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './faq.reducer';
 import { APP_TIMESTAMP_FORMAT, NEWS_STATUSES } from 'app/config/constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 import FaqFilterForm from 'app/modules/faq/faq-filter';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
@@ -41,7 +41,7 @@ export const Faq = (props: IFaqsProps) => {
         ? convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString()
         : null,
       'datePublished.lessThanOrEqual': criteria.datePublished.lessThanOrEqual
-        ? addDays(convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual), 1).toISOString()
+        ? convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString()
         : null,
     });
   };

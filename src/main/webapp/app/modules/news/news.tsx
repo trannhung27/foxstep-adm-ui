@@ -10,7 +10,7 @@ import { getEntities } from './news.reducer';
 import { APP_TIMESTAMP_FORMAT, NEWS_STATUSES } from 'app/config/constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import NewsFilterForm from 'app/modules/news/news-filter';
-import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { PageHeader } from 'antd';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
@@ -39,7 +39,7 @@ export const News = (props: INewsProps) => {
         ? convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual).toISOString()
         : null,
       'datePublished.lessThanOrEqual': criteria.datePublished.lessThanOrEqual
-        ? addDays(convertDateTimeToServer(criteria.datePublished.greaterThanOrEqual), 1).toISOString()
+        ? convertDateTimeToServer(criteria.datePublished.lessThanOrEqual).toISOString()
         : null,
     });
   };
