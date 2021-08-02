@@ -11,15 +11,11 @@ import { ICategory } from 'app/shared/model/category.model';
 import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { convertDateTimeToServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
-import moment from 'moment';
 import { createEntity } from './banners.reducer';
 
-// export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 export interface IBannerUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export const News = (props: IBannerUpdateProps) => {
+export const BannersUpdate = (props: IBannerUpdateProps) => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
@@ -181,4 +177,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(News);
+export default connect(mapStateToProps, mapDispatchToProps)(BannersUpdate);
