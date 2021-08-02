@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 import { Button, Row, Col, Label, Collapse, CardBody, Card } from 'reactstrap';
 import {
   AvFeedback,
@@ -45,6 +45,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   const [showRejectModal, setShowRejectModal] = useState(false);
 
   const { challengeEntity } = props;
+  const history = useHistory();
   return (
     <Row>
       <Col md="12">
@@ -446,8 +447,8 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             getEntities={props.getActions}
           />
         </AvForm>
-        <Button tag={Link} to="/challenges" replace color="info" data-cy="entityDetailsBackButton">
-          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Trở lại</span>
+        <Button key="1" onClick={() => history.goBack()} color="info" data-cy="entityDetailsBackButton">
+          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Quay lại</span>
         </Button>
         &nbsp;
       </Col>
