@@ -4,14 +4,11 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table, Label, Badge } from 'reactstrap';
 import { Translate, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
+import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './challenge.reducer';
-import { IChallenge } from 'app/shared/model/challenge.model';
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import { getEntities, reset } from './challenge.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { height } from '@fortawesome/free-solid-svg-icons/faCogs';
 import moment from 'moment';
 import DateTime from 'react-datetime';
 import {
@@ -26,27 +23,44 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
 import { PageSizePicker } from 'app/shared/util/page-size-picker';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
+import ChallengeFilterForm from 'app/modules/challenge/challenge-filter';
+import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
 
 export interface IChallengeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Challenge = (props: IChallengeProps) => {
+  const overrideChallengeCriteriaWithQueryParams = () => {
+    const params = new URLSearchParams(props.location.search);
+    return {
+      'title.contains': params.get('title.contains'),
+      'status.equals': params.get('status.equals'),
+      'dateStart.greaterThanOrEqual': params.get('dateStart.greaterThanOrEqual'),
+      'dateFinish.lessThanOrEqual': params.get('dateFinish.lessThanOrEqual'),
+      'challengeType.equals': params.get('challengeType.equals'),
+      'sport.name.equals': params.get('sport.name.equals'),
+    };
+  };
+
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortStateCustom(props.location, 'id', 'desc'), props.location.search)
   );
 
-  const [criteriaState, setCriteriaState] = useState({
-    'title.contains': null,
-    'userId.equals': null,
-    'status.equals': null,
-    'challengeType.equals': null,
-    'dateStart.greaterThanOrEqual': null,
-    'dateStart.lessThanOrEqual': null,
-    'dateFinish.greaterThanOrEqual': null,
-    'dateFinish.lessThanOrEqual': null,
-    'dateRegisDeadline.greaterThanOrEqual': null,
-    'dateRegisDeadline.lessThanOrEqual': null,
-    'sport.name.equals': null,
-  });
+  const [criteriaState, setCriteriaState] = useState(overrideChallengeCriteriaWithQueryParams());
+
+  const handleFilter = criteria => {
+    setCriteriaState({
+      'title.contains': criteria.title.contains,
+      'status.equals': criteria.status.equals,
+      'challengeType.equals': criteria.challengeType.equals,
+      'sport.name.equals': criteria.sport.name.equals,
+      'dateStart.greaterThanOrEqual': criteria.dateStart.greaterThanOrEqual
+        ? convertDateTimeToServer(criteria.dateStart.greaterThanOrEqual).toISOString()
+        : null,
+      'dateFinish.lessThanOrEqual': criteria.dateFinish.lessThanOrEqual
+        ? addDays(convertDateTimeToServer(criteria.dateFinish.lessThanOrEqual), 1).toISOString()
+        : null,
+    });
+  };
 
   const getAllEntities = () => {
     props.getEntities(
@@ -63,10 +77,12 @@ export const Challenge = (props: IChallengeProps) => {
 
     if (criteriaState['title.contains']) endURL += '&title.contains=' + criteriaState['title.contains'];
     if (criteriaState['status.equals']) endURL += '&status.equals=' + criteriaState['status.equals'];
-    // if (criteriaState['datePublished.greaterThanOrEqual'])
-    //   endURL += '&datePublished.greaterThanOrEqual=' + criteriaState['datePublished.greaterThanOrEqual'];
-    // if (criteriaState['datePublished.lessThanOrEqual'])
-    //   endURL += '&datePublished.lessThanOrEqual=' + criteriaState['datePublished.lessThanOrEqual'];
+    if (criteriaState['challengeType.equals']) endURL += '&challengeType.equals=' + criteriaState['challengeType.equals'];
+    if (criteriaState['sport.name.equals']) endURL += '&sport.name.equals' + criteriaState['sport.name.equals'];
+    if (criteriaState['dateStart.greaterThanOrEqual'])
+      endURL += '&dateStart.greaterThanOrEqual=' + criteriaState['dateStart.greaterThanOrEqual'];
+    if (criteriaState['dateFinish.lessThanOrEqual'])
+      endURL += '&dateFinish.lessThanOrEqual=' + criteriaState['dateFinish  .lessThanOrEqual'];
 
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
@@ -132,152 +148,14 @@ export const Challenge = (props: IChallengeProps) => {
         </div>
       </h2>
 
-      <AvForm onSubmit={getAllEntities}>
-        <Row>
-          <Col xs="12" sm="4">
-            <AvGroup>
-              <AvField
-                type="text"
-                name="title"
-                label="Tên thử thách"
-                placeholder="Điền tên thử thách"
-                value={criteriaState['title.contains']}
-                onChange={event => (criteriaState['title.contains'] = event.target.value)}
-              />
-            </AvGroup>
-          </Col>
-          <Col xs="12" sm="4">
-            <AvField
-              type="select"
-              name="status"
-              label="Trạng thái"
-              onChange={event => {
-                criteriaState['status.equals'] = event.target.value;
-              }}
-            >
-              <option value="" key="0">
-                Tất cả
-              </option>
-              <option value={ChallengeStatuses[0].id}>{ChallengeStatuses[0].name}</option>
-              <option value={ChallengeStatuses[1].id}>{ChallengeStatuses[1].name}</option>
-              <option value={ChallengeStatuses[2].id}>{ChallengeStatuses[2].name}</option>
-              <option value={ChallengeStatuses[3].id}>{ChallengeStatuses[3].name}</option>
-              <option value={ChallengeStatuses[4].id}>{ChallengeStatuses[4].name}</option>
-              <option value={ChallengeStatuses[5].id}>{ChallengeStatuses[5].name}</option>
-            </AvField>
-          </Col>
-          <Col xs="12" sm="4">
-            <AvField
-              type="select"
-              name="challengeType"
-              label="Loại thử thách"
-              value={criteriaState['challengeType.equals']}
-              onChange={event => (criteriaState['challengeType.equals'] = event.target.value)}
-            >
-              <option value="" key="0">
-                Tất cả
-              </option>
-              <option value="1">Cá nhân</option>
-              <option value="0">Ban tổ chức</option>
-              {/* {categories
-                ? categories.map(otherEntity => (
-                    <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.name}
-                    </option>
-                  ))
-                : null} */}
-            </AvField>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col xs="12" sm="4">
-            <Row>
-              <Col xs="12" sm="12">
-                <AvGroup>
-                  <AvField
-                    type="select"
-                    name="sportName"
-                    label="Bộ môn"
-                    value={criteriaState['sport.name.equals']}
-                    onChange={event => (criteriaState['sport.name.equals'] = event.target.value)}
-                  >
-                    <option value="" key="0">
-                      Tất cả
-                    </option>
-                    <option value="Run">Chạy bộ</option>
-                    {/* {categories
-                ? categories.map(otherEntity => (
-                    <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.name}
-                    </option>
-                  ))
-                : null} */}
-                  </AvField>
-                </AvGroup>
-              </Col>
-            </Row>
-          </Col>
-
-          <Col xs="12" sm="4">
-            <Row>
-              <Col xs="12" sm="12">
-                <AvGroup>
-                  <Label>Từ ngày</Label>
-                  <DateTime
-                    value={criteriaState['dateStart.greaterThanOrEqual']}
-                    onChange={date => (criteriaState['dateStart.greaterThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
-                    inputProps={{ placeholder: 'Chọn ngày bắt đầu' }}
-                    dateFormat="DD/MM/YYYY"
-                    timeFormat="HH:mm:ss"
-                    closeOnSelect={true}
-                  />
-                </AvGroup>
-              </Col>
-            </Row>
-          </Col>
-
-          <Col xs="12" sm="4">
-            <Row>
-              <Col xs="12" sm="12">
-                <AvGroup>
-                  <Label>Đến ngày</Label>
-                  <DateTime
-                    value={criteriaState['dateFinish.greaterThanOrEqual']}
-                    onChange={date => (criteriaState['dateFinish.lessThanOrEqual'] = moment(date).format('YYYY-MM-DDTHH:mm:ss.sss[Z]'))}
-                    inputProps={{ placeholder: 'Chọn ngày kết thúc' }}
-                    dateFormat="DD/MM/YYYY"
-                    timeFormat="HH:mm:ss"
-                    closeOnSelect={true}
-                  />
-                </AvGroup>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={2}>
-            <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={loading} block>
-              <FontAwesomeIcon icon="search" />
-              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tìm kiếm</span>
-            </Button>
-          </Col>
-          <Col sm={2}>
-            <Button
-              color="default"
-              className="border-secondary"
-              id="cancel-button"
-              data-cy="cancelFilterButton"
-              type="reset"
-              value="Reset"
-              block
-            >
-              <FontAwesomeIcon icon={faWindowClose} />
-              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Hủy</span>
-            </Button>
-          </Col>
-        </Row>
-      </AvForm>
+      <ChallengeFilterForm
+        challengeCriteria={criteriaState}
+        handleFilter={handleFilter}
+        updating={loading}
+        clear={() => {
+          props.reset();
+        }}
+      />
 
       <hr style={{ backgroundColor: 'DodgerBlue', height: '2px' }} />
       <div className="table-responsive">
@@ -400,6 +278,7 @@ const mapStateToProps = ({ challenge }: IRootState) => ({
 
 const mapDispatchToProps = {
   getEntities,
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
