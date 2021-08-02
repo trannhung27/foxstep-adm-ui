@@ -6,16 +6,20 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Col, Row, Table } f
 import { Translate, getSortState, IPaginationBaseState, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
-import { getEntities, reset } from 'app/entities/news/news.reducer';
+import { getEntities, reset, updateEntity } from 'app/entities/news/news.reducer';
 import { ICategory } from 'app/shared/model/category.model';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT } from 'app/config/constants';
+import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+import { convertDateTimeToServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import moment from 'moment';
+import { createEntity } from './banners.reducer';
 
-export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+// export interface INewsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export interface IBannerUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export const News = (props: INewsProps) => {
+export const News = (props: IBannerUpdateProps) => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
@@ -59,11 +63,34 @@ export const News = (props: INewsProps) => {
     }
   }, [sorting]);
 
-  const { newsList, match, loading } = props;
+  const saveEntity = (content_id, date, banner_type_id, newsentity) => {
+    const entity = {
+      id: parseInt(props.match.params.id, 10),
+      content_id,
+      banner_type_id,
+      date_created: date,
+      date_updated: date,
+    };
+
+    newsentity.status = 1;
+
+    const en = {
+      ...newsEntity,
+      ...newsentity,
+    };
+
+    if (props.createEntity(entity)) {
+      props.updateEntity(en);
+    }
+
+    props.history.push('/banners' + props.location.search);
+  };
+
+  const { newsList, match, loading, newsEntity } = props;
   return (
     <Modal isOpen size="xl" toggle={handleClose}>
       <ModalHeader id="category-heading" data-cy="CategoryHeading" style={{ backgroundColor: 'rgb(30, 122, 150)' }}>
-        <h2 style={{ color: 'white' }}>Chọn Thử thách/Tin tức</h2>
+        <span style={{ color: 'white' }}>Chọn Thử thách/Tin tức</span>
       </ModalHeader>
       <ModalBody>
         <div className="input-group mb-3">
@@ -103,13 +130,13 @@ export const News = (props: INewsProps) => {
                     </td>
                     <td>{news.title}</td>
                     <td>
-                      {news.dateCreated ? <TextFormat type="date" value={news.dateCreated} format={APP_LOCAL_DATETIME_FORMAT} /> : null} -{' '}
-                      {news.dateUpdated ? <TextFormat type="date" value={news.dateUpdated} format={APP_LOCAL_DATETIME_FORMAT} /> : null}
+                      {news.dateCreated ? <TextFormat type="date" value={news.dateCreated} format={APP_TIMESTAMP_FORMAT} /> : null} -{' '}
+                      {news.dateUpdated ? <TextFormat type="date" value={news.dateUpdated} format={APP_TIMESTAMP_FORMAT} /> : null}
                     </td>
                     <td>News Category</td>
                     <td>{news.status === 0 ? 'Chưa diễn ra' : 'Đang diễn ra'}</td>
                     <td>
-                      <Button tag={Link} to={`/banners/${news.id}/select`} color="link" size="sm">
+                      <Button onClick={() => saveEntity(news.id, '2021-07-28T07:53:55Z', 1, news)} size="sm">
                         Select
                       </Button>
                     </td>
@@ -140,12 +167,14 @@ const mapStateToProps = ({ news }: IRootState) => ({
   newsList: news.entities,
   loading: news.loading,
   totalItems: news.totalItems,
-  entity: news.entity,
+  newsEntity: news.entity,
   updateSuccess: news.updateSuccess,
 });
 
 const mapDispatchToProps = {
   getEntities,
+  createEntity,
+  updateEntity,
   reset,
 };
 
