@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, NavLink as Link } from 'react-router-dom';
-import { getChallengesOfUser, reset } from 'app/modules/users/users.reducer';
+import { getChallengesOfUser } from 'app/modules/users/users.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { JhiPagination, TextFormat } from 'react-jhipster';
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { getSortStateCustom } from 'app/shared/util/pagination-utils-custom';
 import { addDays, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { PageHeader } from 'antd';
@@ -11,11 +10,10 @@ import ChallengesOfUserFilterForm from 'app/modules/users/challenges-of-user/cou
 import { Button, Row, Table } from 'reactstrap';
 import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
 import { SortIcon } from 'app/shared/util/sort-icon-util';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 import { connect } from 'react-redux';
-import { APP_LOCAL_DATE_FORMAT, APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 import { PageSizePicker } from 'app/shared/util/page-size-picker';
+import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 
 export interface ICOUProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -78,6 +76,19 @@ export const ChallengesOfUser = (props: ICOUProps) => {
     }
   };
 
+  const resetFilter = () => {
+    setCriteriaState({
+      ...criteriaState,
+      title: null,
+      chalType: null,
+      sportId: null,
+      fromDate: null,
+      toDate: null,
+      chalUserStatus: null,
+      chalStatus: null,
+    });
+  };
+
   useEffect(() => {
     sortEntities();
   }, [criteriaState, paginationState.itemsPerPage, paginationState.activePage, paginationState.order, paginationState.sort]);
@@ -135,14 +146,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
         }
       />
       <hr />
-      <ChallengesOfUserFilterForm
-        couCriteria={criteriaState}
-        handleFilter={handleFilter}
-        clear={() => {
-          props.reset();
-        }}
-        updating={loading}
-      />
+      <ChallengesOfUserFilterForm couCriteria={criteriaState} handleFilter={handleFilter} clear={resetFilter} updating={loading} />
 
       <div className="table-responsive pt-2">
         {couList && couList.length > 0 ? (
@@ -236,7 +240,6 @@ const mapStateToProps = ({ users }: IRootState) => ({
 
 const mapDispatchToProps = {
   getChallengesOfUser,
-  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

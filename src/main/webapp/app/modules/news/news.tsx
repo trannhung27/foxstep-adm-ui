@@ -6,7 +6,7 @@ import { JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities, reset } from './news.reducer';
+import { getEntities } from './news.reducer';
 import { APP_TIMESTAMP_FORMAT, NEWS_STATUSES } from 'app/config/constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import NewsFilterForm from 'app/modules/news/news-filter';
@@ -73,6 +73,15 @@ export const News = (props: INewsProps) => {
     }
   };
 
+  const resetFilter = () => {
+    setCriteriaState({
+      'title.contains': null,
+      'status.equals': null,
+      'datePublished.greaterThanOrEqual': null,
+      'datePublished.lessThanOrEqual': null,
+    });
+  };
+
   useEffect(() => {
     sortEntities();
   }, [criteriaState, paginationState.itemsPerPage, paginationState.activePage, paginationState.order, paginationState.sort]);
@@ -120,14 +129,7 @@ export const News = (props: INewsProps) => {
     <div>
       <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý tin tức" />
       <hr />
-      <NewsFilterForm
-        newsCriteria={criteriaState}
-        handleFilter={handleFilter}
-        clear={() => {
-          props.reset();
-        }}
-        updating={loading}
-      />
+      <NewsFilterForm newsCriteria={criteriaState} handleFilter={handleFilter} clear={resetFilter} updating={loading} />
 
       <div className="table-responsive pt-2">
         {newsList && newsList.length > 0 ? (
@@ -244,7 +246,6 @@ const mapStateToProps = ({ news }: IRootState) => ({
 
 const mapDispatchToProps = {
   getEntities,
-  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
