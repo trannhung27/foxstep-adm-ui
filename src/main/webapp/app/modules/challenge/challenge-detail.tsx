@@ -215,9 +215,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                   Thời gian bắt đầu: &nbsp; &nbsp;
                 </Label>
                 <div>
-                  {challengeEntity.dateStart ? (
-                    <TextFormat type="date" value={challengeEntity.dateStart} format={APP_TIMESTAMP_FORMAT} />
-                  ) : null}
+                  <TextFormat type="date" value={challengeEntity.dateStart} format={APP_TIMESTAMP_FORMAT} />
                 </div>
               </AvGroup>
             </Col>
@@ -228,9 +226,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
                   Thời gian kết thúc: &nbsp; &nbsp;
                 </Label>
                 <div>
-                  {challengeEntity.dateFinish ? (
-                    <TextFormat type="date" value={challengeEntity.dateFinish} format={APP_TIMESTAMP_FORMAT} />
-                  ) : null}
+                  <TextFormat type="date" value={challengeEntity.dateFinish} format={APP_TIMESTAMP_FORMAT} />
                 </div>
               </AvGroup>
             </Col>
@@ -317,9 +313,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               <AvGroup inline name="mínDistance" className="form-group form-inline">
                 <input type="checkbox" checked className="mr-2" />
                 <Label>Bài chạy có quãng đường tối thiểu &nbsp; &nbsp; </Label>
-                <div>
-                  {challengeEntity.challengeValidity ? Number((challengeEntity.challengeValidity.minDistance / 1000).toFixed(1)) : ''}
-                </div>
+                <div>{Number((challengeEntity.challengeValidity.minDistance / 1000).toFixed(1))}</div>
                 <text> &nbsp; (km)</text>
               </AvGroup>
             )
@@ -330,7 +324,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               <AvGroup inline name="elevationGain" className="form-group form-inline">
                 <input type="checkbox" checked className="mr-2" />
                 <Label>Bài chạy có độ cao đạt được (elevation gain) tối thiểu &nbsp; &nbsp; </Label>
-                <div>{challengeEntity.challengeValidity ? Number(challengeEntity.challengeValidity.elevationGain) : ''}</div>
+                <div>{Number(challengeEntity.challengeValidity.elevationGain)}</div>
                 <text> &nbsp; (m)</text>
               </AvGroup>
             )
