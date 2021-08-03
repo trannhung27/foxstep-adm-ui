@@ -20,15 +20,8 @@ import parse from 'html-react-parser';
 
 import { IRootState } from 'app/shared/reducers';
 import { approveChallenge, getEntity, endChallenge } from './challenge.reducer';
-import moment from 'moment';
-import {
-  APP_DATE_FORMAT,
-  APP_LOCAL_DATE_FORMAT,
-  APP_LOCAL_DATETIME_FORMAT_Z,
-  APP_TIMESTAMP_FORMAT,
-  ChallengeStatuses,
-  WfProcessGroup,
-} from 'app/config/constants';
+
+import { APP_TIMESTAMP_FORMAT, ChallengeStatuses, WfProcessGroup } from 'app/config/constants';
 import { getEntities as getActions } from '../workflow/wf-action/wf-action-reducer';
 import { WfAction } from 'app/modules/workflow/wf-action/wf-action';
 import { ChallengeApproveDialog } from 'app/modules/challenge/challenge-approve-dialog';
@@ -49,10 +42,14 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   return (
     <Row>
       <Col md="12">
-        <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
-        </Button>
-        &nbsp;
+        {challengeEntity.status !== ChallengeStatuses[2].id ? (
+          <>
+            <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
+              <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
+            </Button>
+            &nbsp;
+          </>
+        ) : null}
         {[ChallengeStatuses[1].id, ChallengeStatuses[2].id, ChallengeStatuses[3].id].includes(challengeEntity.status) && (
           <>
             <Button tag={Link} to={`/challenges/${challengeEntity.id}/participants`} replace color="primary">
@@ -103,6 +100,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             &nbsp;
           </>
         ) : null}
+        &nbsp;
       </Col>
       <ChallengeApproveDialog
         showModal={showApproveModal}
@@ -314,29 +312,49 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             <text> &nbsp; (phút/km)</text>
           </AvGroup>
 
-          <AvGroup inline name="mínDistance" className="form-group form-inline">
-            <input type="checkbox" className="mr-2" />
-            <Label>Bài chạy có quãng đường tối thiểu &nbsp; &nbsp; </Label>
-            <div>{challengeEntity.challengeValidity ? Number((challengeEntity.challengeValidity.minDistance / 1000).toFixed(1)) : ''}</div>
-            <text> &nbsp; (km)</text>
-          </AvGroup>
+          {challengeEntity.challengeValidity ? (
+            challengeEntity.challengeValidity.minDistance === 0 ? null : (
+              <AvGroup inline name="mínDistance" className="form-group form-inline">
+                <input type="checkbox" checked className="mr-2" />
+                <Label>Bài chạy có quãng đường tối thiểu &nbsp; &nbsp; </Label>
+                <div>
+                  {challengeEntity.challengeValidity ? Number((challengeEntity.challengeValidity.minDistance / 1000).toFixed(1)) : ''}
+                </div>
+                <text> &nbsp; (km)</text>
+              </AvGroup>
+            )
+          ) : null}
 
-          <AvGroup inline name="elevationGain" className="form-group form-inline">
-            <input type="checkbox" className="mr-2" />
-            <Label>Bài chạy có độ cao đạt được (elevation gain) tối thiểu &nbsp; &nbsp; </Label>
-            <div>{challengeEntity.challengeValidity ? Number(challengeEntity.challengeValidity.elevationGain) : ''}</div>
-            <text> &nbsp; (m)</text>
-          </AvGroup>
+          {challengeEntity.challengeValidity ? (
+            challengeEntity.challengeValidity.elevationGain === 0 ? null : (
+              <AvGroup inline name="elevationGain" className="form-group form-inline">
+                <input type="checkbox" checked className="mr-2" />
+                <Label>Bài chạy có độ cao đạt được (elevation gain) tối thiểu &nbsp; &nbsp; </Label>
+                <div>{challengeEntity.challengeValidity ? Number(challengeEntity.challengeValidity.elevationGain) : ''}</div>
+                <text> &nbsp; (m)</text>
+              </AvGroup>
+            )
+          ) : null}
 
-          <AvGroup inline name="avgCadence" className="form-group form-inline">
-            <input type="checkbox" className="mr-2" />
-            <Label>Bài chạy có nhịp chân trung bình(avg cadence) &nbsp; &nbsp; Từ &nbsp;</Label>
-            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgCadenceFrom : ''}</div>
-            <Label>&nbsp; - Đến &nbsp; </Label>
-            <div>{challengeEntity.challengeValidity ? challengeEntity.challengeValidity.avgCadenceTo : ''}</div>
-            <text> &nbsp; (bước/phút)</text>
-          </AvGroup>
+          {challengeEntity.challengeValidity ? (
+            challengeEntity.challengeValidity.avgCadenceFrom === 0 ? null : (
+              <AvGroup inline name="avgCadence" className="form-group form-inline">
+                <input type="checkbox" checked className="mr-2" />
+                <Label>Bài chạy có nhịp chân trung bình(avg cadence) &nbsp; &nbsp; Từ &nbsp;</Label>
+                <div>{challengeEntity.challengeValidity.avgCadenceFrom}</div>
+                <Label>&nbsp; - Đến &nbsp; </Label>
+                <div>{challengeEntity.challengeValidity.avgCadenceTo}</div>
+                <text> &nbsp; (bước/phút)</text>
+              </AvGroup>
+            )
+          ) : null}
 
+          {challengeEntity.gps === 1 && (
+            <AvGroup inline name="isGps" className="form-group form-inline">
+              <input type="checkbox" className="mr-2" checked />
+              <Label>Chỉ chấp nhận các bài tập ngoài trời dùng GPS </Label>
+            </AvGroup>
+          )}
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hoàn thành:</text>
           <Row></Row>

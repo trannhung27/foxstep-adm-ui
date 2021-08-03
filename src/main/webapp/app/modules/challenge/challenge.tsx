@@ -140,12 +140,12 @@ export const Challenge = (props: IChallengeProps) => {
     <div>
       <h2 id="challenge-heading" data-cy="ChallengeHeading">
         Quản lý thử thách
-        <div className="d-flex justify-content-end">
-          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp; Tạo thử thách
-          </Link>
-        </div>
+        {/*<div className="d-flex justify-content-end">*/}
+        {/*  <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">*/}
+        {/*    <FontAwesomeIcon icon="plus" />*/}
+        {/*    &nbsp; Tạo thử thách*/}
+        {/*  </Link>*/}
+        {/*</div>*/}
       </h2>
 
       <ChallengeFilterForm challengeCriteria={criteriaState} handleFilter={handleFilter} updating={loading} clear={resetFilter} />
