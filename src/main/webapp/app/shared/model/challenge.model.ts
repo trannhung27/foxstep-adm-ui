@@ -28,6 +28,7 @@ export interface IChallenge {
   teams?: ITeam[] | [];
   organizationName?: string | null;
   userCreated?: IUserCreated | null;
+  gps?: number | null;
 }
 
 export const defaultValue: Readonly<IChallenge> = {};

@@ -210,13 +210,30 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
-    values.challengeValidity.avgCadenceFrom = Number(values.challengeValidity.avgCadenceFrom);
-    values.challengeValidity.avgCadenceTo = Number(values.challengeValidity.avgCadenceTo);
     values.challengeValidity.avgPaceFrom = Number(values.challengeValidity.avgPaceFrom);
     values.challengeValidity.avgPaceTo = Number(values.challengeValidity.avgPaceTo);
-    values.challengeValidity.elevationGain = Number(values.challengeValidity.elevationGain);
+
+    if (avgCadence.required) {
+      values.challengeValidity.avgCadenceFrom = Number(values.challengeValidity.avgCadenceFrom);
+      values.challengeValidity.avgCadenceTo = Number(values.challengeValidity.avgCadenceTo);
+    } else {
+      values.challengeValidity.avgCadenceFrom = 0;
+      values.challengeValidity.avgCadenceTo = 0;
+    }
+
+    if (elevationGain.required) {
+      values.challengeValidity.elevationGain = Number(values.challengeValidity.elevationGain);
+    } else {
+      values.challengeValidity.elevationGain = 0;
+    }
     values.challengeValidity.completionCriteria = Number(values.challengeValidity.completionCriteria);
-    values.challengeValidity.minDistance = Number(values.challengeValidity.minDistance) * 1000;
+    if (minDistance.required) {
+      values.challengeValidity.minDistance = Number(values.challengeValidity.minDistance) * 1000;
+    } else {
+      values.challengeValidity.minDistance = 0;
+    }
+
+    values.challengeValidity.rankCriteria3 = Number(values.challengeValidity.rankCriteria3);
     values.challengeValidity.gps = Number(values.challengeValidity.gps);
 
     values.dateStart = convertDateTimeToServer(values.dateStart);
@@ -821,10 +838,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   : ''
                               }
                             />
-                            <AvInput
+                            <AvField
+                              type="number"
                               hidden
                               name={'challengeValidity.rankCriteria' + (index + 1)}
-                              value={criteria === 3 ? (criteria3Checked ? 3 : 0) : criteria}
+                              value={criteria === 3 ? (!criteria3Checked ? '0' : '3') : Number(criteria)}
                             />
                             {index !== 2 ? <Button onClick={swapPosition}> Đổi </Button> : null}
                           </AvGroup>
