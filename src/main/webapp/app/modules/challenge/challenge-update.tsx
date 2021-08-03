@@ -36,6 +36,7 @@ import { getCustomer } from '../users/users.reducer';
 import { ChallengeUserDialog } from './challenge-search-user-dialog';
 import { UploadImageInput } from '../upload-image/upload-image';
 import { uploadImage } from '../upload-image/upload-image-reducer';
+import challenge from 'app/modules/challenge/challenge';
 
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -207,6 +208,15 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
         required: avgCadence.required,
       });
     }
+
+    if (challengeEntity.teams && !isNew) {
+      setTeamAllow(true);
+      const list = [{ name: '' }];
+      challengeEntity.teams.map((team, index) => {
+        list[index] = { name: team.name };
+      });
+      setTeamList(list);
+    }
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
@@ -241,12 +251,18 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     values.dateFinish = convertDateTimeToServer(values.dateFinish);
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
-    values.challengeDistance.map((challenge, i) => {
-      challenge.distance = challenge.distance * 1000;
+    values.challengeDistance.map((challengeDistance, i) => {
+      challengeDistance.distance = challengeDistance.distance * 1000;
     });
     if (values.challengeValidity.checkTime === true) {
       values.challengeValidity.checkTime = 0;
     } else values.challengeValidity.checkTime = 1;
+
+    if (!teamAllow) {
+      values.teams = [];
+      values.numPerTeam = undefined;
+    }
+
     if (errors.length === 0) {
       const entity = {
         ...challengeEntity,
@@ -308,7 +324,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               {!isNew ? (
                 <AvGroup>
                   <Label for="challenge-id">ID</Label>
-                  <AvInput id="challenge-id" type="text" className="form-control" name="id" required readOnly />
+                  <AvInput id="challenge-id" type="text" className="form-control" name="id" value={challengeEntity.id} required readOnly />
                 </AvGroup>
               ) : null}
 
@@ -531,10 +547,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           setChallengeDistanceList(challengeDistanceList.slice(0, 1));
                         }
                       }}
+                      value={challengeEntity.calType}
                       required
                     >
-                      <AvRadio label="Có MỘT LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value="1" />
-                      <AvRadio label="Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value="2" />
+                      <AvRadio label="Có MỘT LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value={1} />
+                      <AvRadio label="Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value={2} />
                     </AvRadioGroup>
 
                     <Row>
@@ -602,7 +619,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <AvField
                       type="checkbox"
                       disabled
-                      check
                       name="challengeValidity.checkTime"
                       label=" Thời gian bắt đầu diễn ra thử thách từ thời gian bắt đầu tới thời gian kết thúc"
                       value={true}
@@ -922,33 +938,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     </Row>
                     <Row>
                       <AvCheckboxGroup name="teamAllow">
-                        <AvCheckbox label="Thi đấu theo nhóm" onChange={changeTeamAllow}></AvCheckbox>
+                        <AvCheckbox label="Thi đấu theo nhóm" checked={teamAllow} onChange={changeTeamAllow}></AvCheckbox>
                       </AvCheckboxGroup>
                     </Row>
-
-                    {/* {teamAllow === true
-                        ?
-
-                        : null
-                      } */}
-
-                    {/* <AvGroup>
-                      <Label id="datePublishedLabel" for="news-datePublished">
-                        Date Published
-                      </Label>
-                      <AvInput
-                        id="news-datePublished"
-                        data-cy="datePublished"
-                        type="datetime-local"
-                        className="form-control"
-                        name="datePublished"
-                        placeholder={'YYYY-MM-DD HH:mm'}
-                        value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.newsEntity.datePublished)}
-                        validate={{
-                          required: { value: true, errorMessage: 'This field is required.' },
-                        }}
-                      />
-                    </AvGroup> */}
 
                     {teamAllow === true ? (
                       <AvGroup className="form-group">
