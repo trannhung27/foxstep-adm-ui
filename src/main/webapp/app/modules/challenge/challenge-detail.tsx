@@ -42,7 +42,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   return (
     <Row>
       <Col md="12">
-        {challengeEntity.status !== ChallengeStatuses[2].id ? (
+        {challengeEntity.status === ChallengeStatuses[0].id ? (
           <>
             <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
               <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
@@ -211,7 +211,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <Row>
             <Col xs="12" sm="6">
               <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateStart">
                   Thời gian bắt đầu: &nbsp; &nbsp;
                 </Label>
                 <div>
@@ -222,11 +222,24 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
 
             <Col xs="12" sm="6">
               <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateFinish">
                   Thời gian kết thúc: &nbsp; &nbsp;
                 </Label>
                 <div>
                   <TextFormat type="date" value={challengeEntity.dateFinish} format={APP_TIMESTAMP_FORMAT} />
+                </div>
+              </AvGroup>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs="12" sm="6">
+              <AvGroup className="form-group form-inline">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateRegisDeadline">
+                  Hạn đăng kí: &nbsp; &nbsp;
+                </Label>
+                <div>
+                  <TextFormat type="date" value={challengeEntity.dateRegisDeadline} format={APP_TIMESTAMP_FORMAT} />
                 </div>
               </AvGroup>
             </Col>
