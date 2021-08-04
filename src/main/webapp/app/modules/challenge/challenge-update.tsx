@@ -209,7 +209,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       });
     }
 
-    if (challengeEntity.teams.length > 0 && !isNew) {
+    if (challengeEntity.teams && challengeEntity.teams.length > 0 && !isNew) {
       setTeamAllow(true);
       const list = [{ name: '' }];
       challengeEntity.teams.map((team, index) => {
