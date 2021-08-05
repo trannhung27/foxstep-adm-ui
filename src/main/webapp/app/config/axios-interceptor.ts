@@ -3,6 +3,7 @@ import { Storage } from 'react-jhipster';
 
 import { SERVER_API_URL } from 'app/config/constants';
 import camelcaseKeys from 'camelcase-keys';
+import { logout } from 'app/shared/reducers/authentication';
 
 const TIMEOUT = 1 * 60 * 1000;
 axios.defaults.timeout = TIMEOUT;
@@ -24,7 +25,8 @@ const setupAxiosInterceptors = onUnauthenticated => {
   const onResponseError = err => {
     const status = err.status || (err.response ? err.response.status : 0);
     if (status === 403 || status === 401) {
-      onUnauthenticated();
+      // onUnauthenticated();
+      logout();
     }
     return Promise.reject(err);
   };
