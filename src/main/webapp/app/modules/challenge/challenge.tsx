@@ -208,9 +208,7 @@ export const Challenge = (props: IChallengeProps) => {
                       {challenge.challengeType === 0 && <div>Ban tổ chức</div>}
                       {challenge.challengeType === 1 && <div>Cá nhân</div>}
                     </td>
-                    <td>
-                      {challenge.challengeType === 0 ? challenge.organizationName : challenge.userCreated ? challenge.userCreated.name : ''}
-                    </td>
+                    <td>{challenge.userCreated ? challenge.userCreated.name : ''}</td>
                     <td>{challenge.code}</td>
                     <td>
                       {challenge.status === 0 ? (
