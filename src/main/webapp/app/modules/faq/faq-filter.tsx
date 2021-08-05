@@ -1,10 +1,11 @@
 import React from 'react';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
-import { convertDateFromServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateFromServer } from 'app/shared/util/date-utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { fromDateSmallerThanToDate_DatePublished } from 'app/shared/util/form-validate-utils';
 
 export interface IFaqFilterFormProps {
   faqCriteria: Record<string, unknown>;
@@ -22,7 +23,12 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
 
   handleSubmit = (even, errors, faqCriteria) => {
     const { handleFilter } = this.props;
-    handleFilter(faqCriteria);
+    if (errors.length === 0) handleFilter(faqCriteria);
+  };
+
+  validateDates = () => {
+    this.form.validateInput('datePublished.greaterThanOrEqual');
+    this.form.validateInput('datePublished.lessThanOrEqual');
   };
 
   cancelFilter = (event, fields) => {
@@ -59,7 +65,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
               <Label id="statusLabel" for="faq-status">
                 Trạng thái
               </Label>
-              <AvInput
+              <AvField
                 id="faq-status"
                 data-cy="status.equals"
                 type="select"
@@ -76,7 +82,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 <option value={NEWS_STATUSES[1].id} key="2">
                   {NEWS_STATUSES[1].name}
                 </option>
-              </AvInput>
+              </AvField>
             </AvGroup>
           </Col>
           <Col xs="12" sm="4">
@@ -84,7 +90,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
               <Label id="categoryLabel" for="faq-category">
                 Loại
               </Label>
-              <AvInput
+              <AvField
                 id="faq-category"
                 data-cy="newsCategoryId.equals"
                 type="select"
@@ -101,7 +107,7 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
                 <option value={NEWS_CATEGORY_TYPES.TUTORIAL.id} key="2">
                   {NEWS_CATEGORY_TYPES.TUTORIAL.name}
                 </option>
-              </AvInput>
+              </AvField>
             </AvGroup>
           </Col>
           <Col xs="12" sm="6">
@@ -109,13 +115,15 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
               <Label id="datePublishedFromLabel" for="faq-datePublishedFrom">
                 Từ ngày
               </Label>
-              <AvInput
+              <AvField
                 id="faq-datePublishedFrom"
                 data-cy="datePublished.greaterThanOrEqual"
                 type="date"
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
                 value={convertDateFromServer(faqCriteria['datePublished.greaterThanOrEqual'])}
+                onChange={() => this.validateDates()}
+                validate={{ myValidation: fromDateSmallerThanToDate_DatePublished }}
               />
             </AvGroup>
           </Col>
@@ -124,13 +132,15 @@ class FaqFilterForm extends React.Component<IFaqFilterFormProps> {
               <Label id="datePublishedToLabel" for="faq-datePublishedTo">
                 Đến ngày
               </Label>
-              <AvInput
+              <AvField
                 id="faq-datePublishedTo"
                 data-cy="datePublished.lessThanOrEqual"
                 type="date"
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
-                value={convertDateFromServer(faqCriteria['datePublished.greaterThanOrEqual'])}
+                value={convertDateFromServer(faqCriteria['datePublished.lessThanOrEqual'])}
+                onChange={() => this.validateDates()}
+                validate={{ myValidation: fromDateSmallerThanToDate_DatePublished }}
               />
             </AvGroup>
           </Col>

@@ -139,12 +139,7 @@ class ChallengeFilterForm extends React.Component<IChallengeFilterFormProps> {
                     type="date"
                     className="form-control"
                     name="dateStart.lessThanOrEqual"
-                    validate={{
-                      min: {
-                        value: challengeCriteria['dateStart.lessThanOrEqual'],
-                        errorMessage: 'Giá trị đến cần lớn hơn giá trị từ',
-                      },
-                    }}
+                    min={challengeCriteria['dateStart.greaterThanOrEqual']}
                     value={convertDateFromServer(challengeCriteria['dateStart.lessThanOrEqual'])}
                   />
                 </AvGroup>

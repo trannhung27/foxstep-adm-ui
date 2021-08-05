@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -19,7 +19,7 @@ class ParticipantsFilterForm extends React.Component<IParticipantsFilterFormProp
 
   handleSubmit = (even, errors, participantsCriteria) => {
     const { handleFilter } = this.props;
-    handleFilter(participantsCriteria);
+    if (errors.length === 0) handleFilter(participantsCriteria);
   };
 
   cancelFilter = (event, fields) => {
