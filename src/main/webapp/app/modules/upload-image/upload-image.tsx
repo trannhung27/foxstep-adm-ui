@@ -78,13 +78,16 @@ export const UploadImageInput = (props: IUploadImage) => {
 
       <AvGroup className="form-group">
         <img style={{ width: '300px', height: '240px' }} src={base64File} />
-        <AvInput
+        <AvField
           type="file"
           accept="image/png, image/gif, image/jpeg"
           name="file"
           className="upload-file"
           id="file"
           onChange={handleChangeImage}
+          validate={{
+            required: { value: true, errorMessage: 'Giá trị bắt buộc' },
+          }}
         />
         <Button color="info" onClick={uploadHandler}>
           Upload!

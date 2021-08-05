@@ -40,9 +40,9 @@ const Routes = () => (
       <ErrorBoundaryRoute path="/login" component={Login} />
       <ErrorBoundaryRoute path="/logout" component={Logout} />
       {/*<ErrorBoundaryRoute path="/register" component={Register} />*/}
-      {/*<ErrorBoundaryRoute path="/activate/:key?" component={Activate} />*/}
-      {/*<ErrorBoundaryRoute path="/reset/request" component={PasswordResetInit} />*/}
-      {/*<ErrorBoundaryRoute path="/reset/finish/:key?" component={PasswordResetFinish} />*/}
+      <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
+      <ErrorBoundaryRoute path="/reset/request" component={PasswordResetInit} />
+      <ErrorBoundaryRoute path="/reset/finish/:key?" component={PasswordResetFinish} />
       <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN.name]} />
       <PrivateRoute path="/" component={Home} exact hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
@@ -56,7 +56,6 @@ const Routes = () => (
       <PrivateRoute path="/challenges" component={Challenge} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <PrivateRoute path="/faqs" component={Faqs} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <PrivateRoute path="/banner" component={Banner} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
-      {/*<PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />*/}
       <ErrorBoundaryRoute path="*" component={PageNotFound} />
     </Switch>
   </div>
