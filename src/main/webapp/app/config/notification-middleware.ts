@@ -84,6 +84,10 @@ export default () => next => action => {
               addErrorAlert('Not found', 'error.url.not.found');
               break;
 
+            case 401:
+              addErrorAlert('Hết phiên đăng nhập');
+              break;
+
             default:
               if (data !== '' && data.detail) {
                 addErrorAlert(data.detail);
@@ -97,7 +101,7 @@ export default () => next => action => {
       } else if (error && error.config && error.config.url === 'api/account' && error.config.method === 'get') {
         /* eslint-disable no-console */
         console.log('Authentication Error: Trying to access url api/account with GET.');
-      } else if (error && error.data.errorDescription) {
+      } else if (error && error.data && error.data.errorDescription) {
         toast.error(error.data.errorDescription);
       } else if (error && error.message) {
         toast.error(error.message);
