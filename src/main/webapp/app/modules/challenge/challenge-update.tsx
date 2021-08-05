@@ -84,6 +84,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     { distance: 0, isDisabled: true },
     { distance: 0, isDisabled: true },
   ]);
+
+  const compare = (a, b) => {
+    return Number(a.orderId) - Number(b.orderId);
+  };
   const [distanceInputCount, setDistanceInputCount] = useState(0);
   const [criteria3Checked, setCriteria3Checked] = useState(false);
 
@@ -186,6 +190,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       challengeEntity.challengeDistance.map((challengeDistance, i) => {
         list[i] = { distance: challengeDistance.distance, isDisabled: false };
       });
+      list.sort(compare);
       setChallengeDistanceList(list);
     }
 
