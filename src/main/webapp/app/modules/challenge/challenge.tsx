@@ -176,7 +176,6 @@ export const Challenge = (props: IChallengeProps) => {
                     Loại thử thách <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand">Người tạo</th>
-                  <th className="hand">Mã thử thách</th>
                   <th className="hand">Trạng thái</th>
                   <th className="hand" onClick={sort('dateStart')}>
                     Ngày bắt đầu <FontAwesomeIcon icon="sort" />
@@ -209,7 +208,6 @@ export const Challenge = (props: IChallengeProps) => {
                       {challenge.challengeType === 1 && <div>Cá nhân</div>}
                     </td>
                     <td>{challenge.userCreated ? challenge.userCreated.name : ''}</td>
-                    <td>{challenge.code}</td>
                     <td>
                       {challenge.status === 0 ? (
                         <Badge color="dark">{ChallengeStatuses[0].name}</Badge>
