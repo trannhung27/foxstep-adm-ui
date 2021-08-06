@@ -1,9 +1,7 @@
 import 'app/config/dayjs.ts';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../../../node_modules/antd/dist/antd.css';
-import '../../../../node_modules/react-datetime/css/react-datetime.css';
 import './app.scss';
-import 'react-datetime/css/react-datetime.css';
 
 import React, { useEffect } from 'react';
 import { Storage } from 'react-jhipster';
@@ -35,10 +33,12 @@ export interface IAppProps extends StateProps, DispatchProps {}
 export const App = (props: IAppProps) => {
   useEffect(() => {
     if (Storage.local.get(AUTH_TOKEN_KEY)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (jwtDecode(Storage.local.get(AUTH_TOKEN_KEY)).exp < Date.now() / 1000) props.logout();
     }
     if (Storage.session.get(AUTH_TOKEN_KEY)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (jwtDecode(Storage.session.get(AUTH_TOKEN_KEY)).exp < Date.now() / 1000) props.logout();
     }
