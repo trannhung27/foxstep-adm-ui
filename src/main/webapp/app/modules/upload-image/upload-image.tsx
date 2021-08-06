@@ -81,6 +81,7 @@ export const UploadImageInput = (props: IUploadImage) => {
         <AvField
           type="file"
           accept="image/png, image/gif, image/jpeg"
+          required
           name="file"
           className="upload-file"
           id="file"

@@ -6,10 +6,16 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 
 import { IUsers, defaultValue } from 'app/shared/model/users.model';
 import { IChallengesOfUser } from 'app/shared/model/challenges-of-user.model';
+import { IWfRequest } from 'app/shared/model/workflow/wf-request.model';
+import { getEntities as getActions } from 'app/modules/workflow/wf-action/wf-action-reducer';
+import { IUserLockRequest } from 'app/shared/model/user-lock-request.model';
 
 export const ACTION_TYPES = {
   FETCH_USERS_LIST: 'users/FETCH_USERS_LIST',
   FETCH_USERS: 'users/FETCH_USERS',
+  CREATE_USERS: 'users/CREATE_CHALLENGE',
+  UPDATE_USERS: 'users/UPDATE_CHALLENGE',
+  PARTIAL_UPDATE_USERS: 'users/PARTIAL_UPDATE_CHALLENGE',
   FETCH_CHALLENGES_OF_USER_LIST: 'users/FETCH_CHALLENGES_OF_USER_LIST',
   RESET: 'users/RESET',
 };
@@ -48,6 +54,15 @@ export default (state: UsersState = initialState, action): UsersState => {
         loading: false,
         entities: action.payload.data,
         totalItems: parseInt(action.payload.headers['xTotalCount'], 10),
+      };
+    case SUCCESS(ACTION_TYPES.CREATE_USERS):
+    case SUCCESS(ACTION_TYPES.UPDATE_USERS):
+    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_USERS):
+      return {
+        ...state,
+        updating: false,
+        updateSuccess: true,
+        entity: action.payload.data,
       };
     case FAILURE(ACTION_TYPES.FETCH_CHALLENGES_OF_USER_LIST):
     case SUCCESS(ACTION_TYPES.FETCH_CHALLENGES_OF_USER_LIST):
@@ -119,6 +134,14 @@ export const getEntity: ICrudGetAction<IUsers> = id => {
     type: ACTION_TYPES.FETCH_USERS,
     payload: axios.get<IUsers>(requestUrl),
   };
+};
+
+export const lockUser: ICrudPutAction<IUserLockRequest> = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.UPDATE_USERS,
+    payload: axios.put(`${apiUrl}/lock/${entity.userId}`, cleanEntity(entity)),
+  });
+  return result;
 };
 
 export const reset = () => ({
