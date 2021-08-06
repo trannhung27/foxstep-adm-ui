@@ -7,12 +7,12 @@ import { WfProcessType, WfProcessGroup, WfActionType } from '../../config/consta
 import { IRootState } from 'app/shared/reducers';
 import { getEntity, lockUser } from './users.reducer';
 
-export interface IUserLockModalProps extends StateProps, DispatchProps {
+export interface IUserUnlockModalProps extends StateProps, DispatchProps {
   showModal: boolean;
   onClose: () => void;
 }
 
-export const UserLockModal = (props: IUserLockModalProps) => {
+export const UserUnlockModal = (props: IUserUnlockModalProps) => {
   const handleClose = () => {
     props.onClose();
   };
@@ -25,23 +25,23 @@ export const UserLockModal = (props: IUserLockModalProps) => {
 
   const { userEntity } = props;
   const [actionMessage, setActionMessage] = useState('');
-  const sendLockUserRequest = () => {
-    const lockRequest = {
-      activity: 1,
+  const sendUnlockUserRequest = () => {
+    const unlockRequest = {
+      activity: 2,
       reason: actionMessage,
       userId: userEntity.id,
     };
-    props.lockUser(lockRequest);
+    props.lockUser(unlockRequest);
   };
 
   return (
     <Modal isOpen={props.showModal} toggle={handleClose}>
-      <ModalHeader toggle={handleClose} data-cy="userLockModalHeading">
-        Khoá khách hàng
+      <ModalHeader toggle={handleClose} data-cy="userUnlockModalHeading">
+        Mở khoá khách hàng
       </ModalHeader>
-      <ModalBody id="foxstep2AdminWebappApp.users.lock.question">
+      <ModalBody id="foxstep2AdminWebappApp.users.unlock.question">
         <Row style={{ marginLeft: '1px' }}>
-          Bạn có chắc muốn khóa khách hàng? Sau khi khóa, khách hàng sẽ không thể truy cập được ứng dụng.
+          Bạn có chắc muốn mở khóa khách hàng? Sau khi mở khóa, khách hàng sẽ được truy cập được ứng dụng.
         </Row>
         <Row style={{ marginLeft: '1px' }}>
           Lý do: <text style={{ color: 'red' }}>*</text>
@@ -58,7 +58,7 @@ export const UserLockModal = (props: IUserLockModalProps) => {
         </Row>
       </ModalBody>
       <ModalFooter>
-        <Button id="jhi-confirm-lock-user" data-cy="entityLockUserButton" color="danger" onClick={sendLockUserRequest}>
+        <Button id="jhi-confirm-lock-user" data-cy="entityLockUserButton" color="danger" onClick={sendUnlockUserRequest}>
           &nbsp; Có
         </Button>
         <Button color="secondary" onClick={handleClose}>
@@ -79,4 +79,4 @@ const mapDispatchToProps = { getEntity, lockUser };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserLockModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UserUnlockModal);

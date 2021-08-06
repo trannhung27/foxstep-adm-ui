@@ -10,6 +10,7 @@ import { APP_LOCAL_DATE_FORMAT, APP_USER_GENDER, APP_USER_STATUS } from 'app/con
 import { PageHeader } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserLockModal } from 'app/modules/users/user-lock-modal';
+import { UserUnlockModal } from 'app/modules/users/user-unlock-modal';
 
 export interface IUsersDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -36,21 +37,46 @@ export const UsersDetail = (props: IUsersDetailProps) => {
         updateSuccess={props.updateSuccess}
       />
 
+      <UserUnlockModal
+        showModal={showUnlockModal}
+        onClose={() => {
+          setShowUnlockModal(false);
+        }}
+        userEntity={props.usersEntity}
+        getEntity={props.getEntity}
+        lockUser={props.lockUser}
+        updateSuccess={props.updateSuccess}
+      />
       <PageHeader
         style={{ padding: '0 0' }}
         className="site-page-header"
         title="Thông tin khách hàng"
         extra={
           <>
-            <Button
-              color="danger"
-              className="m-1"
-              onClick={() => {
-                setShowLockModal(true);
-              }}
-            >
-              Khóa
-            </Button>
+            {usersEntity.status === 1 && (
+              <Button
+                color="danger"
+                className="m-1"
+                onClick={() => {
+                  setShowLockModal(true);
+                }}
+              >
+                Khóa
+              </Button>
+            )}
+
+            {usersEntity.status === -2 && (
+              <Button
+                color="success"
+                className="m-1"
+                onClick={() => {
+                  setShowUnlockModal(true);
+                }}
+              >
+                Mở khóa
+              </Button>
+            )}
+
             <Button tag={Link} to={`/users/${usersEntity.id}/challenges-of-user`} color="info" className="m-1">
               Thử thách của KH
             </Button>
