@@ -415,7 +415,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             data-cy="title"
                             type="text"
                             name="title"
-                            value={challengeEntity ? challengeEntity.title : ''}
+                            value={challengeEntity && !isNew ? challengeEntity.title : ''}
                             validate={{
                               required: { value: true, errorMessage: 'This field is required.' },
                               minLength: {
@@ -618,7 +618,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
-                                  value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
+                                  value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance + 1 : 0,
                                   errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
                                 },
                               }}

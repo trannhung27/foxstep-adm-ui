@@ -78,9 +78,10 @@ export const UploadImageInput = (props: IUploadImage) => {
 
       <AvGroup className="form-group">
         <img style={{ width: '300px', height: '240px' }} src={base64File} />
-        <AvInput
+        <AvField
           type="file"
           accept="image/png, image/gif, image/jpeg"
+          required
           name="file"
           className="upload-file"
           id="file"
