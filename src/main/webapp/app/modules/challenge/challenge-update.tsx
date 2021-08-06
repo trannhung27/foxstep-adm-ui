@@ -618,7 +618,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
-                                  value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance + 1 : 0,
+                                  value: challengeDistanceList[i - 1] ? Number(challengeDistanceList[i - 1].distance) + 1 : 0,
                                   errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
                                 },
                               }}
