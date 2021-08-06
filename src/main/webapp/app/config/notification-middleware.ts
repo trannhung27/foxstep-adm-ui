@@ -76,7 +76,7 @@ export default () => next => action => {
               } else if (data !== '' && data.message) {
                 addErrorAlert(data.message, data.message, data.params);
               } else {
-                addErrorAlert(data);
+                addErrorAlert('Dữ liệu không hợp lệ ', data);
               }
               break;
             }

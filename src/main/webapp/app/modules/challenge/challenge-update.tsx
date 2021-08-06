@@ -398,6 +398,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           initImage={isNew ? null : challengeEntity.imgUrl}
                           label="Ảnh đại diện TT: "
                           reset={props.resetUploadImage}
+                          required={isNew ? true : !challengeEntity.imgUrl}
                         />
                         <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
                         {/*add feedback for not upload image*/}

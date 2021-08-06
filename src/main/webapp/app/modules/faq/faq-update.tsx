@@ -65,8 +65,6 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.dateCreated = convertDateTimeToServer(values.dateCreated);
-    values.dateUpdated = convertDateTimeToServer(values.dateUpdated);
     values.datePublished = convertDateTimeToServer(values.datePublished);
 
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
@@ -115,8 +113,19 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     label="Ảnh:"
                     reset={props.resetUploadImage}
                     initImage={isNew ? null : faqEntity.imgUrl}
+                    required={isNew ? true : !faqEntity.imgUrl}
                   />
-                  <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
+                  <AvField
+                    hidden
+                    id="news-imgUrl"
+                    data-cy="imgUrl"
+                    type="text"
+                    name="imgUrl"
+                    value={props.uploadImageEntity.url}
+                    validate={{
+                      required: { value: true, errorMessage: 'Chưa upload ảnh' },
+                    }}
+                  />
                 </Col>
                 <Col>
                   <AvGroup>
@@ -250,6 +259,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                       className="form-control"
                       name="datePublished"
                       onKeyDown={e => e.preventDefault()}
+                      disabled={!isNew && new Date() > new Date(props.faqEntity.datePublished)}
                       value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.faqEntity.datePublished)}
                       validate={{
                         required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
