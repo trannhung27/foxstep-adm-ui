@@ -86,6 +86,9 @@ export const UploadImageInput = (props: IUploadImage) => {
           className="upload-file"
           id="file"
           onChange={handleChangeImage}
+          validate={{
+            required: { value: true, errorMessage: 'Giá trị bắt buộc' },
+          }}
         />
         <Button color="info" onClick={uploadHandler}>
           Upload!
