@@ -920,6 +920,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               className="form-control"
                               name="numOfParticipant"
                               validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage: 'Không được bỏ trống thông tin này',
+                                },
                                 max: {
                                   value: 100,
                                   errorMessage:
