@@ -3,8 +3,8 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { Button, Col, FormGroup, Input, InputGroup, Label, Row } from 'reactstrap';
+import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -21,8 +21,6 @@ import { uploadImage } from 'app/modules/upload-image/upload-image-reducer';
 import { PageHeader } from 'antd';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { UploadImageInput } from 'app/modules/upload-image/upload-image';
-import axios from 'axios';
-import { cleanEntity } from 'app/shared/util/entity-utils';
 import { uploadImageCallBack } from 'app/shared/util/editor-utils';
 
 export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -69,8 +67,6 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.dateCreated = convertDateTimeToServer(values.dateCreated);
-    values.dateUpdated = convertDateTimeToServer(values.dateUpdated);
     values.datePublished = convertDateTimeToServer(values.datePublished);
 
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
@@ -103,7 +99,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
               {!isNew ? (
                 <AvGroup hidden>
                   <Label for="news-id">ID</Label>
-                  <AvInput id="news-id" type="text" className="form-control" name="id" required readOnly />
+                  <AvField id="news-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <Row className="justify-content-between">
@@ -115,15 +111,35 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     label="Ảnh:"
                     initImage={isNew ? null : newsEntity.imgUrl}
                     reset={props.resetUploadImage}
+                    required={isNew ? true : !newsEntity.imgUrl}
                   />
-                  <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
+                  <AvField
+                    hidden
+                    id="news-imgUrl"
+                    data-cy="imgUrl"
+                    type="text"
+                    name="imgUrl"
+                    value={props.uploadImageEntity.url}
+                    validate={{
+                      required: { value: true, errorMessage: 'Chưa upload ảnh' },
+                    }}
+                  />
                 </Col>
                 <Col>
                   <AvGroup>
                     <Label id="statusLabel" for="news-status">
                       Trạng thái:
                     </Label>
-                    <AvInput id="news-status" data-cy="status" type="select" className="form-control" name="status">
+                    <AvField
+                      id="news-status"
+                      data-cy="status"
+                      type="select"
+                      className="form-control"
+                      name="status"
+                      validate={{
+                        required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                      }}
+                    >
                       <option value="" key="0">
                         --Chọn trạng thái--
                       </option>
@@ -133,7 +149,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                       <option value={NEWS_STATUSES[1].id} key="2">
                         {NEWS_STATUSES[1].name}
                       </option>
-                    </AvInput>
+                    </AvField>
                   </AvGroup>
                 </Col>
               </Row>
@@ -148,7 +164,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   name="title"
                   placeholder="Aa"
                   validate={{
-                    required: { value: true, errorMessage: 'Không được để trống.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                     maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
                   }}
                 />
@@ -164,7 +180,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   name="description"
                   placeholder="Aa"
                   validate={{
-                    required: { value: true, errorMessage: 'Không được để trống.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                     maxLength: { value: 1000, errorMessage: 'Tối đa 1000 ký tự.' },
                   }}
                 />
@@ -203,11 +219,11 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     },
                   }}
                 />
-                {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
+                {editorChanged && editorError && <p className="invalid-feedback">Giá trị bắt buộc.</p>}
               </AvGroup>
               <AvGroup hidden>
                 <Label for="post-user">Người tạo:</Label>
-                <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
+                <AvField id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
                   {users
                     ? users.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
@@ -215,11 +231,11 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                         </option>
                       ))
                     : null}
-                </AvInput>
+                </AvField>
               </AvGroup>
               <AvGroup hidden>
                 <Label for="news-newsCategory">Phân loại:</Label>
-                <AvInput
+                <AvField
                   id="news-newsCategory"
                   data-cy="newsCategory"
                   type="select"
@@ -230,7 +246,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   <option value={NEWS_CATEGORY_TYPES.NEWS.id} key="1">
                     {NEWS_CATEGORY_TYPES.NEWS.name}
                   </option>
-                </AvInput>
+                </AvField>
               </AvGroup>
               <Row className="justify-content-between">
                 <Col sm="6">
@@ -238,16 +254,17 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     <Label id="datePublishedLabel" for="news-datePublished">
                       Thời gian đăng bài:
                     </Label>
-                    <AvInput
+                    <AvField
                       id="news-datePublished"
                       data-cy="datePublished"
                       type="datetime-local"
                       className="form-control"
                       name="datePublished"
                       onKeyDown={e => e.preventDefault()}
+                      disabled={!isNew && new Date() > new Date(props.newsEntity.datePublished)}
                       value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.newsEntity.datePublished)}
                       validate={{
-                        required: { value: true, errorMessage: 'Không được để trống.' },
+                        required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                       }}
                     />
                   </AvGroup>

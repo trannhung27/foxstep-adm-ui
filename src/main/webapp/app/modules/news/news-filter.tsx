@@ -1,10 +1,11 @@
 import React from 'react';
-import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvField } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
-import { convertDateFromServer, convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateFromServer } from 'app/shared/util/date-utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NEWS_STATUSES } from 'app/config/constants';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { fromDateSmallerThanToDate_DatePublished } from 'app/shared/util/form-validate-utils';
 
 export interface INewsFilterFormProps {
   newsCriteria: Record<string, unknown>;
@@ -25,6 +26,11 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
     handleFilter(newsCriteria);
   };
 
+  validateDates = () => {
+    this.form.validateInput('datePublished.greaterThanOrEqual');
+    this.form.validateInput('datePublished.lessThanOrEqual');
+  };
+
   cancelFilter = (event, fields) => {
     this.props.clear();
     this.form && this.form.reset();
@@ -41,7 +47,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="titleLabel" for="news-title">
                 Tiêu đề
               </Label>
-              <AvInput
+              <AvField
                 id="news-title"
                 type="text"
                 name="title.contains"
@@ -58,7 +64,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="statusLabel" for="news-status">
                 Trạng thái
               </Label>
-              <AvInput
+              <AvField
                 id="news-status"
                 data-cy="status"
                 type="select"
@@ -75,7 +81,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 <option value={NEWS_STATUSES[1].id} key="2">
                   {NEWS_STATUSES[1].name}
                 </option>
-              </AvInput>
+              </AvField>
             </AvGroup>
           </Col>
           <Col xs="12" sm="6">
@@ -83,13 +89,15 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="datePublishedFromLabel" for="news-datePublishedFrom">
                 Từ ngày
               </Label>
-              <AvInput
+              <AvField
                 id="news-datePublishedFrom"
                 data-cy="datePublished.greaterThanOrEqual"
                 type="date"
                 className="form-control"
                 name="datePublished.greaterThanOrEqual"
                 value={convertDateFromServer(newsCriteria['datePublished.greaterThanOrEqual'])}
+                onChange={() => this.validateDates()}
+                validate={{ myValidation: fromDateSmallerThanToDate_DatePublished }}
               />
             </AvGroup>
           </Col>
@@ -98,17 +106,20 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
               <Label id="datePublishedToLabel" for="news-datePublishedTo">
                 Đến ngày
               </Label>
-              <AvInput
+              <AvField
                 id="news-datePublishedTo"
                 data-cy="datePublished.lessThanOrEqual"
                 type="date"
                 className="form-control"
                 name="datePublished.lessThanOrEqual"
                 value={convertDateFromServer(newsCriteria['datePublished.lessThanOrEqual'])}
+                onChange={() => this.validateDates()}
+                validate={{ myValidation: fromDateSmallerThanToDate_DatePublished }}
               />
             </AvGroup>
           </Col>
         </Row>
+        <div></div>
         <Row>
           <Col sm={2}>
             <Button color="primary" id="filter-button" data-cy="entityFilterButton" type="submit" disabled={updating} block>

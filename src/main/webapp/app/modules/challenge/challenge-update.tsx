@@ -71,6 +71,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [teamAllow, setTeamAllow] = useState(false);
   const changeTeamAllow = () => setTeamAllow(!teamAllow);
 
+  const [dateStart, setDateStart] = useState('');
+  const [dateFinish, setDateFinish] = useState('');
+  const [dateRegisDeadline, setDateRegisDeadline] = useState('');
+
   const [teamList, setTeamList] = useState([{ name: '' }]);
   const { state } = props.location;
   const [challengeDistanceList, setChallengeDistanceList] = useState([
@@ -80,6 +84,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     { distance: 0, isDisabled: true },
     { distance: 0, isDisabled: true },
   ]);
+
+  const compare = (a, b) => {
+    return Number(a.orderId) - Number(b.orderId);
+  };
   const [distanceInputCount, setDistanceInputCount] = useState(0);
   const [criteria3Checked, setCriteria3Checked] = useState(false);
 
@@ -148,7 +156,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   };
 
   const handleClose = () => {
-    props.history.push('entity/challenge' + props.location.search);
+    props.history.goBack();
   };
 
   useEffect(() => {
@@ -182,6 +190,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       challengeEntity.challengeDistance.map((challengeDistance, i) => {
         list[i] = { distance: challengeDistance.distance, isDisabled: false };
       });
+      list.sort(compare);
       setChallengeDistanceList(list);
     }
 
@@ -209,7 +218,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       });
     }
 
-    if (challengeEntity.teams && !isNew) {
+    if (challengeEntity.teams && challengeEntity.teams.length > 0 && !isNew) {
       setTeamAllow(true);
       const list = [{ name: '' }];
       challengeEntity.teams.map((team, index) => {
@@ -389,6 +398,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           initImage={isNew ? null : challengeEntity.imgUrl}
                           label="Ảnh đại diện TT: "
                           reset={props.resetUploadImage}
+                          required={isNew ? true : !challengeEntity.imgUrl}
                         />
                         <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
                         {/*add feedback for not upload image*/}
@@ -406,7 +416,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             data-cy="title"
                             type="text"
                             name="title"
-                            value={challengeEntity ? challengeEntity.title : ''}
+                            value={challengeEntity && !isNew ? challengeEntity.title : ''}
                             validate={{
                               required: { value: true, errorMessage: 'This field is required.' },
                               minLength: {
@@ -444,6 +454,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             name="dateStart"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={isNew ? displayDefaultTimeStamp() : convertDateTimeFromServer(props.challengeEntity.dateStart)}
+                            onChange={event => {
+                              setDateStart(event.target.value);
+                            }}
                             validate={{
                               required: { value: true, errorMessage: 'This field is required.' },
                             }}
@@ -459,14 +472,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             id="challenge-dateFinish"
                             data-cy="dateFinish"
                             type="datetime-local"
+                            placeholder={'YYYY-MM-DD HH:mm'}
                             className="form-control"
                             name="dateFinish"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={isNew ? displayDefaultTimeStamp() : convertDateTimeFromServer(props.challengeEntity.dateFinish)}
-                            validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
+                            onChange={event => {
+                              setDateFinish(event.target.value);
                             }}
+                            value={isNew ? displayDefaultTimeStamp() : convertDateTimeFromServer(props.challengeEntity.dateFinish)}
                           />
+                          {convertDateTimeFromServer(dateFinish) < convertDateTimeFromServer(dateStart) && (
+                            <p className="invalid-feedback">Giá trị đến phải lớn hơn giá trị từ</p>
+                          )}
                         </AvGroup>
                       </Col>
                       <Col xs="12" sm="4">
@@ -482,10 +498,16 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             name="dateRegisDeadline"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={isNew ? displayDefaultTimeStamp() : convertDateTimeFromServer(props.challengeEntity.dateRegisDeadline)}
+                            onChange={event => {
+                              setDateRegisDeadline(event.target.value);
+                            }}
                             validate={{
                               required: { value: true, errorMessage: 'This field is required.' },
                             }}
                           />
+                          {convertDateTimeFromServer(dateFinish) < convertDateTimeFromServer(dateRegisDeadline) && (
+                            <p className="invalid-feedback">Hạn đăng kí phải nhỏ hơn ngày kết thúc</p>
+                          )}
                         </AvGroup>
                       </Col>
                     </Row>
@@ -530,7 +552,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Row className="justify-content-left">
                       <Col xs="12" sm="6">
                         <AvGroup>
-                          <AvField id="challenge_sport" type="select" name="sport.name" label="Bộ môn">
+                          <AvField
+                            id="challenge_sport"
+                            type="select"
+                            name="sport.name"
+                            label="Bộ môn"
+                            // disabled = {!isNew && ([1,12].includes(challengeEntity.status)) }
+                          >
                             <option>Chạy bộ</option>
                           </AvField>
                           <AvField hidden name="sport.id" type="text" value="1"></AvField>
@@ -541,6 +569,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <AvRadioGroup
                       name="calType"
                       label="Cách tính thành tích"
+                      // disabled = {!isNew && ([1,12].includes(challengeEntity.status)) }
                       onChange={event => {
                         setCalValue(Number(event.target.value));
                         if (Number(event.target.value) === 1 && !isNew) {
@@ -582,6 +611,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               onChange={e => {
                                 handleChallengeDistance(e, i);
                               }}
+                              // disabled = {!isNew && ([1,12].includes(challengeEntity.status)) }
                               value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
                               validate={{
                                 required: {
@@ -589,7 +619,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
-                                  value: challengeDistanceList[i - 1] ? challengeDistanceList[i - 1].distance : 0,
+                                  value: challengeDistanceList[i - 1] ? Number(challengeDistanceList[i - 1].distance) + 1 : 0,
                                   errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
                                 },
                               }}
@@ -891,6 +921,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               className="form-control"
                               name="numOfParticipant"
                               validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage: 'Không được bỏ trống thông tin này',
+                                },
                                 max: {
                                   value: 100,
                                   errorMessage:

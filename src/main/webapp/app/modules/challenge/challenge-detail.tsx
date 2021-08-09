@@ -36,13 +36,29 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [challengeDistance, setChallengeDistance] = useState([]);
 
   const { challengeEntity } = props;
   const history = useHistory();
+
+  const compare = (a, b) => {
+    return Number(a.orderId) - Number(b.orderId);
+  };
+
+  useEffect(() => {
+    if (challengeEntity.challengeDistance) {
+      const list = [];
+      challengeEntity.challengeDistance.map((distance, index) => {
+        list[index] = { value: distance.distance, orderId: distance.orderId };
+      });
+      list.sort(compare);
+      setChallengeDistance(list);
+    }
+  }, [props.challengeEntity]);
   return (
     <Row>
       <Col md="12">
-        {challengeEntity.status !== ChallengeStatuses[2].id ? (
+        {challengeEntity.status === ChallengeStatuses[0].id ? (
           <>
             <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
               <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
@@ -211,7 +227,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           <Row>
             <Col xs="12" sm="6">
               <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateStart">
                   Thời gian bắt đầu: &nbsp; &nbsp;
                 </Label>
                 <div>
@@ -222,11 +238,24 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
 
             <Col xs="12" sm="6">
               <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateFinish">
                   Thời gian kết thúc: &nbsp; &nbsp;
                 </Label>
                 <div>
                   <TextFormat type="date" value={challengeEntity.dateFinish} format={APP_TIMESTAMP_FORMAT} />
+                </div>
+              </AvGroup>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs="12" sm="6">
+              <AvGroup className="form-group form-inline">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateRegisDeadline">
+                  Hạn đăng kí: &nbsp; &nbsp;
+                </Label>
+                <div>
+                  <TextFormat type="date" value={challengeEntity.dateRegisDeadline} format={APP_TIMESTAMP_FORMAT} />
                 </div>
               </AvGroup>
             </Col>
@@ -268,18 +297,16 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km){' '}
           </text>
 
-          {challengeEntity.challengeDistance
-            ? challengeEntity.challengeDistance.map((challengeDistance, i) => (
-                <Col xs="12" sm="6" key={i}>
-                  <AvGroup className="form-group form-inline">
-                    <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
-                      Hạng mục {i + 1}: &nbsp; &nbsp;
-                    </Label>
-                    <div className="content">{challengeDistance.distance / 1000}</div>
-                  </AvGroup>
-                </Col>
-              ))
-            : null}
+          {challengeDistance.map((distance, i) => (
+            <Col xs="12" sm="6" key={i}>
+              <AvGroup className="form-group form-inline">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
+                  Hạng mục {i + 1}: &nbsp; &nbsp;
+                </Label>
+                <div className="content">{distance.value / 1000}</div>
+              </AvGroup>
+            </Col>
+          ))}
 
           <Row></Row>
           <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ:</text>
@@ -424,6 +451,8 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               <AvRadio label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia" value={Number('2')} />
             </AvRadioGroup>
           </AvGroup>
+
+          {challengeEntity.objectType === 2 ? <div className="content">{challengeEntity.code}</div> : null}
 
           <input type="checkbox" checked={challengeEntity.teams ? challengeEntity.teams.length > 0 : false} className="mr-2" />
           <Label>Thi đấu theo nhóm</Label>

@@ -5,8 +5,6 @@ import { convertDateFromServer, convertDateTimeFromServer } from 'app/shared/uti
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChallengeStatuses, NEWS_STATUSES } from 'app/config/constants';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
-import DateTime from 'react-datetime';
-import moment from 'moment';
 
 export interface IChallengeFilterFormProps {
   challengeCriteria: Record<string, unknown>;
@@ -139,12 +137,7 @@ class ChallengeFilterForm extends React.Component<IChallengeFilterFormProps> {
                     type="date"
                     className="form-control"
                     name="dateStart.lessThanOrEqual"
-                    validate={{
-                      min: {
-                        value: challengeCriteria['dateStart.lessThanOrEqual'],
-                        errorMessage: 'Giá trị đến cần lớn hơn giá trị từ',
-                      },
-                    }}
+                    min={challengeCriteria['dateStart.greaterThanOrEqual']}
                     value={convertDateFromServer(challengeCriteria['dateStart.lessThanOrEqual'])}
                   />
                 </AvGroup>

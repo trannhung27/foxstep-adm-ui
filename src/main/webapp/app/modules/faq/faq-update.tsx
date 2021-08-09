@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Label, Row } from 'reactstrap';
-import { AvFeedback, AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvFeedback, AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { NEWS_CATEGORY_TYPES, NEWS_STATUSES } from 'app/config/constants';
@@ -65,8 +65,6 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.dateCreated = convertDateTimeToServer(values.dateCreated);
-    values.dateUpdated = convertDateTimeToServer(values.dateUpdated);
     values.datePublished = convertDateTimeToServer(values.datePublished);
 
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
@@ -103,7 +101,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
               {!isNew ? (
                 <AvGroup hidden>
                   <Label for="faqs-id">ID</Label>
-                  <AvInput id="faqs-id" type="text" className="form-control" name="id" required readOnly />
+                  <AvField id="faqs-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <Row className="justify-content-between">
@@ -115,15 +113,35 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     label="Ảnh:"
                     reset={props.resetUploadImage}
                     initImage={isNew ? null : faqEntity.imgUrl}
+                    required={isNew ? true : !faqEntity.imgUrl}
                   />
-                  <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
+                  <AvField
+                    hidden
+                    id="news-imgUrl"
+                    data-cy="imgUrl"
+                    type="text"
+                    name="imgUrl"
+                    value={props.uploadImageEntity.url}
+                    validate={{
+                      required: { value: true, errorMessage: 'Chưa upload ảnh' },
+                    }}
+                  />
                 </Col>
                 <Col>
                   <AvGroup>
                     <Label id="statusLabel" for="faq-status">
                       Trạng thái:
                     </Label>
-                    <AvInput id="faq-status" data-cy="status" type="select" className="form-control" name="status">
+                    <AvField
+                      id="faq-status"
+                      data-cy="status"
+                      type="select"
+                      className="form-control"
+                      name="status"
+                      validate={{
+                        required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                      }}
+                    >
                       <option value="" key="0">
                         --Chọn trạng thái--
                       </option>
@@ -133,7 +151,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                       <option value={NEWS_STATUSES[1].id} key="2">
                         {NEWS_STATUSES[1].name}
                       </option>
-                    </AvInput>
+                    </AvField>
                   </AvGroup>
                 </Col>
               </Row>
@@ -148,14 +166,14 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                   name="title"
                   placeholder="Aa"
                   validate={{
-                    required: { value: true, errorMessage: 'Không được để trống.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                     maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
                   }}
                 />
               </AvGroup>
               <AvGroup>
                 <Label for="news-newsCategory">Loại</Label>
-                <AvInput
+                <AvField
                   id="news-newsCategory"
                   data-cy="newsCategory"
                   type="select"
@@ -177,8 +195,8 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                           )
                       )
                     : null}
-                </AvInput>
-                <AvFeedback>Không được để trống.</AvFeedback>
+                </AvField>
+                <AvFeedback>Giá trị bắt buộc.</AvFeedback>
               </AvGroup>
               <AvGroup>
                 <Label id="contentLabel" for="faq-content">
@@ -214,11 +232,11 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     },
                   }}
                 />
-                {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
+                {editorChanged && editorError && <p className="invalid-feedback">Giá trị bắt buộc.</p>}
               </AvGroup>
               <AvGroup hidden>
                 <Label for="post-user">Người tạo:</Label>
-                <AvInput id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
+                <AvField id="post-user" data-cy="user" type="select" className="form-control" name="userId" value={adminUser.id}>
                   {users
                     ? users.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
@@ -226,7 +244,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                         </option>
                       ))
                     : null}
-                </AvInput>
+                </AvField>
               </AvGroup>
               <Row className="justify-content-between">
                 <Col sm="6">
@@ -234,16 +252,17 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     <Label id="datePublishedLabel" for="faq-datePublished">
                       Thời gian đăng bài:
                     </Label>
-                    <AvInput
+                    <AvField
                       id="faq-datePublished"
                       data-cy="datePublished"
                       type="datetime-local"
                       className="form-control"
                       name="datePublished"
                       onKeyDown={e => e.preventDefault()}
+                      disabled={!isNew && new Date() > new Date(props.faqEntity.datePublished)}
                       value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.faqEntity.datePublished)}
                       validate={{
-                        required: { value: true, errorMessage: 'Không được để trống.' },
+                        required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                       }}
                     />
                   </AvGroup>

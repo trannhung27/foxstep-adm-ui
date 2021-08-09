@@ -1,7 +1,7 @@
 import React from 'react';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
-import { APP_USER_STATUS, NEWS_STATUSES, USER_STATUS } from 'app/config/constants';
+import { APP_USER_STATUS } from 'app/config/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface INewsFilterFormProps {
@@ -20,7 +20,7 @@ class UsersFilterForm extends React.Component<INewsFilterFormProps> {
 
   handleSubmit = (even, errors, usersCriteria) => {
     const { handleFilter } = this.props;
-    handleFilter(usersCriteria);
+    if (errors.length === 0) handleFilter(usersCriteria);
   };
 
   cancelFilter = (event, fields) => {

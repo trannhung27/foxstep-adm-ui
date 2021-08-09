@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { Button, Col, Label, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChallengeStatuses, ChallengeTypes, ChallengeUserStatuses } from 'app/config/constants';
@@ -8,6 +8,7 @@ import { getEntities as getSportList } from 'app/modules/sport/sport.reducer';
 import { connect } from 'react-redux';
 import { ISport } from 'app/shared/model/sport.model';
 import { convertDateFromServer } from 'app/shared/util/date-utils';
+import { fromDateSmallerThanToDate } from 'app/shared/util/form-validate-utils';
 
 export interface ICOUTFilterFormProps {
   couCriteria: Record<string, unknown>;
@@ -26,7 +27,12 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
 
   handleSubmit = (even, errors, couCriteria) => {
     const { handleFilter } = this.props;
-    handleFilter(couCriteria);
+    if (errors.length === 0) handleFilter(couCriteria);
+  };
+
+  validateDates = () => {
+    this.form.validateInput('fromDate');
+    this.form.validateInput('toDate');
   };
 
   cancelFilter = (event, fields) => {
@@ -92,13 +98,15 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
               <Label id="fromDateLabel" for="fromDate">
                 Từ ngày
               </Label>
-              <AvInput
+              <AvField
                 id="fromDate"
                 data-cy="fromDate"
                 type="date"
                 className="form-control"
                 name="fromDate"
                 value={convertDateFromServer(couCriteria['fromDate'])}
+                onChange={() => this.validateDates()}
+                validate={{ myValidation: fromDateSmallerThanToDate }}
               />
             </AvGroup>
           </Col>
@@ -107,13 +115,15 @@ class ChallengesOfUserFilterForm extends React.Component<ICOUTFilterFormProps> {
               <Label id="toDateLabel" for="toDate">
                 Từ ngày
               </Label>
-              <AvInput
+              <AvField
                 id="toDate"
                 data-cy="toDate"
                 type="date"
                 className="form-control"
                 name="toDate"
                 value={convertDateFromServer(couCriteria['toDate'])}
+                onChange={() => this.validateDates()}
+                validate={{ myValidation: fromDateSmallerThanToDate }}
               />
             </AvGroup>
           </Col>

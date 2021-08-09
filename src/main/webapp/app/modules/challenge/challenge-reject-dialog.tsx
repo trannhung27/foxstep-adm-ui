@@ -54,6 +54,7 @@ export const ChallengeRejectDialog = (props: IChallengeRejectDialogProps) => {
           <input
             style={{ width: '500px', height: '180px', margin: '10px' }}
             type="string"
+            required
             onChange={event => {
               setActionMessage(event.target.value);
             }}

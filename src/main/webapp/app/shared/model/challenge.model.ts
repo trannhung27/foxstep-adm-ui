@@ -29,6 +29,7 @@ export interface IChallenge {
   organizationName?: string | null;
   userCreated?: IUserCreated | null;
   gps?: number | null;
+  code?: string | null;
 }
 
 export const defaultValue: Readonly<IChallenge> = {};

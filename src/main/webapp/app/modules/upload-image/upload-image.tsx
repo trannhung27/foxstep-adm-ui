@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export interface IUploadImage extends StateProps, DispatchProps {
   label: string;
   initImage: string;
+  required: boolean;
 }
 
 export const UploadImageInput = (props: IUploadImage) => {
@@ -78,13 +79,17 @@ export const UploadImageInput = (props: IUploadImage) => {
 
       <AvGroup className="form-group">
         <img style={{ width: '300px', height: '240px' }} src={base64File} />
-        <AvInput
+        <AvField
           type="file"
           accept="image/png, image/gif, image/jpeg"
+          required
           name="file"
           className="upload-file"
-          id="file"
+          id="uploadFile"
           onChange={handleChangeImage}
+          validate={{
+            required: { value: props.required, errorMessage: 'Giá trị bắt buộc' },
+          }}
         />
         <Button color="info" onClick={uploadHandler}>
           Upload!
