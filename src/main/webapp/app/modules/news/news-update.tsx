@@ -2,8 +2,8 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, FormGroup, Input, InputGroup, Label, Row } from 'reactstrap';
+import { RouteComponentProps } from 'react-router-dom';
+import { Button, Col, FormGroup, Label, Row } from 'reactstrap';
 import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
@@ -31,6 +31,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [editorChanged, setEditorChanged] = useState(false);
   const [editorError, setEditorErrorState] = useState(false);
+  const [datePublishedState, setDatePublishedState] = useState(displayDefaultDateTime());
 
   const onEditorStateChange = editor => {
     setEditorChanged(true);
@@ -58,6 +59,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   useEffect(() => {
     if (newsEntity.content && !isNew)
       setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(newsEntity.content))));
+    if (newsEntity.datePublished && !isNew) setDatePublishedState(convertDateTimeFromServer(props.newsEntity.datePublished));
   }, [newsEntity]);
 
   useEffect(() => {
@@ -67,7 +69,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.datePublished = convertDateTimeToServer(values.datePublished);
+    values.datePublished = convertDateTimeToServer(datePublishedState);
 
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     if (errors.length === 0) {
@@ -140,9 +142,6 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                         required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                       }}
                     >
-                      <option value="" key="0">
-                        --Chọn trạng thái--
-                      </option>
                       <option value={NEWS_STATUSES[0].id} key="1">
                         {NEWS_STATUSES[0].name}
                       </option>
@@ -250,24 +249,23 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
               </AvGroup>
               <Row className="justify-content-between">
                 <Col sm="6">
-                  <AvGroup>
+                  <FormGroup>
                     <Label id="datePublishedLabel" for="news-datePublished">
                       Thời gian đăng bài:
                     </Label>
-                    <AvField
+                    <input
                       id="news-datePublished"
                       data-cy="datePublished"
                       type="datetime-local"
                       className="form-control"
                       name="datePublished"
                       onKeyDown={e => e.preventDefault()}
+                      min={displayDefaultDateTime()}
                       disabled={!isNew && new Date() > new Date(props.newsEntity.datePublished)}
-                      value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.newsEntity.datePublished)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
-                      }}
+                      value={datePublishedState}
+                      onChange={e => setDatePublishedState(e.target.value)}
                     />
-                  </AvGroup>
+                  </FormGroup>
                 </Col>
                 <Col sm="3">
                   <Label for="save-entity">&nbsp;</Label>
