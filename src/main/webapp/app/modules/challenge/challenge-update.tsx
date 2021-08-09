@@ -128,7 +128,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const handleChallengeDistance = (e, i) => {
     const list = [...challengeDistanceList];
     list[i] = { distance: e.target.value, isDisabled: false };
-    if (i < 4) list[i + 1] = { distance: 0, isDisabled: false };
+    if (i < 4) list[i + 1] = { distance: challengeDistanceList[i + 1].distance, isDisabled: false };
     setChallengeDistanceList(list);
   };
   const handleInputChange = (e, index) => {
@@ -612,7 +612,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                 handleChallengeDistance(e, i);
                               }}
                               // disabled = {!isNew && ([1,12].includes(challengeEntity.status)) }
-                              value={challengeDistanceList[i] ? challengeDistanceList[i].distance : 0}
+                              value={challengeDistanceList[i].distance}
                               validate={{
                                 required: {
                                   value: i === 0,
