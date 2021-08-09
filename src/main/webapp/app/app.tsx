@@ -1,14 +1,14 @@
 import 'app/config/dayjs.ts';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../../../node_modules/antd/dist/antd.css';
-import '../../../../node_modules/react-datetime/css/react-datetime.css';
 import './app.scss';
-import 'react-datetime/css/react-datetime.css';
 
 import React, { useEffect } from 'react';
+import { Storage } from 'react-jhipster';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { getSession } from 'app/shared/reducers/authentication';
+import { getSession, logout } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
+import jwtDecode from 'jwt-decode';
 
 import { Layout } from 'antd';
 import LayoutHeader from 'app/shared/layout/header/header';
@@ -27,10 +27,21 @@ import LoadingBar from 'react-redux-loading-bar';
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 const { Content } = Layout;
 
-export interface IAppProps extends StateProps, DispatchProps {}
+const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 
+export interface IAppProps extends StateProps, DispatchProps {}
 export const App = (props: IAppProps) => {
   useEffect(() => {
+    if (Storage.local.get(AUTH_TOKEN_KEY)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (jwtDecode(Storage.local.get(AUTH_TOKEN_KEY)).exp < Date.now() / 1000) props.logout();
+    }
+    if (Storage.session.get(AUTH_TOKEN_KEY)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (jwtDecode(Storage.session.get(AUTH_TOKEN_KEY)).exp < Date.now() / 1000) props.logout();
+    }
     props.getSession();
     props.getProfile();
   }, []);
@@ -78,7 +89,7 @@ const mapStateToProps = ({ authentication, applicationProfile }: IRootState) => 
   isOpenAPIEnabled: applicationProfile.isOpenAPIEnabled,
 });
 
-const mapDispatchToProps = { getSession, getProfile };
+const mapDispatchToProps = { getSession, getProfile, logout };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

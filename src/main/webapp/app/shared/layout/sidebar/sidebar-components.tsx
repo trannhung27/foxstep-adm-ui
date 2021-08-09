@@ -19,7 +19,7 @@ export const Brand = props => (
     </Col>
     {props.expanded && (
       <Col span={18} className="text-left">
-        <span className="brand-title">Foxsteps Admin</span>
+        <span className="brand-title">FoxSteps Admin</span>
         <span className="navbar-version">{appConfig.VERSION}</span>
       </Col>
     )}

@@ -3,7 +3,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, FormGroup, Input, InputGroup, Label, Row } from 'reactstrap';
 import { AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
@@ -21,8 +21,6 @@ import { uploadImage } from 'app/modules/upload-image/upload-image-reducer';
 import { PageHeader } from 'antd';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { UploadImageInput } from 'app/modules/upload-image/upload-image';
-import axios from 'axios';
-import { cleanEntity } from 'app/shared/util/entity-utils';
 import { uploadImageCallBack } from 'app/shared/util/editor-utils';
 
 export interface INewsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -69,8 +67,6 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.dateCreated = convertDateTimeToServer(values.dateCreated);
-    values.dateUpdated = convertDateTimeToServer(values.dateUpdated);
     values.datePublished = convertDateTimeToServer(values.datePublished);
 
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
@@ -115,8 +111,19 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     label="Ảnh:"
                     initImage={isNew ? null : newsEntity.imgUrl}
                     reset={props.resetUploadImage}
+                    required={isNew ? true : !newsEntity.imgUrl}
                   />
-                  <AvField hidden id="news-imgUrl" data-cy="imgUrl" type="text" name="imgUrl" value={props.uploadImageEntity.url} />
+                  <AvField
+                    hidden
+                    id="news-imgUrl"
+                    data-cy="imgUrl"
+                    type="text"
+                    name="imgUrl"
+                    value={props.uploadImageEntity.url}
+                    validate={{
+                      required: { value: true, errorMessage: 'Chưa upload ảnh' },
+                    }}
+                  />
                 </Col>
                 <Col>
                   <AvGroup>
@@ -254,6 +261,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                       className="form-control"
                       name="datePublished"
                       onKeyDown={e => e.preventDefault()}
+                      disabled={!isNew && new Date() > new Date(props.newsEntity.datePublished)}
                       value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.newsEntity.datePublished)}
                       validate={{
                         required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
