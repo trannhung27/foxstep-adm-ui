@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Label, Row } from 'reactstrap';
+import { Button, Col, FormGroup, Label, Row } from 'reactstrap';
 import { AvFeedback, AvField, AvForm, AvGroup } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -29,6 +29,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [editorChanged, setEditorChanged] = useState(false);
   const [editorError, setEditorErrorState] = useState(false);
+  const [datePublishedState, setDatePublishedState] = useState(displayDefaultDateTime());
 
   const onEditorStateChange = editor => {
     setEditorChanged(true);
@@ -56,6 +57,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   useEffect(() => {
     if (faqEntity.content && !isNew)
       setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(faqEntity.content))));
+    if (faqEntity.datePublished && !isNew) setDatePublishedState(convertDateTimeFromServer(props.faqEntity.datePublished));
   }, [faqEntity]);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    values.datePublished = convertDateTimeToServer(values.datePublished);
+    values.datePublished = convertDateTimeToServer(datePublishedState);
 
     values.content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     if (errors.length === 0) {
@@ -142,9 +144,6 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                         required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                       }}
                     >
-                      <option value="" key="0">
-                        --Chọn trạng thái--
-                      </option>
                       <option value={NEWS_STATUSES[0].id} key="1">
                         {NEWS_STATUSES[0].name}
                       </option>
@@ -248,24 +247,23 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
               </AvGroup>
               <Row className="justify-content-between">
                 <Col sm="6">
-                  <AvGroup>
+                  <FormGroup>
                     <Label id="datePublishedLabel" for="faq-datePublished">
                       Thời gian đăng bài:
                     </Label>
-                    <AvField
+                    <input
                       id="faq-datePublished"
                       data-cy="datePublished"
                       type="datetime-local"
                       className="form-control"
                       name="datePublished"
                       onKeyDown={e => e.preventDefault()}
+                      min={displayDefaultDateTime()}
                       disabled={!isNew && new Date() > new Date(props.faqEntity.datePublished)}
-                      value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.faqEntity.datePublished)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
-                      }}
+                      value={datePublishedState}
+                      onChange={e => setDatePublishedState(e.target.value)}
                     />
-                  </AvGroup>
+                  </FormGroup>
                 </Col>
                 <Col sm="3">
                   <Label for="save-entity">&nbsp;</Label>
