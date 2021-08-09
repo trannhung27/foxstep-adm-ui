@@ -615,7 +615,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               value={challengeDistanceList[i].distance}
                               validate={{
                                 required: {
-                                  value: i === 0,
+                                  value: i === 0 || (i < 4 && challengeDistanceList[i + 1]),
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
