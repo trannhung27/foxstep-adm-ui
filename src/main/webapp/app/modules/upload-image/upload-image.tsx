@@ -2,19 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { IRootState } from 'app/shared/reducers';
 import { connect } from 'react-redux';
 import { reset, uploadImage as upload } from 'app/modules/upload-image/upload-image-reducer';
-import { Button, Row, Col, Label, Collapse, CardBody, Card } from 'reactstrap';
-import {
-  AvFeedback,
-  AvForm,
-  AvGroup,
-  AvInput,
-  AvField,
-  AvRadioGroup,
-  AvRadio,
-  AvCheckboxGroup,
-  AvCheckbox,
-} from 'availity-reactstrap-validation';
-import { faCheck, faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { Button, Row, Col, Label } from 'reactstrap';
+import { AvGroup, AvField } from 'availity-reactstrap-validation';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface IUploadImage extends StateProps, DispatchProps {
@@ -27,7 +18,6 @@ export const UploadImageInput = (props: IUploadImage) => {
   const { entity, loading } = props;
   const [selectedFile, setSelectedFile] = useState(null);
   const [base64File, setBase64File] = useState('');
-  const [img, setImg] = useState('');
   const uploadImageToServer = (base64Image: string) => {
     const imageEntity = {
       content: base64Image,
@@ -37,6 +27,10 @@ export const UploadImageInput = (props: IUploadImage) => {
     props.upload(imageEntity);
   };
 
+  const chooseImage = () => {
+    document.getElementById('uploadFile').click();
+  };
+
   const handleChangeImage = event => {
     setSelectedFile(event.target.files[0]);
     const reader = new FileReader();
@@ -44,9 +38,6 @@ export const UploadImageInput = (props: IUploadImage) => {
     reader.onload = function () {
       setBase64File(reader.result.toString());
     };
-    // reader.onerror = function() {
-    //   console.log('there are some problems');
-    // };
   };
 
   useEffect(() => {
@@ -74,23 +65,27 @@ export const UploadImageInput = (props: IUploadImage) => {
   return (
     <div>
       <AvGroup className="form-group">
-        <Label>{props.label}</Label>
-      </AvGroup>
+        <Row>
+          <Col sm="6" xs="12">
+            <Label>{props.label}</Label>
+            <img style={{ width: '300px', height: '240px' }} src={base64File} />
+            <Button color="success" onClick={chooseImage}>
+              <FontAwesomeIcon icon={faUpload} /> Tải ảnh
+            </Button>
 
-      <AvGroup className="form-group">
-        <img style={{ width: '300px', height: '240px' }} src={base64File} />
-        <AvField
-          type="file"
-          accept="image/png, image/gif, image/jpeg"
-          required
-          name="file"
-          className="upload-file"
-          id="uploadFile"
-          onChange={handleChangeImage}
-          validate={{
-            required: { value: props.required, errorMessage: 'Giá trị bắt buộc' },
-          }}
-        />
+            <AvField
+              type="file"
+              hidden
+              accept="image/png, image/gif, image/jpeg"
+              name="file"
+              className="upload-file"
+              id="uploadFile"
+              onChange={handleChangeImage}
+              validate={{}}
+            />
+          </Col>
+        </Row>
+
         <Button color="info" onClick={uploadHandler}>
           Upload!
         </Button>
