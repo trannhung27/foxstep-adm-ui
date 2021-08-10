@@ -90,7 +90,12 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
 
   return (
     <div>
-      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Tạo tin tức' : 'Sửa tin tức'} />
+      <PageHeader
+        style={{ padding: '0 0' }}
+        className="site-page-header"
+        onBack={() => props.history.goBack()}
+        title={isNew ? 'Tạo tin tức' : 'Sửa tin tức'}
+      />
       <hr />
       <Row>
         <Col>

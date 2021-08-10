@@ -31,7 +31,7 @@ export const FaqDetail = (props: IFaqDetailProps) => {
           <Button key="0" tag={Link} to={`/faqs/${faqEntity.id}/edit`} replace color="primary">
             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
           </Button>,
-          <Button key="1" onClick={() => history.goBack()} replace color="info" data-cy="entityDetailsBackButton">
+          <Button key="1" onClick={() => history.goBack()} color="info" data-cy="entityDetailsBackButton">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Quay lại</span>
           </Button>,
         ]}
