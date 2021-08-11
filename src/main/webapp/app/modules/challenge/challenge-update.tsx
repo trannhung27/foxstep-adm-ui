@@ -128,7 +128,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const handleChallengeDistance = (e, i) => {
     const list = [...challengeDistanceList];
     list[i] = { distance: e.target.value, isDisabled: false };
-    if (i < 4) list[i + 1] = { distance: challengeDistanceList[i + 1] ? challengeDistanceList[i + 1].distance : 0, isDisabled: false };
+    if (i < 4) {
+      list[i + 1] = { distance: challengeDistanceList[i + 1] ? challengeDistanceList[i + 1].distance : 0, isDisabled: false };
+    }
     setChallengeDistanceList(list);
   };
   const handleInputChange = (e, index) => {
@@ -186,11 +188,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     setUpdatedEntity(entity);
 
     if (challengeEntity.challengeDistance && !isNew) {
-      const list = [{ distance: 0, isDisabled: false }];
+      const list = challengeDistanceList;
       challengeEntity.challengeDistance.map((challengeDistance, i) => {
         list[i] = { distance: challengeDistance.distance, isDisabled: false };
       });
-      list.sort(compare);
       setChallengeDistanceList(list);
     }
 
@@ -627,12 +628,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               value={challengeDistanceList[i].distance}
                               validate={{
                                 required: {
-                                  value:
-                                    i === 0 || (i < 4 && challengeDistanceList[i + 1] && Number(challengeDistanceList[i + 1].distance) > 0),
+                                  value: i === 0 || (i < 4 && challengeDistanceList[i + 1] && challengeDistanceList[i + 1].distance > 0),
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
-                                  value: challengeDistanceList[i - 1] ? Number(challengeDistanceList[i - 1].distance) + 1 : 0,
+                                  value: isNew && challengeDistanceList[i - 1] ? Number(challengeDistanceList[i - 1].distance) + 1 : 0,
                                   errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
                                 },
                               }}
@@ -976,7 +976,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setObjectType(event.target.value);
                             }}
                             defaultValue="1"
-                            value={challengeEntity.objectType.toString()}
+                            value={challengeEntity.objectType ? challengeEntity.objectType.toString() : '1'}
                             validate={{
                               required: {
                                 value: true,
