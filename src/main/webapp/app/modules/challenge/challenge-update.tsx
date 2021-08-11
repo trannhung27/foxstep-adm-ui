@@ -428,14 +428,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             name="title"
                             value={challengeEntity && !isNew ? challengeEntity.title : ''}
                             validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
+                              required: { value: true, errorMessage: 'Không được bỏ trống' },
                               minLength: {
                                 value: 5,
-                                errorMessage: 'This field is required to be at least 5 characters.',
+                                errorMessage: 'Cần ít nhất 5 kí tự',
                               },
                               maxLength: {
                                 value: 200,
-                                errorMessage: 'This field cannot be longer than 200 characters.',
+                                errorMessage: 'Không được nhiều hơn 200 kí tự',
                               },
                             }}
                           />
@@ -468,7 +468,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setDateStart(event.target.value);
                             }}
                             validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
+                              required: { value: true, errorMessage: 'Không được bỏ trống' },
                             }}
                           />
                         </AvGroup>
@@ -512,7 +512,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setDateRegisDeadline(event.target.value);
                             }}
                             validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
+                              required: { value: true, errorMessage: 'Không được bỏ trống' },
                             }}
                           />
                           {convertDateTimeFromServer(dateFinish) < convertDateTimeFromServer(dateRegisDeadline) && (
@@ -587,7 +587,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         }
                       }}
                       value={challengeEntity.calType}
-                      required
+                      validate={{
+                        required: { value: true, errorMessage: 'Giá trị bắt buộc' },
+                      }}
                     >
                       <AvRadio label="Có MỘT LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value={1} />
                       <AvRadio label="Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value={2} />
@@ -696,7 +698,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             }}
                             name="challengeValidity.avgPaceFrom"
                             validate={{
-                              required: { value: avgPace.required, errorMessage: 'Không để trống' },
+                              required: { value: avgPace.required, errorMessage: 'Không được để trống' },
                             }}
                           />
 
@@ -719,7 +721,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             }}
                             name="challengeValidity.avgPaceTo"
                             validate={{
-                              required: { value: true, errorMessage: 'Không để trống' },
+                              required: { value: true, errorMessage: 'Không được để trống' },
                               min: { value: avgPace.from, errorMessage: 'Giá trị từ không thể lớn hơn giá trị đến ' },
                             }}
                           />
@@ -756,9 +758,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             max="300.0"
                             className="form-control"
                             name="challengeValidity.minDistance"
-                            // validate={{
-                            //   required: { value: minDistance.required, errorMessage: 'Không để trống' },
-                            // }}
+                            validate={{
+                              required: { value: minDistance.required, errorMessage: 'Không để trống' },
+                            }}
                           ></AvField>
                           {/*<Label> &nbsp; (km)</Label>*/}
                           {minDistance.value === '' && <p className="invalid-feedback">Không được để trống.</p>}
@@ -789,7 +791,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             className="form-control"
                             name="challengeValidity.elevationGain"
                             validate={{
-                              required: { value: elevationGain.required, errorMessage: 'Không để trống' },
+                              required: { value: elevationGain.required, errorMessage: 'Không được để trống' },
                             }}
                           />
 
@@ -824,7 +826,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             className="form-control"
                             name="challengeValidity.avgCadenceFrom"
                             validate={{
-                              required: { value: avgCadence.required, errorMessage: 'Không để trống' },
+                              required: { value: avgCadence.required, errorMessage: 'Không được để trống' },
                             }}
                           />
                           <AvField
@@ -839,7 +841,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             className="form-control"
                             name="challengeValidity.avgCadenceTo"
                             validate={{
-                              required: { value: avgCadence.required, errorMessage: 'Không để trống' },
+                              required: { value: avgCadence.required, errorMessage: 'Không được để trống' },
                               min: { value: avgCadence.from, errorMessage: 'Giá trị đến không thể nhỏ hơn giá trị từ' },
                             }}
                           />
@@ -934,7 +936,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               validate={{
                                 required: {
                                   value: true,
-                                  errorMessage: 'Không được bỏ trống thông tin này',
+                                  errorMessage: 'Không được bỏ trống ',
                                 },
                                 max: {
                                   value: 100,
@@ -962,7 +964,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setObjectType(event.target.value);
                             }}
                             defaultValue="1"
-                            required
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'Không được bỏ trống ',
+                              },
+                            }}
                           >
                             <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
                             <AvRadio label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia" value="2" />
@@ -974,7 +981,16 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   Mã đăng kí
                                   <RedAsterisk /> &nbsp;
                                 </label>
-                                <AvInput type="text" name="code" required />
+                                <AvField
+                                  type="text"
+                                  name="code"
+                                  validate={{
+                                    required: {
+                                      value: true,
+                                      errorMessage: 'Không được bỏ trống ',
+                                    },
+                                  }}
+                                />
                               </Row>
                             </Col>
                           ) : null}
@@ -1014,7 +1030,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   name={'teams' + '[' + i + ']' + '.name'}
                                   placeholder={'Nhóm' + ' ' + (+i + +1)}
                                   value={team.name}
-                                  required
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Không được bỏ trống' },
+                                  }}
                                   onChange={event => handleInputChange(event, i)}
                                 >
                                   team.name{' '}
