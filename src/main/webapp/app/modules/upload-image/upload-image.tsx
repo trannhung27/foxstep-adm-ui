@@ -70,7 +70,7 @@ export const UploadImageInput = (props: IUploadImage) => {
             <Label>{props.label}</Label>
             <img style={{ width: '300px', height: '240px' }} src={base64File} />
             <Button color="success" onClick={chooseImage}>
-              <FontAwesomeIcon icon={faUpload} /> Tải ảnh
+              <FontAwesomeIcon icon={faUpload} /> Chọn ảnh
             </Button>
 
             <AvField
@@ -81,13 +81,15 @@ export const UploadImageInput = (props: IUploadImage) => {
               className="upload-file"
               id="uploadFile"
               onChange={handleChangeImage}
-              validate={{}}
+              validate={{
+                required: { value: true, errorMessage: 'Không được để trống' },
+              }}
             />
           </Col>
         </Row>
 
         <Button color="info" onClick={uploadHandler}>
-          Upload!
+          Tải ảnh
         </Button>
       </AvGroup>
       {props.entity.url ? (
