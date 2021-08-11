@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 import { TextFormat } from 'react-jhipster';
 
@@ -20,7 +20,6 @@ export const UsersDetail = (props: IUsersDetailProps) => {
   }, []);
 
   const { usersEntity } = props;
-  const history = useHistory();
 
   const [showLockModal, setShowLockModal] = useState(false);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
@@ -86,7 +85,7 @@ export const UsersDetail = (props: IUsersDetailProps) => {
             {/*<Button tag={Link} to={`/users/${usersEntity.id}/edit`}  color="info" className="m-1">*/}
             {/*  Chỉnh sửa*/}
             {/*</Button>*/}
-            <Button onClick={() => history.goBack()} color="default" className="border-secondary m-1">
+            <Button onClick={() => props.history.goBack()} color="default" className="border-secondary m-1">
               Quay lại
             </Button>
           </>

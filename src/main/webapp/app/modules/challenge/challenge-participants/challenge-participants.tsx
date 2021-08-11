@@ -63,7 +63,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
     if (criteriaState['email']) endURL += '&email=' + criteriaState['email'];
 
     if (props.location.search !== endURL) {
-      props.history.push(`${props.location.pathname}${endURL}`);
+      props.history.replace(`${props.location.pathname}${endURL}`);
     }
   };
 
@@ -133,7 +133,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
         title="Danh sách thành viên (Thử thách)"
         extra={
           <>
-            <Button tag={Link} to={'/challenges/' + currentMatch.params.challengesId} color="info">
+            <Button onClick={() => props.history.goBack()} color="info">
               <span className="d-none d-md-inline">Quay lại</span>
             </Button>
           </>

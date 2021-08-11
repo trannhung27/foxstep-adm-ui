@@ -72,7 +72,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
     if (criteriaState['chalStatus']) endURL += '&chalStatus=' + criteriaState['chalStatus'];
 
     if (props.location.search !== endURL) {
-      props.history.push(`${props.location.pathname}${endURL}`);
+      props.history.replace(`${props.location.pathname}${endURL}`);
     }
   };
 
@@ -139,7 +139,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
         title="Thông tin khách hàng - Danh sách thử thách"
         extra={
           <>
-            <Button tag={Link} to={'/users/' + props.match.params.id} color="info">
+            <Button onClick={() => props.history.goBack()} color="info">
               <span className="d-none d-md-inline">Quay lại</span>
             </Button>
           </>

@@ -72,7 +72,7 @@ export const Faq = (props: IFaqsProps) => {
       endURL += '&datePublished.lessThanOrEqual=' + criteriaState['datePublished.lessThanOrEqual'];
 
     if (props.location.search !== endURL) {
-      props.history.push(`${props.location.pathname}${endURL}`);
+      props.history.replace(`${props.location.pathname}${endURL}`);
     }
   };
 

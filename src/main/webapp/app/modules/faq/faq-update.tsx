@@ -90,6 +90,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
     <div>
       <PageHeader
         style={{ padding: '0 0' }}
+        onBack={() => props.history.goBack()}
         className="site-page-header"
         title={isNew ? 'Tạo Câu hỏi thường gặp/Hướng dẫn' : 'Sửa Câu hỏi thường gặp/Hướng dẫn'}
       />

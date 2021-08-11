@@ -68,7 +68,7 @@ export const Users = (props: IUsersProps) => {
     if (criteriaState['bib.equals']) endURL += '&bib.equals=' + criteriaState['bib.equals'];
 
     if (props.location.search !== endURL) {
-      props.history.push(`${props.location.pathname}${endURL}`);
+      props.history.replace(`${props.location.pathname}${endURL}`);
     }
   };
 
