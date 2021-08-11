@@ -355,6 +355,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             onChange={event => {
                               event.target.value === '1' ? setIsOrganization(1) : event.target.value === '0' ? setIsOrganization(0) : {};
                             }}
+                            validate={{
+                              required: { value: true, errorMessage: 'Không được bỏ trống' },
+                            }}
                           >
                             <option></option>
                             <option value="1">Cá nhân</option>
