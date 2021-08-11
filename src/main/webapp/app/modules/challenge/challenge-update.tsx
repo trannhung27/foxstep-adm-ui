@@ -737,6 +737,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <input
                               type="checkbox"
                               className="mr-2"
+                              checked={
+                                !isNew && challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.minDistance) > 0
+                              }
                               onChange={() =>
                                 setMinDistance({
                                   value: minDistance.value,
@@ -774,6 +777,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
+                            checked={
+                              !isNew && challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.elevationGain) > 0
+                            }
                             onChange={() =>
                               setElevationGain({
                                 value: elevationGain.value,
@@ -806,6 +812,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
+                            checked={
+                              !isNew &&
+                              challengeEntity.challengeValidity &&
+                              Number(challengeEntity.challengeValidity.avgCadenceFrom) > 0 &&
+                              Number(challengeEntity.challengeValidity.avgCadenceTo) > 0
+                            }
                             onChange={() =>
                               setAvgCadence({
                                 from: avgCadence.from,
@@ -964,6 +976,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setObjectType(event.target.value);
                             }}
                             defaultValue="1"
+                            value={challengeEntity.objectType.toString()}
                             validate={{
                               required: {
                                 value: true,

@@ -68,9 +68,7 @@ export const UploadImageInput = (props: IUploadImage) => {
         <Row>
           <Col sm="6" xs="12">
             <Label>{props.label}</Label>
-            <Row></Row>
             <img style={{ width: '300px', height: '240px' }} src={base64File} />
-            <Row></Row>
             <Button color="success" onClick={chooseImage}>
               <FontAwesomeIcon icon={faUpload} /> Chọn ảnh
             </Button>
