@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Badge, Button, Row, Table } from 'reactstrap';
+import { Badge, Button, Col, Row, Table } from 'reactstrap';
 import { JhiPagination } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -135,7 +135,14 @@ export const Users = (props: IUsersProps) => {
       <div className="table-responsive pt-2">
         {usersList && usersList.length > 0 ? (
           <div>
-            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize} />
+            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>
+              <Col sm="2">
+                <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                  <FontAwesomeIcon icon="plus" />
+                  <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
+                </Button>
+              </Col>
+            </PageSizePicker>
             <Table responsive hover striped>
               <thead>
                 <tr>
