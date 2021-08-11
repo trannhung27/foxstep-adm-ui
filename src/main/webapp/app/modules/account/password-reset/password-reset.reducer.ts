@@ -56,7 +56,7 @@ export const handlePasswordResetInit = mail => ({
   // If the content-type isn't set that way, axios will try to encode the body and thus modify the data sent to the server.
   payload: axios.post(`${apiUrl}/init`, mail, { headers: { ['Content-Type']: 'text/plain' } }),
   meta: {
-    successMessage: 'Check your emails for details on how to reset your password.',
+    successMessage: 'Đã gửi mail reset mật khẩu!',
   },
 });
 
@@ -64,7 +64,7 @@ export const handlePasswordResetFinish = (key, newPassword) => ({
   type: ACTION_TYPES.RESET_PASSWORD_FINISH,
   payload: axios.post(`${apiUrl}/finish`, { key, newPassword }),
   meta: {
-    successMessage: '<strong>Your password has been reset.</strong>',
+    successMessage: 'Cập nhật mật khẩu thành công!',
   },
 });
 

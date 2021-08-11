@@ -15,14 +15,14 @@ dev-build:
     - dev
   script:
     - trigger -h http://gitlab.fpt.net -u /api/v4/projects -a rd6ApchjALgm-d7uzkCA -p 6dcf89e5386a77eff243cc77c793a2 -o 0 -e STAGE="build" -e DOCKER_TAG=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA -t dev 2244
-dev-code-analysis:
-  stage: code-analysis
-  tags:
-    - devenv
-  only:
-    - dev
-  script:
-    - trigger -h http://gitlab.fpt.net -u /api/v4/projects -a rd6ApchjALgm-d7uzkCA -p 6dcf89e5386a77eff243cc77c793a2 -o 1 -e STAGE="code-analysis" -e DOCKER_TAG=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA -t dev 2244
+# dev-code-analysis:
+#   stage: code-analysis
+#   tags:
+#     - devenv
+#   only:
+#     - dev
+#   script:
+#     - trigger -h http://gitlab.fpt.net -u /api/v4/projects -a rd6ApchjALgm-d7uzkCA -p 6dcf89e5386a77eff243cc77c793a2 -o 1 -e STAGE="code-analysis" -e DOCKER_TAG=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA -t dev 2244
 dev-deploy:
   stage: deploy
   tags:

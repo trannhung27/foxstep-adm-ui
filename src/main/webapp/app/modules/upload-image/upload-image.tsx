@@ -82,7 +82,7 @@ export const UploadImageInput = (props: IUploadImage) => {
               id="uploadFile"
               onChange={handleChangeImage}
               validate={{
-                required: { value: true, errorMessage: 'Không được để trống' },
+                required: { value: props.required, errorMessage: 'Không được để trống' },
               }}
             />
           </Col>
