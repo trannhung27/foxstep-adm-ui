@@ -128,7 +128,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const handleChallengeDistance = (e, i) => {
     const list = [...challengeDistanceList];
     list[i] = { distance: e.target.value, isDisabled: false };
-    if (i < 4) list[i + 1] = { distance: challengeDistanceList[i + 1].distance, isDisabled: false };
+    if (i < 4) list[i + 1] = { distance: challengeDistanceList[i + 1] ? challengeDistanceList[i + 1].distance : 0, isDisabled: false };
     setChallengeDistanceList(list);
   };
   const handleInputChange = (e, index) => {
@@ -400,7 +400,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           reset={props.resetUploadImage}
                           required={isNew ? true : !challengeEntity.imgUrl}
                         />
-                        <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
+                        <AvField
+                          hidden
+                          name="imgUrl"
+                          value={isNew ? props.uploadImageEntity.url : challengeEntity.imgUrl}
+                          validate={{
+                            required: { value: true, errorMessage: 'Ảnh chưa cập nhật thành công' },
+                          }}
+                        />
                         {/*add feedback for not upload image*/}
                       </Col>
                     </Row>
@@ -615,7 +622,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               value={challengeDistanceList[i].distance}
                               validate={{
                                 required: {
-                                  value: i === 0 || (i < 4 && challengeDistanceList[i + 1]),
+                                  value:
+                                    i === 0 || (i < 4 && challengeDistanceList[i + 1] && Number(challengeDistanceList[i + 1].distance) > 0),
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
