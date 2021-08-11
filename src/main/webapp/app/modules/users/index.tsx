@@ -6,8 +6,7 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Users from './users';
 import UsersDetail from './users-detail';
 import ChallengesOfUser from 'app/modules/users/challenges-of-user/challenges-of-user';
-import FaqUpdate from 'app/modules/faq/faq-update';
-import { UsersUpdate } from 'app/modules/users/users-update';
+import UsersUpdate from 'app/modules/users/users-update';
 
 const Routes = ({ match }) => (
   <>

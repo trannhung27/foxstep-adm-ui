@@ -6,6 +6,7 @@ export interface IUser {
   login?: string;
   firstName?: string;
   lastName?: string;
+  fullName?: string;
   email?: string;
   status?: number;
   langKey?: string;
@@ -22,6 +23,7 @@ export const defaultValue: Readonly<IUser> = {
   login: '',
   firstName: '',
   lastName: '',
+  fullName: '',
   email: '',
   status: USER_STATUS.ACTIVATED,
   langKey: '',
