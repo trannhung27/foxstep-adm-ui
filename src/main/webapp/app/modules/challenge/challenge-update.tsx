@@ -113,9 +113,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [updatedEntity, setUpdatedEntity] = useState(challengeEntity);
 
   const [avgPace, setAvgPace] = useState({ from: '4.0', to: '15.0', required: true });
-  const [minDistance, setMinDistance] = useState({ value: '1.0', required: false });
-  const [elevationGain, setElevationGain] = useState({ value: '100', required: false });
-  const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false });
+  const [minDistance, setMinDistance] = useState({ value: '1.0', required: false, checked: false });
+  const [elevationGain, setElevationGain] = useState({ value: '100', required: false, checked: false });
+  const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false, checked: false });
   // const
 
   const onEditorStateChange = editor => {
@@ -205,17 +205,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       setMinDistance({
         value: (challengeEntity.challengeValidity.minDistance / 1000).toString(),
         required: minDistance.required,
+        checked: challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.minDistance) > 0,
       });
 
       setElevationGain({
         value: challengeEntity.challengeValidity.elevationGain.toString(),
         required: elevationGain.required,
+        checked: challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.elevationGain) > 0,
       });
 
       setAvgCadence({
         from: challengeEntity.challengeValidity.avgCadenceFrom.toString(),
         to: challengeEntity.challengeValidity.avgCadenceTo.toString(),
         required: avgCadence.required,
+        checked:
+          challengeEntity.challengeValidity &&
+          Number(challengeEntity.challengeValidity.avgCadenceFrom) > 0 &&
+          Number(challengeEntity.challengeValidity.avgCadenceTo) > 0,
       });
     }
 
@@ -353,6 +359,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             id="challenge_type"
                             type="select"
                             name="challengeType"
+                            value={challengeEntity.challengeType ? challengeEntity.challengeType.toString() : '-1'}
                             onChange={event => {
                               event.target.value === '1' ? setIsOrganization(1) : event.target.value === '0' ? setIsOrganization(0) : {};
                             }}
@@ -360,7 +367,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               required: { value: true, errorMessage: 'Không được bỏ trống' },
                             }}
                           >
-                            <option></option>
+                            <option value="-1"></option>
                             <option value="1">Cá nhân</option>
                             <option value="0">Ban tổ chức</option>
                           </AvField>
@@ -737,13 +744,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <input
                               type="checkbox"
                               className="mr-2"
-                              checked={
-                                !isNew && challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.minDistance) > 0
-                              }
+                              checked={minDistance.checked}
                               onChange={() =>
                                 setMinDistance({
                                   value: minDistance.value,
                                   required: !minDistance.required,
+                                  checked: !minDistance.checked,
                                 })
                               }
                             />
@@ -777,13 +783,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            checked={
-                              !isNew && challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.elevationGain) > 0
-                            }
+                            checked={elevationGain.checked}
                             onChange={() =>
                               setElevationGain({
                                 value: elevationGain.value,
                                 required: !elevationGain.required,
+                                checked: !elevationGain.checked,
                               })
                             }
                           />
@@ -812,17 +817,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
-                            checked={
-                              !isNew &&
-                              challengeEntity.challengeValidity &&
-                              Number(challengeEntity.challengeValidity.avgCadenceFrom) > 0 &&
-                              Number(challengeEntity.challengeValidity.avgCadenceTo) > 0
-                            }
+                            checked={avgCadence.checked}
                             onChange={() =>
                               setAvgCadence({
                                 from: avgCadence.from,
                                 to: avgCadence.to,
                                 required: !avgCadence.required,
+                                checked: avgCadence.checked,
                               })
                             }
                           />
@@ -945,6 +946,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               step="1"
                               className="form-control"
                               name="numOfParticipant"
+                              value={!isNew && challengeEntity.numOfParticipant ? challengeEntity.numOfParticipant : undefined}
                               validate={{
                                 required: {
                                   value: true,
