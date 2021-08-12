@@ -13,8 +13,9 @@ import {
   AvCheckboxGroup,
   AvCheckbox,
 } from 'availity-reactstrap-validation';
+import 'app/app.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faSyncAlt, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { IRootState } from 'app/shared/reducers';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -30,7 +31,7 @@ import {
 import CreatableSelect from 'react-select/creatable';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import { DownOutlined, DownSquareOutlined } from '@ant-design/icons';
+import { DownOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
 import { getCustomer } from '../users/users.reducer';
 import { ChallengeUserDialog } from './challenge-search-user-dialog';
@@ -93,7 +94,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   class RedAsterisk extends React.Component {
     render() {
-      return <text style={{ color: 'red' }}>&nbsp; *</text>;
+      return <text style={{ color: 'red' }}> *</text>;
     }
   }
 
@@ -129,7 +130,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     const list = [...challengeDistanceList];
     list[i] = { distance: e.target.value, isDisabled: false };
     if (i < 4) {
-      list[i + 1] = { distance: challengeDistanceList[i + 1] ? challengeDistanceList[i + 1].distance : 0, isDisabled: false };
+      list[i + 1] = {
+        distance: challengeDistanceList[i + 1] ? challengeDistanceList[i + 1].distance : 0,
+        isDisabled: false,
+      };
     }
     setChallengeDistanceList(list);
   };
@@ -344,9 +348,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </AvGroup>
               ) : null}
 
-              <Row>
-                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
-                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle} />
+              <Row form>
+                <h4 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h4>
+                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle} />
               </Row>
               <Collapse isOpen={isOpen}>
                 <Card>
@@ -423,43 +427,51 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       </Col>
                     </Row>
 
-                    <Row>
-                      <Col xs="12" sm="6">
-                        <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
-                            Tên thử thách <RedAsterisk />
-                          </Label>
-                          <AvField
-                            id="challenge-title"
-                            data-cy="title"
-                            type="text"
-                            name="title"
-                            value={challengeEntity && !isNew ? challengeEntity.title : ''}
-                            validate={{
-                              required: { value: true, errorMessage: 'Không được bỏ trống' },
-                              minLength: {
-                                value: 5,
-                                errorMessage: 'Cần ít nhất 5 kí tự',
-                              },
-                              maxLength: {
-                                value: 200,
-                                errorMessage: 'Không được nhiều hơn 200 kí tự',
-                              },
-                            }}
-                          />
-                        </AvGroup>
+                    <Row form>
+                      <Col md={3}>
+                        <Row>
+                          <Col md={11}>
+                            <AvGroup>
+                              <Label id="titleLabel" for="challenge-title">
+                                Tên thử thách <RedAsterisk />
+                              </Label>
+                              <AvField
+                                id="challenge-title"
+                                data-cy="title"
+                                type="text"
+                                name="title"
+                                value={challengeEntity && !isNew ? challengeEntity.title : ''}
+                                validate={{
+                                  required: { value: true, errorMessage: 'Không được bỏ trống' },
+                                  minLength: {
+                                    value: 5,
+                                    errorMessage: 'Cần ít nhất 5 kí tự',
+                                  },
+                                  maxLength: {
+                                    value: 200,
+                                    errorMessage: 'Không được nhiều hơn 200 kí tự',
+                                  },
+                                }}
+                              />
+                            </AvGroup>
+                          </Col>
+                        </Row>
                       </Col>
 
-                      <Col xs="12" sm="6">
-                        <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }}>Gắn thẻ:</Label>
-                          <AvInput name="challenge-tag" />
-                        </AvGroup>
+                      <Col md={3}>
+                        <Row className="justify-content-right">
+                          <Col md={12}>
+                            <AvGroup className="form-group">
+                              <Label>Gắn thẻ:</Label>
+                              <AvInput name="challenge-tag" />
+                            </AvGroup>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
 
-                    <Row>
-                      <Col xs="12" sm="4">
+                    <Row form>
+                      <Col md={2}>
                         <AvGroup>
                           <Label id="dateStartLabel" for="challenge-dateStart">
                             Từ ngày
@@ -481,7 +493,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           />
                         </AvGroup>
                       </Col>
-                      <Col xs="12" sm="4">
+                      <Col md={2}>
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateFinish">
                             Đến ngày
@@ -503,10 +515,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           )}
                         </AvGroup>
                       </Col>
-                      <Col xs="12" sm="4">
+                      <Col md={2}>
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateRegisDeadline">
-                            Hạn đăng kí
+                            Hạn đăng ký
                           </Label>
                           <AvInput
                             id="challenge-dateRegisDeadline"
@@ -559,24 +571,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   </CardBody>
                 </Card>
               </Collapse>
-
-              <Row>
-                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>2. Cài đặt tiêu chí</h4>
-                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle2} />
+              <Row form>
+                <h4 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí&nbsp;</h4>
+                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle2} />
               </Row>
               <Collapse isOpen={isOpen2}>
                 <Card>
                   <CardBody>
-                    <Row className="justify-content-left">
-                      <Col xs="12" sm="6">
+                    <Row form>
+                      <Col md={4}>
                         <AvGroup>
-                          <AvField
-                            id="challenge_sport"
-                            type="select"
-                            name="sport.name"
-                            label="Bộ môn"
-                            // disabled = {!isNew && ([1,12].includes(challengeEntity.status)) }
-                          >
+                          <AvField id="challenge_sport" type="select" name="sport.name" label="Bộ môn">
                             <option>Chạy bộ</option>
                           </AvField>
                           <AvField hidden name="sport.id" type="text" value="1"></AvField>
@@ -611,11 +616,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       </Col>
                     </Row>
 
-                    <Row>
-                      {challengeDistanceList.map((distance, i) => (
-                        <Col xs="12" sm="6" key={i}>
-                          <AvGroup className="form-group">
-                            <Label style={{ marginRight: '10px' }}>
+                    {challengeDistanceList.map((distance, i) => (
+                      <Row form key={i}>
+                        <Col md={4}>
+                          <AvGroup>
+                            <Label>
                               {i === 0 ? (
                                 <div>
                                   Hạng mục {i + 1}: <RedAsterisk />
@@ -657,8 +662,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             </AvGroup>
                           ) : null}
                         </Col>
-                      ))}
-                    </Row>
+                      </Row>
+                    ))}
 
                     <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ</text>
                     <Row></Row>
@@ -823,7 +828,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                 from: avgCadence.from,
                                 to: avgCadence.to,
                                 required: !avgCadence.required,
-                                checked: avgCadence.checked,
+                                checked: !avgCadence.checked,
                               })
                             }
                           />
@@ -885,8 +890,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <text style={{ fontWeight: 'bold' }}> Thứ tự các tiêu chí xếp hạng:</text>
 
                     {validityCriteria.map((criteria, index) => (
-                      <Row className="justify-content-right" key={index}>
-                        <Col xs="12" sm="7">
+                      <Row key={index}>
+                        <Col sm={7}>
                           <AvGroup className="form-group form-inline">
                             <input
                               type="checkbox"
@@ -898,8 +903,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvField
                               type="string"
                               name={'rankCriteria' + (index + 1)}
-                              disabled={criteria !== 3}
-                              style={{ width: '250px' }}
+                              disabled
+                              style={{ width: '250px', border: 'hidden', fill: 'white' }}
                               value={
                                 criteria === 1
                                   ? 'Số km thực hiện nhiều nhất'
@@ -916,7 +921,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               name={'challengeValidity.rankCriteria' + (index + 1)}
                               value={criteria === 3 ? (!criteria3Checked ? '0' : '3') : Number(criteria)}
                             />
-                            {index !== 2 ? <Button onClick={swapPosition}> Đổi </Button> : null}
+                            &nbsp; &nbsp;
+                            {index !== 2 ? (
+                              <Button outline color="primary" onClick={swapPosition}>
+                                {' '}
+                                Đổi <FontAwesomeIcon icon={faSyncAlt} />{' '}
+                              </Button>
+                            ) : null}
                           </AvGroup>
                         </Col>
                       </Row>
@@ -925,9 +936,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </Card>
               </Collapse>
 
-              <Row>
-                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>3. Cài đặt thành viên</h4>
-                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle3} />
+              <Row form>
+                <h4 style={{ fontWeight: 'bold' }}>3. Cài đặt thành viên&nbsp;</h4>
+                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle3} />
               </Row>
               <Collapse isOpen={isOpen3}>
                 <Card>
@@ -986,14 +997,14 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               },
                             }}
                           >
-                            <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
+                            <AvRadio label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
                             <AvRadio label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia" value="2" />
                           </AvRadioGroup>
                           {objectType === '2' ? (
                             <Col xs="12" sm="8">
                               <Row style={{ paddingTop: '6px' }}>
                                 <label>
-                                  Mã đăng kí
+                                  Mã đăng ký
                                   <RedAsterisk /> &nbsp;
                                 </label>
                                 <AvField
