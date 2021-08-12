@@ -268,7 +268,9 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                       min={displayDefaultDateTime()}
                       disabled={!isNew && new Date() > new Date(props.newsEntity.datePublished)}
                       value={datePublishedState}
-                      onChange={e => setDatePublishedState(e.target.value)}
+                      onChange={e =>
+                        setDatePublishedState(new Date() < new Date(e.target.value) ? e.target.value : displayDefaultDateTime())
+                      }
                     />
                   </FormGroup>
                 </Col>
