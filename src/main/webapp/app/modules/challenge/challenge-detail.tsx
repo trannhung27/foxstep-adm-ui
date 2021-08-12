@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
-import { Button, Row, Col, Label, Collapse, CardBody, Card } from 'reactstrap';
-import {
-  AvFeedback,
-  AvForm,
-  AvGroup,
-  AvInput,
-  AvField,
-  AvRadioGroup,
-  AvRadio,
-  AvCheckboxGroup,
-  AvCheckbox,
-  AvInputContainer,
-} from 'availity-reactstrap-validation';
+import { Button, Row, Col, Label, Badge } from 'reactstrap';
+import { AvFeedback, AvForm, AvGroup, AvField, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
 import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import parse from 'html-react-parser';
@@ -140,43 +129,32 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
       />
       <Col md="12">
         <AvForm model={challengeEntity} readOnly>
-          <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
+          <h4 style={{ fontWeight: 'bold' }}>1. Thông tin chung</h4>
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={4}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }}>Trạng thái: &nbsp; &nbsp; &nbsp;</Label>
-                {challengeEntity.status === ChallengeStatuses[0].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[0].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[1].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[1].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[2].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[2].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[3].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[3].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[4].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[4].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[5].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[5].name}</div>
+                {challengeEntity.status === 0 ? (
+                  <Badge color="dark">{ChallengeStatuses[0].name}</Badge>
+                ) : challengeEntity.status === 1 ? (
+                  <Badge color="primary">{ChallengeStatuses[1].name}</Badge>
+                ) : challengeEntity.status === 2 ? (
+                  <Badge color="danger">{ChallengeStatuses[2].name}</Badge>
+                ) : challengeEntity.status === 12 ? (
+                  <Badge color="success">{ChallengeStatuses[3].name}</Badge>
+                ) : challengeEntity.status === -1 ? (
+                  <Badge color="secondary">{ChallengeStatuses[4].name}</Badge>
+                ) : challengeEntity.status === -2 ? (
+                  <Badge color="info">{ChallengeStatuses[5].name}</Badge>
                 ) : (
-                  <div style={{ fontWeight: 'bold' }}></div>
+                  <div></div>
                 )}
-              </AvGroup>
-            </Col>
-
-            <Col xs="12" sm="6">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="img_urlLabel" for="challenge-img_url">
-                  Thành viên: &nbsp; &nbsp;
-                </Label>
-                <div style={{ fontWeight: 'bold' }}>
-                  {challengeEntity.numOfRegis}/{challengeEntity.numOfParticipant}
-                </div>
               </AvGroup>
             </Col>
           </Row>
 
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={3}>
               {challengeEntity.challengeType === 0 ? (
                 <AvGroup className="form-group form-inline">
                   <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
@@ -194,7 +172,20 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               )}
             </Col>
 
-            <Col xs="12" sm="6">
+            <Col md={3}>
+              <AvGroup className="form-group form-inline">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="img_urlLabel" for="challenge-img_url">
+                  Thành viên: &nbsp; &nbsp;
+                </Label>
+                <div style={{ fontWeight: 'bold' }}>
+                  {challengeEntity.numOfRegis}/{challengeEntity.numOfParticipant}
+                </div>
+              </AvGroup>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={6}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Ảnh đại diện TT(tỉ lệ 2x1): &nbsp; &nbsp;
@@ -205,7 +196,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           </Row>
 
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Tên thử thách: &nbsp; &nbsp;
@@ -214,7 +205,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               </AvGroup>
             </Col>
 
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Gắn thẻ: &nbsp; &nbsp;
@@ -225,7 +216,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           </Row>
 
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateStart">
                   Thời gian bắt đầu: &nbsp; &nbsp;
@@ -236,7 +227,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               </AvGroup>
             </Col>
 
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateFinish">
                   Thời gian kết thúc: &nbsp; &nbsp;
@@ -272,14 +263,14 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             </Col>
           </Row>
 
-          <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>2. Cài đặt tiêu chí:</h4>
+          <h4 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí:</h4>
           <Row>
             <Col xs="12" sm="6">
               <AvGroup className="form-group">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Bộ môn: &nbsp; &nbsp;
                 </Label>
-                <div>{challengeEntity.sport && challengeEntity.sport.name}</div>
+                <Badge>{challengeEntity.sport && challengeEntity.sport.name}</Badge>
               </AvGroup>
               <AvGroup classname="form-inline">
                 <AvRadioGroup name="calType" value={challengeEntity.calType}>
@@ -293,9 +284,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             </Col>
           </Row>
 
-          <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>
-            Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km){' '}
-          </text>
+          <text style={{ fontWeight: 'bold' }}>Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km) </text>
 
           {challengeDistance.map((distance, i) => (
             <Col xs="12" sm="6" key={i}>
@@ -309,7 +298,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           ))}
 
           <Row></Row>
-          <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ:</text>
+          <text style={{ fontWeight: 'bold' }}>Tiêu chí hợp lệ:</text>
 
           <AvField
             type="checkbox"

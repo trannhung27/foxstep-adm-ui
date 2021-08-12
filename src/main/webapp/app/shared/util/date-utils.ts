@@ -14,7 +14,7 @@ export const convertDateFromServer = date => (date ? dayjs(date).format(APP_LOCA
 
 export const convertDateTimeToServer = date => (date ? dayjs(date).toDate() : null);
 
-export const displayDefaultDateTime = () => dayjs().startOf('day').format(APP_LOCAL_DATETIME_FORMAT);
+export const displayDefaultDateTime = () => dayjs().startOf('minute').format(APP_LOCAL_DATETIME_FORMAT);
 
 export const displayDefaultTimeStamp = () => dayjs().startOf('day').format(APP_TIMESTAMP_FORMAT);
 
