@@ -943,41 +943,39 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               <Collapse isOpen={isOpen3}>
                 <Card>
                   <CardBody>
-                    <Row>
-                      <Col xs="12" sm="5">
-                        <Row>
-                          <AvGroup className="form-group">
-                            <Label id="titleLabel" for="challenge-title">
-                              Số người tham gia <RedAsterisk />
-                            </Label>
-                            <AvField
-                              id="challenge-num_of_participant"
-                              data-cy="num_of_participant"
-                              type="number"
-                              step="1"
-                              className="form-control"
-                              name="numOfParticipant"
-                              value={!isNew && challengeEntity.numOfParticipant ? challengeEntity.numOfParticipant : undefined}
-                              validate={{
-                                required: {
-                                  value: true,
-                                  errorMessage: 'Không được bỏ trống ',
-                                },
-                                max: {
-                                  value: 100,
-                                  errorMessage:
-                                    'Tối đa 100 thành viên đối với thử thách từ cá nhân. Để tạo thử thách với số lượng thành viên lớn hơn, vui lòng liên hệ 19006600',
-                                },
-                              }}
-                            />
-                          </AvGroup>
-                        </Row>
+                    <Row form>
+                      <Col md={5}>
+                        <AvGroup className="form-group form-inline">
+                          <Label id="titleLabel" for="challenge-title">
+                            Số người tham gia: <RedAsterisk /> &nbsp;
+                          </Label>
+                          <AvField
+                            id="challenge-num_of_participant"
+                            data-cy="num_of_participant"
+                            type="number"
+                            step="1"
+                            className="form-control"
+                            name="numOfParticipant"
+                            value={!isNew && challengeEntity.numOfParticipant ? challengeEntity.numOfParticipant : undefined}
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'Không được bỏ trống ',
+                              },
+                              max: {
+                                value: 100,
+                                errorMessage:
+                                  'Tối đa 100 thành viên đối với thử thách từ cá nhân. Để tạo thử thách với số lượng thành viên lớn hơn, vui lòng liên hệ 19006600',
+                              },
+                            }}
+                          />
+                        </AvGroup>
                       </Col>
                     </Row>
 
-                    <Row>
+                    <Row form>
                       <Col xs="12" sm="8">
-                        <Row className="form-group">
+                        <AvGroup className="form-group">
                           <Label>
                             Phạm vi tham gia:
                             <RedAsterisk /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -1020,13 +1018,16 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               </Row>
                             </Col>
                           ) : null}
-                        </Row>
+                        </AvGroup>
                       </Col>
                     </Row>
-                    <Row>
-                      <AvCheckboxGroup name="teamAllow">
-                        <AvCheckbox label="Thi đấu theo nhóm" checked={teamAllow} onChange={changeTeamAllow}></AvCheckbox>
-                      </AvCheckboxGroup>
+
+                    <Row form>
+                      <Col md={4}>
+                        <AvCheckboxGroup name="teamAllow">
+                          <AvCheckbox label="Thi đấu theo nhóm" checked={teamAllow} onChange={changeTeamAllow}></AvCheckbox>
+                        </AvCheckboxGroup>
+                      </Col>
                     </Row>
 
                     {teamAllow === true ? (
@@ -1063,15 +1064,16 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                 >
                                   team.name{' '}
                                 </AvInput>
+                                &nbsp;
                                 {teamList.length !== 1 && (
-                                  <Button onClick={() => handleRemoveClick(i)}>
+                                  <Button outline color="danger" onClick={() => handleRemoveClick(i)}>
                                     {' '}
                                     <FontAwesomeIcon icon={faTimes} />
                                   </Button>
                                 )}
                               </AvGroup>
                             ))}
-                            <Button onClick={handleAddClick} style={{ fontSize: '16px' }}>
+                            <Button outline color="primary" onClick={handleAddClick} style={{ fontSize: '16px' }}>
                               <FontAwesomeIcon icon="plus" size="1x" />
                               &nbsp; Thêm nhóm
                             </Button>
