@@ -5,7 +5,7 @@ import { reset, uploadImage as upload } from 'app/modules/upload-image/upload-im
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvGroup, AvField } from 'availity-reactstrap-validation';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faFileImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface IUploadImage extends StateProps, DispatchProps {
@@ -89,7 +89,7 @@ export const UploadImageInput = (props: IUploadImage) => {
         </Row>
 
         <Button color="info" onClick={uploadHandler}>
-          Tải ảnh
+          <FontAwesomeIcon icon={faUpload} /> Tải ảnh
         </Button>
       </AvGroup>
       {props.entity.url ? (
