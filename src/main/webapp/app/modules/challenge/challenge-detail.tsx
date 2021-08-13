@@ -8,13 +8,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import parse from 'html-react-parser';
 
 import { IRootState } from 'app/shared/reducers';
-import { approveChallenge, getEntity, endChallenge } from './challenge.reducer';
+import { approveChallenge, getEntity, endChallenge, cancelChallenge } from './challenge.reducer';
 
 import { APP_TIMESTAMP_FORMAT, ChallengeStatuses, WfProcessGroup } from 'app/config/constants';
 import { getEntities as getActions } from '../workflow/wf-action/wf-action-reducer';
 import { WfAction } from 'app/modules/workflow/wf-action/wf-action';
 import { ChallengeApproveDialog } from 'app/modules/challenge/challenge-approve-dialog';
 import { ChallengeRejectDialog } from 'app/modules/challenge/challenge-reject-dialog';
+import { ChallengeEndDialog } from 'app/modules/challenge/challenge-end-dialog';
+import { ChallengeCancelDialog } from 'app/modules/challenge/challenge-cancel-dialog';
 
 export interface IChallengeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -25,6 +27,8 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showEndModal, setShowEndModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [challengeDistance, setChallengeDistance] = useState([]);
 
   const { challengeEntity } = props;
@@ -47,7 +51,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   return (
     <Row>
       <Col md="12">
-        {challengeEntity.status === ChallengeStatuses[0].id ? (
+        {challengeEntity.status === ChallengeStatuses[0].id || challengeEntity.status === ChallengeStatuses[4].id ? (
           <>
             <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
               <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
@@ -91,16 +95,30 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             &nbsp;
           </>
         ) : null}
-        {challengeEntity.status === ChallengeStatuses[1].id || challengeEntity.status === ChallengeStatuses[3].id ? (
+        {challengeEntity.status === ChallengeStatuses[3].id ? (
           <>
             <Button
               onClick={() => {
-                props.endChallenge(props.challengeEntity.id);
+                setShowEndModal(true);
               }}
               replace
               color="secondary"
             >
               <span className="d-none d-md-inline">Kết thúc</span>
+            </Button>
+            &nbsp;
+          </>
+        ) : null}
+        {challengeEntity.status === ChallengeStatuses[4].id ? (
+          <>
+            <Button
+              onClick={() => {
+                setShowCancelModal(true);
+              }}
+              replace
+              color="danger"
+            >
+              <span className="d-none d-md-inline">Hủy</span>
             </Button>
             &nbsp;
           </>
@@ -126,6 +144,26 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
         getEntity={props.getEntity}
         reject={props.approveChallenge}
         updateSuccess={props.updateSuccess}
+      />
+      <ChallengeEndDialog
+        onClose={() => {
+          setShowEndModal(false);
+        }}
+        showModal={showEndModal}
+        challengeEntity={props.challengeEntity}
+        endChallenge={props.endChallenge}
+        updateSuccess={props.updateSuccess}
+        updating={props.updating}
+      />
+      <ChallengeCancelDialog
+        onClose={() => {
+          setShowCancelModal(false);
+        }}
+        showModal={showCancelModal}
+        challengeEntity={props.challengeEntity}
+        cancelChallenge={props.cancelChallenge}
+        updateSuccess={props.updateSuccess}
+        updating={props.updating}
       />
       <Col md="12">
         <AvForm model={challengeEntity} readOnly>
@@ -491,9 +529,10 @@ const mapStateToProps = ({ challenge, wfAction }: IRootState) => ({
   wfActionList: wfAction.entities,
   wfActionLoading: wfAction.loading,
   updateSuccess: challenge.updateSuccess,
+  updating: challenge.updating,
 });
 
-const mapDispatchToProps = { getEntity, getActions, approveChallenge, endChallenge };
+const mapDispatchToProps = { getEntity, getActions, approveChallenge, endChallenge, cancelChallenge };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
