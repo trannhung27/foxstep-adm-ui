@@ -193,6 +193,21 @@ export const endChallenge: ICrudDeleteAction<IChallenge> = id => async dispatch 
   return result;
 };
 
+export const cancelChallenge: ICrudDeleteAction<IChallenge> = id => async dispatch => {
+  const requestUrl = `${apiUrl}/${id}/cancel`;
+  const result = await dispatch({
+    type: ACTION_TYPES.DELETE_CHALLENGE,
+    payload: axios.post(requestUrl),
+  });
+  const criteria = {
+    contentId: id,
+    groupId: WfProcessGroup.CHALLENGE,
+  };
+  dispatch(getEntity(id));
+  dispatch(getActions(criteria));
+  return result;
+};
+
 export const reset = () => ({
   type: ACTION_TYPES.RESET,
 });
