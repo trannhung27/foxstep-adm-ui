@@ -78,32 +78,100 @@ export const UsersUpdate = (props: IUsersUpdateProps) => {
                   <AvField id="users-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
-              <Row className="justify-content-between">
-                <Col>
-                  <AvGroup>
-                    <Label id="statusLabel" for="faq-status">
-                      Trạng thái: {usersEntity ? usersEntity.status : null}
-                    </Label>
+
+              {/*<Row>*/}
+              {/*  <Col xs="12" sm="6">*/}
+              {/*    <AvGroup className="form-group form-inline" >*/}
+              {/*      <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">*/}
+              {/*       Trạng thái:*/}
+              {/*      </Label>*/}
+              {/*      <AvField*/}
+              {/*        id="users-status"*/}
+              {/*        data-cy="status"*/}
+              {/*        type="text"*/}
+              {/*        name="status"*/}
+              {/*        validate={{*/}
+              {/*          required: { value: true, errorMessage: 'This field is required.' },*/}
+              {/*          minLength: {*/}
+              {/*            value: 5,*/}
+              {/*            errorMessage: 'This field is required to be at least 5 characters.',*/}
+              {/*          },*/}
+              {/*          maxLength: {*/}
+              {/*            value: 200,*/}
+              {/*            errorMessage: 'This field cannot be longer than 200 characters.',*/}
+              {/*          },*/}
+              {/*        }}*/}
+              {/*      />*/}
+              {/*    </AvGroup>*/}
+              {/*  </Col>*/}
+
+              {/*  <Col xs="12" sm="6">*/}
+              {/*  </Col>*/}
+              {/*</Row>*/}
+
+              <Row form>
+                <Col md={4}>
+                  <AvGroup className="form-inline" row>
+                    <Col md={3}>
+                      <Label id="statusLabel" for="users-status">
+                        Trạng thái: {usersEntity ? usersEntity.status : null}
+                      </Label>
+                    </Col>
+                    <Col md={9}>
+                      <AvField id="users-status" data-cy="userStatus" type="text" name="status" />
+                    </Col>
                   </AvGroup>
                 </Col>
               </Row>
 
-              <AvGroup>
-                <Label id="titleLabel" for="news-title">
-                  Họ và tên:
-                </Label>
-                <AvField
-                  id="users-name"
-                  data-cy="userName"
-                  type="text"
-                  name="fullName"
-                  placeholder="Aa"
-                  validate={{
-                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
-                    maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
-                  }}
-                />
-              </AvGroup>
+              <Row form>
+                <Col md={4}>
+                  <AvGroup className="form-inline" row>
+                    <Col md={3}>
+                      <Label id="usersName" for="users-name">
+                        Họ và tên:
+                      </Label>
+                    </Col>
+                    <Col md={9}>
+                      <AvField
+                        id="users-name"
+                        data-cy="userName"
+                        type="text"
+                        name="fullName"
+                        placeholder="Aa"
+                        validate={{
+                          required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                          maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
+                        }}
+                      />
+                    </Col>
+                  </AvGroup>
+                </Col>
+              </Row>
+
+              <Row form>
+                <Col md={4}>
+                  <AvGroup className="form-inline" row>
+                    <Col md={3} className="justify-content-left">
+                      <Label id="usersEmail" for="users-email">
+                        Email: &nbsp; &nbsp; &nbsp;
+                      </Label>
+                    </Col>
+                    <Col md={9}>
+                      <AvField
+                        id="users-email"
+                        data-cy="userEmail"
+                        type="text"
+                        name="email"
+                        validate={{
+                          required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                          maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
+                        }}
+                      />
+                    </Col>
+                  </AvGroup>
+                </Col>
+              </Row>
             </AvForm>
           )}
         </Col>
