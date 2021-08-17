@@ -32,6 +32,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   const [editorChanged, setEditorChanged] = useState(false);
   const [editorError, setEditorErrorState] = useState(false);
   const [datePublishedState, setDatePublishedState] = useState(displayDefaultDateTime());
+  const [uploadInvalidType, setUploadInvalidType] = useState(false);
 
   const onEditorStateChange = editor => {
     setEditorChanged(true);
@@ -80,10 +81,12 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
         newsCategory: newsCategories.find(it => it.id.toString() === values.newsCategoryId.toString()),
       };
 
-      if (isNew) {
-        props.createEntity(entity);
-      } else {
-        props.updateEntity(entity);
+      if (!uploadInvalidType) {
+        if (isNew) {
+          props.createEntity(entity);
+        } else {
+          props.updateEntity(entity);
+        }
       }
     }
   };
@@ -119,6 +122,8 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     initImage={isNew ? null : newsEntity.imgUrl}
                     reset={props.resetUploadImage}
                     required={isNew ? true : !newsEntity.imgUrl}
+                    onInvalidType={() => setUploadInvalidType(true)}
+                    onValidType={() => setUploadInvalidType(false)}
                   />
                   <AvField
                     hidden
