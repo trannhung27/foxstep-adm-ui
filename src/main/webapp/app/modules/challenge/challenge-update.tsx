@@ -13,8 +13,9 @@ import {
   AvCheckboxGroup,
   AvCheckbox,
 } from 'availity-reactstrap-validation';
+import 'app/app.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faSyncAlt, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { IRootState } from 'app/shared/reducers';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -30,7 +31,7 @@ import {
 import CreatableSelect from 'react-select/creatable';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import { DownOutlined, DownSquareOutlined } from '@ant-design/icons';
+import { DownOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { update as updateWorkflow } from '../workflow/workflow-request.reducer';
 import { getCustomer } from '../users/users.reducer';
 import { ChallengeUserDialog } from './challenge-search-user-dialog';
@@ -93,7 +94,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
 
   class RedAsterisk extends React.Component {
     render() {
-      return <text style={{ color: 'red' }}>&nbsp; *</text>;
+      return <text style={{ color: 'red' }}> *</text>;
     }
   }
 
@@ -113,10 +114,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [updatedEntity, setUpdatedEntity] = useState(challengeEntity);
 
   const [avgPace, setAvgPace] = useState({ from: '4.0', to: '15.0', required: true });
-  const [minDistance, setMinDistance] = useState({ value: '1.0', required: false });
-  const [elevationGain, setElevationGain] = useState({ value: '100', required: false });
-  const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false });
+  const [minDistance, setMinDistance] = useState({ value: '1.0', required: false, checked: false });
+  const [elevationGain, setElevationGain] = useState({ value: '100', required: false, checked: false });
+  const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false, checked: false });
   // const
+
+  //upload image invalid file type error
+  const [uploadInvalidType, setUploadInvalidType] = useState(false);
 
   const onEditorStateChange = editor => {
     setEditorState(editor);
@@ -128,7 +132,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const handleChallengeDistance = (e, i) => {
     const list = [...challengeDistanceList];
     list[i] = { distance: e.target.value, isDisabled: false };
-    if (i < 4) list[i + 1] = { distance: challengeDistanceList[i + 1].distance, isDisabled: false };
+    if (i < 4) {
+      list[i + 1] = {
+        distance: challengeDistanceList[i + 1] ? challengeDistanceList[i + 1].distance : 0,
+        isDisabled: false,
+      };
+    }
     setChallengeDistanceList(list);
   };
   const handleInputChange = (e, index) => {
@@ -186,11 +195,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
     setUpdatedEntity(entity);
 
     if (challengeEntity.challengeDistance && !isNew) {
-      const list = [{ distance: 0, isDisabled: false }];
+      const list = challengeDistanceList;
       challengeEntity.challengeDistance.map((challengeDistance, i) => {
         list[i] = { distance: challengeDistance.distance, isDisabled: false };
       });
-      list.sort(compare);
       setChallengeDistanceList(list);
     }
 
@@ -204,17 +212,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       setMinDistance({
         value: (challengeEntity.challengeValidity.minDistance / 1000).toString(),
         required: minDistance.required,
+        checked: challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.minDistance) > 0,
       });
 
       setElevationGain({
         value: challengeEntity.challengeValidity.elevationGain.toString(),
         required: elevationGain.required,
+        checked: challengeEntity.challengeValidity && Number(challengeEntity.challengeValidity.elevationGain) > 0,
       });
 
       setAvgCadence({
         from: challengeEntity.challengeValidity.avgCadenceFrom.toString(),
         to: challengeEntity.challengeValidity.avgCadenceTo.toString(),
         required: avgCadence.required,
+        checked:
+          challengeEntity.challengeValidity &&
+          Number(challengeEntity.challengeValidity.avgCadenceFrom) > 0 &&
+          Number(challengeEntity.challengeValidity.avgCadenceTo) > 0,
       });
     }
 
@@ -229,6 +243,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
+    console.log(uploadInvalidType);
     values.challengeValidity.avgPaceFrom = Number(values.challengeValidity.avgPaceFrom);
     values.challengeValidity.avgPaceTo = Number(values.challengeValidity.avgPaceTo);
 
@@ -278,10 +293,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
         ...values,
       };
 
-      if (isNew) {
-        props.createEntity(entity);
-      } else {
-        props.updateEntity(entity);
+      if (!uploadInvalidType) {
+        if (isNew) {
+          props.createEntity(entity);
+        } else {
+          props.updateEntity(entity);
+        }
       }
     }
   };
@@ -306,13 +323,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       <Row className="justify-content-right">
         <Col md="6">
           {!isNew ? (
-            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+            <h5 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
               Thay đổi thử thách
-            </h2>
+            </h5>
           ) : (
-            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+            <h5 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
               Thêm mới thử thách
-            </h2>
+            </h5>
           )}
         </Col>
       </Row>
@@ -337,9 +354,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </AvGroup>
               ) : null}
 
-              <Row>
-                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
-                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle} />
+              <Row form>
+                <h6 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle} />
               </Row>
               <Collapse isOpen={isOpen}>
                 <Card>
@@ -352,11 +369,15 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             id="challenge_type"
                             type="select"
                             name="challengeType"
+                            value={challengeEntity.challengeType ? challengeEntity.challengeType.toString() : '-1'}
                             onChange={event => {
                               event.target.value === '1' ? setIsOrganization(1) : event.target.value === '0' ? setIsOrganization(0) : {};
                             }}
+                            validate={{
+                              required: { value: true, errorMessage: 'Không được bỏ trống' },
+                            }}
                           >
-                            <option></option>
+                            <option value="-1"></option>
                             <option value="1">Cá nhân</option>
                             <option value="0">Ban tổ chức</option>
                           </AvField>
@@ -399,49 +420,66 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           label="Ảnh đại diện TT: "
                           reset={props.resetUploadImage}
                           required={isNew ? true : !challengeEntity.imgUrl}
+                          onInvalidType={() => setUploadInvalidType(true)}
+                          onValidType={() => setUploadInvalidType(false)}
                         />
-                        <AvField hidden name="imgUrl" value={props.uploadImageEntity.url} />
+                        <AvField
+                          hidden
+                          name="imgUrl"
+                          value={isNew ? props.uploadImageEntity.url : challengeEntity.imgUrl}
+                          validate={{
+                            required: { value: true, errorMessage: 'Ảnh chưa cập nhật thành công' },
+                          }}
+                        />
                         {/*add feedback for not upload image*/}
                       </Col>
                     </Row>
 
-                    <Row>
-                      <Col xs="12" sm="6">
-                        <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }} id="titleLabel" for="challenge-title">
-                            Tên thử thách <RedAsterisk />
-                          </Label>
-                          <AvField
-                            id="challenge-title"
-                            data-cy="title"
-                            type="text"
-                            name="title"
-                            value={challengeEntity && !isNew ? challengeEntity.title : ''}
-                            validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
-                              minLength: {
-                                value: 5,
-                                errorMessage: 'This field is required to be at least 5 characters.',
-                              },
-                              maxLength: {
-                                value: 200,
-                                errorMessage: 'This field cannot be longer than 200 characters.',
-                              },
-                            }}
-                          />
-                        </AvGroup>
+                    <Row form>
+                      <Col md={3}>
+                        <Row>
+                          <Col md={11}>
+                            <AvGroup>
+                              <Label id="titleLabel" for="challenge-title">
+                                Tên thử thách <RedAsterisk />
+                              </Label>
+                              <AvField
+                                id="challenge-title"
+                                data-cy="title"
+                                type="text"
+                                name="title"
+                                value={challengeEntity && !isNew ? challengeEntity.title : ''}
+                                validate={{
+                                  required: { value: true, errorMessage: 'Không được bỏ trống' },
+                                  minLength: {
+                                    value: 5,
+                                    errorMessage: 'Cần ít nhất 5 kí tự',
+                                  },
+                                  maxLength: {
+                                    value: 200,
+                                    errorMessage: 'Không được nhiều hơn 200 kí tự',
+                                  },
+                                }}
+                              />
+                            </AvGroup>
+                          </Col>
+                        </Row>
                       </Col>
 
-                      <Col xs="12" sm="6">
-                        <AvGroup className="form-group form-inline">
-                          <Label style={{ marginRight: '10px' }}>Gắn thẻ:</Label>
-                          <AvInput name="challenge-tag" />
-                        </AvGroup>
+                      <Col md={3}>
+                        <Row className="justify-content-right">
+                          <Col md={12}>
+                            <AvGroup className="form-group">
+                              <Label>Gắn thẻ:</Label>
+                              <AvInput name="challenge-tag" />
+                            </AvGroup>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
 
-                    <Row>
-                      <Col xs="12" sm="4">
+                    <Row form>
+                      <Col md={2}>
                         <AvGroup>
                           <Label id="dateStartLabel" for="challenge-dateStart">
                             Từ ngày
@@ -458,12 +496,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setDateStart(event.target.value);
                             }}
                             validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
+                              required: { value: true, errorMessage: 'Không được bỏ trống' },
                             }}
                           />
                         </AvGroup>
                       </Col>
-                      <Col xs="12" sm="4">
+                      <Col md={2}>
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateFinish">
                             Đến ngày
@@ -485,10 +523,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           )}
                         </AvGroup>
                       </Col>
-                      <Col xs="12" sm="4">
+                      <Col md={2}>
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateRegisDeadline">
-                            Hạn đăng kí
+                            Hạn đăng ký
                           </Label>
                           <AvInput
                             id="challenge-dateRegisDeadline"
@@ -502,7 +540,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setDateRegisDeadline(event.target.value);
                             }}
                             validate={{
-                              required: { value: true, errorMessage: 'This field is required.' },
+                              required: { value: true, errorMessage: 'Không được bỏ trống' },
                             }}
                           />
                           {convertDateTimeFromServer(dateFinish) < convertDateTimeFromServer(dateRegisDeadline) && (
@@ -541,24 +579,17 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                   </CardBody>
                 </Card>
               </Collapse>
-
-              <Row>
-                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>2. Cài đặt tiêu chí</h4>
-                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle2} />
+              <Row form>
+                <h6 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí&nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle2} />
               </Row>
               <Collapse isOpen={isOpen2}>
                 <Card>
                   <CardBody>
-                    <Row className="justify-content-left">
-                      <Col xs="12" sm="6">
+                    <Row form>
+                      <Col md={4}>
                         <AvGroup>
-                          <AvField
-                            id="challenge_sport"
-                            type="select"
-                            name="sport.name"
-                            label="Bộ môn"
-                            // disabled = {!isNew && ([1,12].includes(challengeEntity.status)) }
-                          >
+                          <AvField id="challenge_sport" type="select" name="sport.name" label="Bộ môn">
                             <option>Chạy bộ</option>
                           </AvField>
                           <AvField hidden name="sport.id" type="text" value="1"></AvField>
@@ -577,7 +608,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         }
                       }}
                       value={challengeEntity.calType}
-                      required
+                      validate={{
+                        required: { value: true, errorMessage: 'Giá trị bắt buộc' },
+                      }}
                     >
                       <AvRadio label="Có MỘT LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value={1} />
                       <AvRadio label="Tổng tích lũy CÁC LẦN thực hiện hợp lệ đạt hạng mục đã đăng ký" value={2} />
@@ -591,11 +624,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                       </Col>
                     </Row>
 
-                    <Row>
-                      {challengeDistanceList.map((distance, i) => (
-                        <Col xs="12" sm="6" key={i}>
-                          <AvGroup className="form-group">
-                            <Label style={{ marginRight: '10px' }}>
+                    {challengeDistanceList.map((distance, i) => (
+                      <Row form key={i}>
+                        <Col md={4}>
+                          <AvGroup>
+                            <Label>
                               {i === 0 ? (
                                 <div>
                                   Hạng mục {i + 1}: <RedAsterisk />
@@ -615,11 +648,11 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               value={challengeDistanceList[i].distance}
                               validate={{
                                 required: {
-                                  value: i === 0 || (i < 4 && challengeDistanceList[i + 1]),
+                                  value: i === 0 || (i < 4 && challengeDistanceList[i + 1] && challengeDistanceList[i + 1].distance > 0),
                                   errorMessage: 'Không được để trống',
                                 },
                                 min: {
-                                  value: challengeDistanceList[i - 1] ? Number(challengeDistanceList[i - 1].distance) + 1 : 0,
+                                  value: isNew && challengeDistanceList[i - 1] ? Number(challengeDistanceList[i - 1].distance) + 1 : 0,
                                   errorMessage: 'Giá trị cần lớn hơn hạng mục trước',
                                 },
                               }}
@@ -637,8 +670,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             </AvGroup>
                           ) : null}
                         </Col>
-                      ))}
-                    </Row>
+                      </Row>
+                    ))}
 
                     <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ</text>
                     <Row></Row>
@@ -685,7 +718,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             }}
                             name="challengeValidity.avgPaceFrom"
                             validate={{
-                              required: { value: avgPace.required, errorMessage: 'Không để trống' },
+                              required: { value: avgPace.required, errorMessage: 'Không được để trống' },
                             }}
                           />
 
@@ -708,7 +741,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             }}
                             name="challengeValidity.avgPaceTo"
                             validate={{
-                              required: { value: true, errorMessage: 'Không để trống' },
+                              required: { value: true, errorMessage: 'Không được để trống' },
                               min: { value: avgPace.from, errorMessage: 'Giá trị từ không thể lớn hơn giá trị đến ' },
                             }}
                           />
@@ -724,10 +757,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <input
                               type="checkbox"
                               className="mr-2"
+                              checked={minDistance.checked}
                               onChange={() =>
                                 setMinDistance({
                                   value: minDistance.value,
                                   required: !minDistance.required,
+                                  checked: !minDistance.checked,
                                 })
                               }
                             />
@@ -745,9 +780,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             max="300.0"
                             className="form-control"
                             name="challengeValidity.minDistance"
-                            // validate={{
-                            //   required: { value: minDistance.required, errorMessage: 'Không để trống' },
-                            // }}
+                            validate={{
+                              required: { value: minDistance.required, errorMessage: 'Không để trống' },
+                            }}
                           ></AvField>
                           {/*<Label> &nbsp; (km)</Label>*/}
                           {minDistance.value === '' && <p className="invalid-feedback">Không được để trống.</p>}
@@ -761,10 +796,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
+                            checked={elevationGain.checked}
                             onChange={() =>
                               setElevationGain({
                                 value: elevationGain.value,
                                 required: !elevationGain.required,
+                                checked: !elevationGain.checked,
                               })
                             }
                           />
@@ -778,7 +815,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             className="form-control"
                             name="challengeValidity.elevationGain"
                             validate={{
-                              required: { value: elevationGain.required, errorMessage: 'Không để trống' },
+                              required: { value: elevationGain.required, errorMessage: 'Không được để trống' },
                             }}
                           />
 
@@ -793,11 +830,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <input
                             type="checkbox"
                             className="mr-2"
+                            checked={avgCadence.checked}
                             onChange={() =>
                               setAvgCadence({
                                 from: avgCadence.from,
                                 to: avgCadence.to,
                                 required: !avgCadence.required,
+                                checked: !avgCadence.checked,
                               })
                             }
                           />
@@ -813,7 +852,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             className="form-control"
                             name="challengeValidity.avgCadenceFrom"
                             validate={{
-                              required: { value: avgCadence.required, errorMessage: 'Không để trống' },
+                              required: { value: avgCadence.required, errorMessage: 'Không được để trống' },
                             }}
                           />
                           <AvField
@@ -828,7 +867,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             className="form-control"
                             name="challengeValidity.avgCadenceTo"
                             validate={{
-                              required: { value: avgCadence.required, errorMessage: 'Không để trống' },
+                              required: { value: avgCadence.required, errorMessage: 'Không được để trống' },
                               min: { value: avgCadence.from, errorMessage: 'Giá trị đến không thể nhỏ hơn giá trị từ' },
                             }}
                           />
@@ -859,8 +898,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <text style={{ fontWeight: 'bold' }}> Thứ tự các tiêu chí xếp hạng:</text>
 
                     {validityCriteria.map((criteria, index) => (
-                      <Row className="justify-content-right" key={index}>
-                        <Col xs="12" sm="7">
+                      <Row key={index}>
+                        <Col sm={7}>
                           <AvGroup className="form-group form-inline">
                             <input
                               type="checkbox"
@@ -872,8 +911,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             <AvField
                               type="string"
                               name={'rankCriteria' + (index + 1)}
-                              disabled={criteria !== 3}
-                              style={{ width: '250px' }}
+                              disabled
+                              style={{ width: '250px', border: 'hidden', fill: 'white' }}
                               value={
                                 criteria === 1
                                   ? 'Số km thực hiện nhiều nhất'
@@ -890,7 +929,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               name={'challengeValidity.rankCriteria' + (index + 1)}
                               value={criteria === 3 ? (!criteria3Checked ? '0' : '3') : Number(criteria)}
                             />
-                            {index !== 2 ? <Button onClick={swapPosition}> Đổi </Button> : null}
+                            &nbsp; &nbsp;
+                            {index !== 2 ? (
+                              <Button outline color="primary" onClick={swapPosition}>
+                                {' '}
+                                Đổi <FontAwesomeIcon icon={faSyncAlt} />{' '}
+                              </Button>
+                            ) : null}
                           </AvGroup>
                         </Col>
                       </Row>
@@ -899,47 +944,46 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </Card>
               </Collapse>
 
-              <Row>
-                <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>3. Cài đặt thành viên</h4>
-                <DownOutlined style={{ fontSize: '20px', paddingTop: '10px' }} onClick={toggle3} />
+              <Row form>
+                <h6 style={{ fontWeight: 'bold' }}>3. Cài đặt thành viên&nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle3} />
               </Row>
               <Collapse isOpen={isOpen3}>
                 <Card>
                   <CardBody>
-                    <Row>
-                      <Col xs="12" sm="5">
-                        <Row>
-                          <AvGroup className="form-group">
-                            <Label id="titleLabel" for="challenge-title">
-                              Số người tham gia <RedAsterisk />
-                            </Label>
-                            <AvField
-                              id="challenge-num_of_participant"
-                              data-cy="num_of_participant"
-                              type="number"
-                              step="1"
-                              className="form-control"
-                              name="numOfParticipant"
-                              validate={{
-                                required: {
-                                  value: true,
-                                  errorMessage: 'Không được bỏ trống thông tin này',
-                                },
-                                max: {
-                                  value: 100,
-                                  errorMessage:
-                                    'Tối đa 100 thành viên đối với thử thách từ cá nhân. Để tạo thử thách với số lượng thành viên lớn hơn, vui lòng liên hệ 19006600',
-                                },
-                              }}
-                            />
-                          </AvGroup>
-                        </Row>
+                    <Row form>
+                      <Col md={5}>
+                        <AvGroup className="form-group form-inline">
+                          <Label id="titleLabel" for="challenge-title">
+                            Số người tham gia: <RedAsterisk /> &nbsp;
+                          </Label>
+                          <AvField
+                            id="challenge-num_of_participant"
+                            data-cy="num_of_participant"
+                            type="number"
+                            step="1"
+                            className="form-control"
+                            name="numOfParticipant"
+                            value={!isNew && challengeEntity.numOfParticipant ? challengeEntity.numOfParticipant : undefined}
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'Không được bỏ trống ',
+                              },
+                              max: {
+                                value: 100,
+                                errorMessage:
+                                  'Tối đa 100 thành viên đối với thử thách từ cá nhân. Để tạo thử thách với số lượng thành viên lớn hơn, vui lòng liên hệ 19006600',
+                              },
+                            }}
+                          />
+                        </AvGroup>
                       </Col>
                     </Row>
 
-                    <Row>
+                    <Row form>
                       <Col xs="12" sm="8">
-                        <Row className="form-group">
+                        <AvGroup className="form-group">
                           <Label>
                             Phạm vi tham gia:
                             <RedAsterisk /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -951,29 +995,47 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               setObjectType(event.target.value);
                             }}
                             defaultValue="1"
-                            required
+                            value={challengeEntity.objectType ? challengeEntity.objectType.toString() : '1'}
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'Không được bỏ trống ',
+                              },
+                            }}
                           >
-                            <AvRadio style={{ textAlign: 'left' }} label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
+                            <AvRadio label="Công khai - Mọi thành viên đều có thể tham gia" value="1" />
                             <AvRadio label="Nội bộ - Chỉ có thành viên có mã đăng ký, được mời, được duyệt mới có thể tham gia" value="2" />
                           </AvRadioGroup>
                           {objectType === '2' ? (
                             <Col xs="12" sm="8">
                               <Row style={{ paddingTop: '6px' }}>
                                 <label>
-                                  Mã đăng kí
+                                  Mã đăng ký
                                   <RedAsterisk /> &nbsp;
                                 </label>
-                                <AvInput type="text" name="code" required />
+                                <AvField
+                                  type="text"
+                                  name="code"
+                                  validate={{
+                                    required: {
+                                      value: true,
+                                      errorMessage: 'Không được bỏ trống ',
+                                    },
+                                  }}
+                                />
                               </Row>
                             </Col>
                           ) : null}
-                        </Row>
+                        </AvGroup>
                       </Col>
                     </Row>
-                    <Row>
-                      <AvCheckboxGroup name="teamAllow">
-                        <AvCheckbox label="Thi đấu theo nhóm" checked={teamAllow} onChange={changeTeamAllow}></AvCheckbox>
-                      </AvCheckboxGroup>
+
+                    <Row form>
+                      <Col md={4}>
+                        <AvCheckboxGroup name="teamAllow">
+                          <AvCheckbox label="Thi đấu theo nhóm" checked={teamAllow} onChange={changeTeamAllow}></AvCheckbox>
+                        </AvCheckboxGroup>
+                      </Col>
                     </Row>
 
                     {teamAllow === true ? (
@@ -1003,20 +1065,23 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                                   name={'teams' + '[' + i + ']' + '.name'}
                                   placeholder={'Nhóm' + ' ' + (+i + +1)}
                                   value={team.name}
-                                  required
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Không được bỏ trống' },
+                                  }}
                                   onChange={event => handleInputChange(event, i)}
                                 >
                                   team.name{' '}
                                 </AvInput>
+                                &nbsp;
                                 {teamList.length !== 1 && (
-                                  <Button onClick={() => handleRemoveClick(i)}>
+                                  <Button outline color="danger" onClick={() => handleRemoveClick(i)}>
                                     {' '}
                                     <FontAwesomeIcon icon={faTimes} />
                                   </Button>
                                 )}
                               </AvGroup>
                             ))}
-                            <Button onClick={handleAddClick} style={{ fontSize: '16px' }}>
+                            <Button outline color="primary" onClick={handleAddClick} style={{ fontSize: '16px' }}>
                               <FontAwesomeIcon icon="plus" size="1x" />
                               &nbsp; Thêm nhóm
                             </Button>

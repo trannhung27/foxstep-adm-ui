@@ -56,8 +56,8 @@ export const savePassword = (currentPassword, newPassword) => ({
   type: ACTION_TYPES.UPDATE_PASSWORD,
   payload: axios.post(`${apiUrl}/change-password`, { currentPassword, newPassword }),
   meta: {
-    successMessage: '<strong>Password changed!</strong>',
-    errorMessage: '<strong>An error has occurred!</strong> The password could not be changed.',
+    successMessage: 'Đổi mật khẩu thành công!',
+    errorMessage: 'Có lỗi xảy ra! Đổi mật khẩu thất bại.',
   },
 });
 

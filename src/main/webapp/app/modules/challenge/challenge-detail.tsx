@@ -1,31 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
-import { Button, Row, Col, Label, Collapse, CardBody, Card } from 'reactstrap';
-import {
-  AvFeedback,
-  AvForm,
-  AvGroup,
-  AvInput,
-  AvField,
-  AvRadioGroup,
-  AvRadio,
-  AvCheckboxGroup,
-  AvCheckbox,
-  AvInputContainer,
-} from 'availity-reactstrap-validation';
+import { Button, Row, Col, Label, Badge } from 'reactstrap';
+import { AvFeedback, AvForm, AvGroup, AvField, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
 import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import parse from 'html-react-parser';
 
 import { IRootState } from 'app/shared/reducers';
-import { approveChallenge, getEntity, endChallenge } from './challenge.reducer';
+import { approveChallenge, getEntity, endChallenge, cancelChallenge } from './challenge.reducer';
 
 import { APP_TIMESTAMP_FORMAT, ChallengeStatuses, WfProcessGroup } from 'app/config/constants';
 import { getEntities as getActions } from '../workflow/wf-action/wf-action-reducer';
 import { WfAction } from 'app/modules/workflow/wf-action/wf-action';
 import { ChallengeApproveDialog } from 'app/modules/challenge/challenge-approve-dialog';
 import { ChallengeRejectDialog } from 'app/modules/challenge/challenge-reject-dialog';
+import { ChallengeEndDialog } from 'app/modules/challenge/challenge-end-dialog';
+import { ChallengeCancelDialog } from 'app/modules/challenge/challenge-cancel-dialog';
 
 export interface IChallengeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -36,6 +27,8 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showEndModal, setShowEndModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [challengeDistance, setChallengeDistance] = useState([]);
 
   const { challengeEntity } = props;
@@ -58,7 +51,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   return (
     <Row>
       <Col md="12">
-        {challengeEntity.status === ChallengeStatuses[0].id ? (
+        {challengeEntity.status === ChallengeStatuses[0].id || challengeEntity.status === ChallengeStatuses[4].id ? (
           <>
             <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
               <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
@@ -102,16 +95,30 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             &nbsp;
           </>
         ) : null}
-        {challengeEntity.status === ChallengeStatuses[1].id || challengeEntity.status === ChallengeStatuses[3].id ? (
+        {challengeEntity.status === ChallengeStatuses[3].id ? (
           <>
             <Button
               onClick={() => {
-                props.endChallenge(props.challengeEntity.id);
+                setShowEndModal(true);
               }}
               replace
               color="secondary"
             >
               <span className="d-none d-md-inline">Kết thúc</span>
+            </Button>
+            &nbsp;
+          </>
+        ) : null}
+        {challengeEntity.status === ChallengeStatuses[4].id ? (
+          <>
+            <Button
+              onClick={() => {
+                setShowCancelModal(true);
+              }}
+              replace
+              color="danger"
+            >
+              <span className="d-none d-md-inline">Hủy</span>
             </Button>
             &nbsp;
           </>
@@ -138,45 +145,54 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
         reject={props.approveChallenge}
         updateSuccess={props.updateSuccess}
       />
+      <ChallengeEndDialog
+        onClose={() => {
+          setShowEndModal(false);
+        }}
+        showModal={showEndModal}
+        challengeEntity={props.challengeEntity}
+        endChallenge={props.endChallenge}
+        updateSuccess={props.updateSuccess}
+        updating={props.updating}
+      />
+      <ChallengeCancelDialog
+        onClose={() => {
+          setShowCancelModal(false);
+        }}
+        showModal={showCancelModal}
+        challengeEntity={props.challengeEntity}
+        cancelChallenge={props.cancelChallenge}
+        updateSuccess={props.updateSuccess}
+        updating={props.updating}
+      />
       <Col md="12">
         <AvForm model={challengeEntity} readOnly>
-          <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>1. Thông tin chung</h4>
+          <h4 style={{ fontWeight: 'bold' }}>1. Thông tin chung</h4>
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={4}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }}>Trạng thái: &nbsp; &nbsp; &nbsp;</Label>
-                {challengeEntity.status === ChallengeStatuses[0].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[0].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[1].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[1].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[2].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[2].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[3].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[3].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[4].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[4].name}</div>
-                ) : challengeEntity.status === ChallengeStatuses[5].id ? (
-                  <div style={{ fontWeight: 'bold' }}>{ChallengeStatuses[5].name}</div>
+                {challengeEntity.status === 0 ? (
+                  <Badge color="dark">{ChallengeStatuses[0].name}</Badge>
+                ) : challengeEntity.status === 1 ? (
+                  <Badge color="primary">{ChallengeStatuses[1].name}</Badge>
+                ) : challengeEntity.status === 2 ? (
+                  <Badge color="danger">{ChallengeStatuses[2].name}</Badge>
+                ) : challengeEntity.status === 12 ? (
+                  <Badge color="success">{ChallengeStatuses[3].name}</Badge>
+                ) : challengeEntity.status === -1 ? (
+                  <Badge color="secondary">{ChallengeStatuses[4].name}</Badge>
+                ) : challengeEntity.status === -2 ? (
+                  <Badge color="info">{ChallengeStatuses[5].name}</Badge>
                 ) : (
-                  <div style={{ fontWeight: 'bold' }}></div>
+                  <div></div>
                 )}
-              </AvGroup>
-            </Col>
-
-            <Col xs="12" sm="6">
-              <AvGroup className="form-group form-inline">
-                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="img_urlLabel" for="challenge-img_url">
-                  Thành viên: &nbsp; &nbsp;
-                </Label>
-                <div style={{ fontWeight: 'bold' }}>
-                  {challengeEntity.numOfRegis}/{challengeEntity.numOfParticipant}
-                </div>
               </AvGroup>
             </Col>
           </Row>
 
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={3}>
               {challengeEntity.challengeType === 0 ? (
                 <AvGroup className="form-group form-inline">
                   <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
@@ -194,7 +210,20 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               )}
             </Col>
 
-            <Col xs="12" sm="6">
+            <Col md={3}>
+              <AvGroup className="form-group form-inline">
+                <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="img_urlLabel" for="challenge-img_url">
+                  Thành viên: &nbsp; &nbsp;
+                </Label>
+                <div style={{ fontWeight: 'bold' }}>
+                  {challengeEntity.numOfRegis}/{challengeEntity.numOfParticipant}
+                </div>
+              </AvGroup>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={6}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Ảnh đại diện TT(tỉ lệ 2x1): &nbsp; &nbsp;
@@ -205,7 +234,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           </Row>
 
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Tên thử thách: &nbsp; &nbsp;
@@ -214,7 +243,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               </AvGroup>
             </Col>
 
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Gắn thẻ: &nbsp; &nbsp;
@@ -225,7 +254,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           </Row>
 
           <Row>
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateStart">
                   Thời gian bắt đầu: &nbsp; &nbsp;
@@ -236,7 +265,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
               </AvGroup>
             </Col>
 
-            <Col xs="12" sm="6">
+            <Col md={3}>
               <AvGroup className="form-group form-inline">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-dateFinish">
                   Thời gian kết thúc: &nbsp; &nbsp;
@@ -272,14 +301,14 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             </Col>
           </Row>
 
-          <h4 style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>2. Cài đặt tiêu chí:</h4>
+          <h4 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí:</h4>
           <Row>
             <Col xs="12" sm="6">
               <AvGroup className="form-group">
                 <Label style={{ marginRight: '10px', fontWeight: 'bold' }} id="titleLabel" for="challenge-title">
                   Bộ môn: &nbsp; &nbsp;
                 </Label>
-                <div>{challengeEntity.sport && challengeEntity.sport.name}</div>
+                <Badge>{challengeEntity.sport && challengeEntity.sport.name}</Badge>
               </AvGroup>
               <AvGroup classname="form-inline">
                 <AvRadioGroup name="calType" value={challengeEntity.calType}>
@@ -293,9 +322,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             </Col>
           </Row>
 
-          <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>
-            Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km){' '}
-          </text>
+          <text style={{ fontWeight: 'bold' }}>Hạng mục(Cho phép nhập trực tiếp quãng đường với đơn vị là Km) </text>
 
           {challengeDistance.map((distance, i) => (
             <Col xs="12" sm="6" key={i}>
@@ -309,7 +336,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
           ))}
 
           <Row></Row>
-          <text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>Tiêu chí hợp lệ:</text>
+          <text style={{ fontWeight: 'bold' }}>Tiêu chí hợp lệ:</text>
 
           <AvField
             type="checkbox"
@@ -502,9 +529,10 @@ const mapStateToProps = ({ challenge, wfAction }: IRootState) => ({
   wfActionList: wfAction.entities,
   wfActionLoading: wfAction.loading,
   updateSuccess: challenge.updateSuccess,
+  updating: challenge.updating,
 });
 
-const mapDispatchToProps = { getEntity, getActions, approveChallenge, endChallenge };
+const mapDispatchToProps = { getEntity, getActions, approveChallenge, endChallenge, cancelChallenge };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
