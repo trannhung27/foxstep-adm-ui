@@ -30,6 +30,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
   const [editorChanged, setEditorChanged] = useState(false);
   const [editorError, setEditorErrorState] = useState(false);
   const [datePublishedState, setDatePublishedState] = useState(displayDefaultDateTime());
+  const [uploadInvalidType, setUploadInvalidType] = useState(false);
 
   const onEditorStateChange = editor => {
     setEditorChanged(true);
@@ -78,10 +79,12 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
         newsCategory: newsCategories.find(it => it.id.toString() === values.newsCategoryId.toString()),
       };
 
-      if (isNew) {
-        props.createEntity(entity);
-      } else {
-        props.updateEntity(entity);
+      if (!uploadInvalidType) {
+        if (isNew) {
+          props.createEntity(entity);
+        } else {
+          props.updateEntity(entity);
+        }
       }
     }
   };
@@ -117,6 +120,8 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     reset={props.resetUploadImage}
                     initImage={isNew ? null : faqEntity.imgUrl}
                     required={isNew ? true : !faqEntity.imgUrl}
+                    onInvalidType={() => setUploadInvalidType(true)}
+                    onValidType={() => setUploadInvalidType(false)}
                   />
                   <AvField
                     hidden

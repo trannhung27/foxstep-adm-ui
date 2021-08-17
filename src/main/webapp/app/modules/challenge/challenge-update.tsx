@@ -119,6 +119,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false, checked: false });
   // const
 
+  //upload image invalid file type error
+  const [uploadInvalidType, setUploadInvalidType] = useState(false);
+
   const onEditorStateChange = editor => {
     setEditorState(editor);
     setEditorChanged(true);
@@ -240,6 +243,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
+    console.log(uploadInvalidType);
     values.challengeValidity.avgPaceFrom = Number(values.challengeValidity.avgPaceFrom);
     values.challengeValidity.avgPaceTo = Number(values.challengeValidity.avgPaceTo);
 
@@ -289,10 +293,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
         ...values,
       };
 
-      if (isNew) {
-        props.createEntity(entity);
-      } else {
-        props.updateEntity(entity);
+      if (!uploadInvalidType) {
+        if (isNew) {
+          props.createEntity(entity);
+        } else {
+          props.updateEntity(entity);
+        }
       }
     }
   };
@@ -317,13 +323,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       <Row className="justify-content-right">
         <Col md="6">
           {!isNew ? (
-            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+            <h5 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
               Thay đổi thử thách
-            </h2>
+            </h5>
           ) : (
-            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+            <h5 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
               Thêm mới thử thách
-            </h2>
+            </h5>
           )}
         </Col>
       </Row>
@@ -349,8 +355,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               ) : null}
 
               <Row form>
-                <h4 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h4>
-                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle} />
+                <h6 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle} />
               </Row>
               <Collapse isOpen={isOpen}>
                 <Card>
@@ -414,6 +420,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           label="Ảnh đại diện TT: "
                           reset={props.resetUploadImage}
                           required={isNew ? true : !challengeEntity.imgUrl}
+                          onInvalidType={() => setUploadInvalidType(true)}
+                          onValidType={() => setUploadInvalidType(false)}
                         />
                         <AvField
                           hidden
@@ -572,8 +580,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </Card>
               </Collapse>
               <Row form>
-                <h4 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí&nbsp;</h4>
-                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle2} />
+                <h6 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí&nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle2} />
               </Row>
               <Collapse isOpen={isOpen2}>
                 <Card>
@@ -937,8 +945,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               </Collapse>
 
               <Row form>
-                <h4 style={{ fontWeight: 'bold' }}>3. Cài đặt thành viên&nbsp;</h4>
-                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle3} />
+                <h6 style={{ fontWeight: 'bold' }}>3. Cài đặt thành viên&nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle3} />
               </Row>
               <Collapse isOpen={isOpen3}>
                 <Card>
