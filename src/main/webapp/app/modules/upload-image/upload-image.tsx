@@ -7,7 +7,7 @@ import { AvGroup, AvField } from 'availity-reactstrap-validation';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faUpload, faFileImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { convert } from 'app/shared/util/editor-utils';
+import { convertSvg } from 'app/shared/util/editor-utils';
 
 export interface IUploadImage extends StateProps, DispatchProps {
   label: string;
@@ -65,8 +65,9 @@ export const UploadImageInput = (props: IUploadImage) => {
     reader.readAsDataURL(selectedFile);
     reader.onload = function () {
       if (selectedFile && selectedFile.type === 'image/svg+xml') {
-        const svgImagetoPngBase64 = convert(reader.result.toString()).split(',')[1];
-        uploadImageToServer(svgImagetoPngBase64);
+        convertSvg(reader.result.toString(), svgImagetoPngBase64 => {
+          uploadImageToServer(svgImagetoPngBase64);
+        });
       } else {
         const imageBase64 = reader.result.toString().split(',')[1];
         uploadImageToServer(imageBase64);

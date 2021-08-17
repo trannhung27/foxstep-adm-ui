@@ -223,7 +223,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     image: {
                       uploadCallback: uploadImageCallBack,
                       previewImage: true,
-                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg+xml',
                       alt: { present: true, mandatory: false },
                     },
                   }}

@@ -243,7 +243,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
-    console.log(uploadInvalidType);
     values.challengeValidity.avgPaceFrom = Number(values.challengeValidity.avgPaceFrom);
     values.challengeValidity.avgPaceTo = Number(values.challengeValidity.avgPaceTo);
 
