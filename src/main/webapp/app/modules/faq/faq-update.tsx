@@ -211,6 +211,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                 <Editor
                   editorState={editorState}
                   onEditorStateChange={onEditorStateChange}
+                  handlePastedText={() => false}
                   wrapperStyle={{ textDecoration: 'none !important' }}
                   editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
                   placeholder="Aa"
