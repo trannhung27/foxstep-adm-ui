@@ -101,6 +101,8 @@ module.exports = options =>
             // The root URL for API calls, ending with a '/'
             SERVER_API_URL: `'${options.api_url}/'`,
             AUTH_API_URL: `'${options.auth_url}'`,
+            OAUTH2_URL: `'${options.oauth2_url}'`,
+            OAUTH2_VERIFY: `'${options.oauth2_verify}'`,
           },
         }),
         new ESLintPlugin({

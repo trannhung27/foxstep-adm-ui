@@ -2,9 +2,12 @@ import axios from 'axios';
 import { Storage } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { AUTH_API_URL, USER_STATUS } from 'app/config/constants';
+import { AUTH_API_URL, OAUTH2_URL, OAUTH2_VERIFY, USER_STATUS } from 'app/config/constants';
+import { toast } from 'react-toastify';
 
 export const ACTION_TYPES = {
+  GET_OAUTH2_URL: 'authentication/GET_OAUTH2_URL',
+  VERIFY_OAUTH2_CODE: 'authentication/VERIFY_OAUTH2_CODE',
   LOGIN: 'authentication/LOGIN',
   GET_SESSION: 'authentication/GET_SESSION',
   LOGOUT: 'authentication/LOGOUT',
@@ -25,6 +28,7 @@ const initialState = {
   sessionHasBeenFetched: false,
   idToken: (null as unknown) as string,
   logoutUrl: (null as unknown) as string,
+  oauth2Url: (null as unknown) as string,
 };
 
 export type AuthenticationState = Readonly<typeof initialState>;
@@ -35,15 +39,20 @@ export default (state: AuthenticationState = initialState, action): Authenticati
   switch (action.type) {
     case REQUEST(ACTION_TYPES.LOGIN):
     case REQUEST(ACTION_TYPES.GET_SESSION):
+    case REQUEST(ACTION_TYPES.GET_OAUTH2_URL):
+    case REQUEST(ACTION_TYPES.VERIFY_OAUTH2_CODE):
       return {
         ...state,
         loading: true,
       };
     case FAILURE(ACTION_TYPES.LOGIN):
+    case FAILURE(ACTION_TYPES.GET_OAUTH2_URL):
+    case FAILURE(ACTION_TYPES.VERIFY_OAUTH2_CODE):
       return {
         ...initialState,
         errorMessage: action.payload,
         loginError: true,
+        oauth2Url: state.oauth2Url,
       };
     case FAILURE(ACTION_TYPES.GET_SESSION):
       return {
@@ -54,6 +63,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         errorMessage: action.payload,
       };
     case SUCCESS(ACTION_TYPES.LOGIN):
+    case SUCCESS(ACTION_TYPES.VERIFY_OAUTH2_CODE):
       return {
         ...state,
         loading: false,
@@ -63,6 +73,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
+        oauth2Url: state.oauth2Url,
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION): {
       const isAuthenticated = action.payload && action.payload.data && action.payload.data.status === USER_STATUS.ACTIVATED;
@@ -74,10 +85,18 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         account: action.payload.data,
       };
     }
+    case SUCCESS(ACTION_TYPES.GET_OAUTH2_URL): {
+      return {
+        ...state,
+        loading: false,
+        oauth2Url: action.payload.data.url,
+      };
+    }
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
         redirectMessage: action.message,
+        oauth2Url: state.oauth2Url,
       };
     case ACTION_TYPES.CLEAR_AUTH:
       return {
@@ -92,11 +111,41 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession: () => void = () => (dispatch, getState) => {
-  dispatch({
+export const getSession: () => void = () => async (dispatch, getState) => {
+  const result = await dispatch({
     type: ACTION_TYPES.GET_SESSION,
     payload: axios.get('api/account'),
   });
+  const isInActive = result.value && result.value.data && result.value.data.status === USER_STATUS.INACTIVE;
+  if (isInActive) {
+    toast.error('Tài khoản chưa kích hoạt!');
+    dispatch(logout());
+  }
+};
+
+export const getOauth2Url: () => void = () => (dispatch, getState) => {
+  dispatch({
+    type: ACTION_TYPES.GET_OAUTH2_URL,
+    payload: axios.get(OAUTH2_URL),
+  });
+};
+
+export const verifyOauth2Code: (code: string, rememberMe?: boolean) => void = (code, rememberMe = false) => async (dispatch, getState) => {
+  const result = await dispatch({
+    type: ACTION_TYPES.VERIFY_OAUTH2_CODE,
+    payload: axios.post(`${OAUTH2_VERIFY}?code=${code}&remember=${rememberMe}`),
+  });
+  if (!result.value.data.error) {
+    const bearerToken = result.value.data.idToken;
+    if (bearerToken) {
+      if (rememberMe) {
+        Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
+      } else {
+        Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+      }
+    }
+    await dispatch(getSession());
+  }
 };
 
 export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (
