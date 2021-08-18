@@ -127,6 +127,7 @@ export const ChallengesOfUser = (props: ICOUProps) => {
     setPaginationState({
       ...paginationState,
       itemsPerPage: size,
+      activePage: Math.min(Math.ceil(props.totalItems / size), paginationState.activePage),
     });
   };
 
