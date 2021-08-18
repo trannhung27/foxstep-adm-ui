@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Storage } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { AUTH_API_URL, OAUTH2_URL, OAUTH2_VERIFY, USER_STATUS } from 'app/config/constants';
+import { AUTH_API_URL, OAUTH2_URL, OAUTH2_VERIFY, USER_STATUS, AUTH_TOKEN_KEY, AUTH_LOGOUT_URL } from 'app/config/constants';
 import { toast } from 'react-toastify';
 
 export const ACTION_TYPES = {
@@ -14,8 +14,6 @@ export const ACTION_TYPES = {
   CLEAR_AUTH: 'authentication/CLEAR_AUTH',
   ERROR_MESSAGE: 'authentication/ERROR_MESSAGE',
 };
-
-const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 
 const initialState = {
   loading: false,
@@ -137,11 +135,14 @@ export const verifyOauth2Code: (code: string, rememberMe?: boolean) => void = (c
   });
   if (!result.value.data.error) {
     const bearerToken = result.value.data.idToken;
+    const logoutUrl = result.value.data.logoutUrl;
     if (bearerToken) {
       if (rememberMe) {
         Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
+        Storage.local.set(AUTH_LOGOUT_URL, logoutUrl);
       } else {
         Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+        Storage.session.set(AUTH_LOGOUT_URL, logoutUrl);
       }
     }
     await dispatch(getSession());
@@ -176,6 +177,12 @@ export const clearAuthToken = () => {
   if (Storage.session.get(AUTH_TOKEN_KEY)) {
     Storage.session.remove(AUTH_TOKEN_KEY);
   }
+  if (Storage.local.get(AUTH_LOGOUT_URL)) {
+    Storage.local.remove(AUTH_LOGOUT_URL);
+  }
+  if (Storage.session.get(AUTH_LOGOUT_URL)) {
+    Storage.session.remove(AUTH_LOGOUT_URL);
+  }
 };
 
 export const logout: () => void = () => dispatch => {
@@ -183,6 +190,12 @@ export const logout: () => void = () => dispatch => {
   dispatch({
     type: ACTION_TYPES.LOGOUT,
   });
+  if (Storage.local.get(AUTH_LOGOUT_URL)) {
+    window.location.replace(Storage.local.get(AUTH_LOGOUT_URL));
+  }
+  if (Storage.session.get(AUTH_LOGOUT_URL)) {
+    window.location.replace(Storage.session.get(AUTH_LOGOUT_URL));
+  }
 };
 
 export const clearAuthentication = messageKey => (dispatch, getState) => {

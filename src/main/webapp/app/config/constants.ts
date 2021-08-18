@@ -9,6 +9,9 @@ export const AUTH_API_URL = process.env.AUTH_API_URL;
 export const OAUTH2_URL = process.env.OAUTH2_URL;
 export const OAUTH2_VERIFY = process.env.OAUTH2_VERIFY;
 
+export const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+export const AUTH_LOGOUT_URL = 'fs-logout-url';
+
 export const AUTHORITIES = {
   USER: { id: 1, name: 'ROLE_USER' },
   ADMIN: { id: 2, name: 'ROLE_ADMIN' },

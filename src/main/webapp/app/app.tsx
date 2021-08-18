@@ -14,7 +14,7 @@ import { Layout } from 'antd';
 import LayoutHeader from 'app/shared/layout/header/header';
 import LayoutFooter from 'app/shared/layout/footer/footer';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
-import { AUTHORITIES } from 'app/config/constants';
+import { AUTH_TOKEN_KEY, AUTHORITIES } from 'app/config/constants';
 import Sidebar from 'app/shared/layout/sidebar/sidebar';
 
 import { toast, ToastContainer } from 'react-toastify';
@@ -26,8 +26,6 @@ import LoadingBar from 'react-redux-loading-bar';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 const { Content } = Layout;
-
-const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 
 export interface IAppProps extends StateProps, DispatchProps {}
 export const App = (props: IAppProps) => {
