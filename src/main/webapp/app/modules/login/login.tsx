@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { Alert, Button, Col, Label, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
@@ -16,7 +16,7 @@ export const Login = (props: ILoginProps) => {
   useLayoutEffect(() => {
     props.getOauth2Url();
     const code = getUrlParameter('code', props.location.search);
-    if (code !== null) props.verifyOauth2Code(code, rememberMe);
+    if (code) props.verifyOauth2Code(code, rememberMe);
   }, []);
 
   const handleSubmit = (event, errors, { username, password, remember }) => {
