@@ -211,6 +211,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                 <Editor
                   editorState={editorState}
                   onEditorStateChange={onEditorStateChange}
+                  handlePastedText={() => false}
                   wrapperStyle={{ textDecoration: 'none !important' }}
                   editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
                   placeholder="Aa"
@@ -232,7 +233,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                     image: {
                       uploadCallback: uploadImageCallBack,
                       previewImage: true,
-                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg+xml',
                       alt: { present: true, mandatory: false },
                     },
                   }}

@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { Alert, Button, Col, Label, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 
 import { IRootState } from 'app/shared/reducers';
-import { login } from 'app/shared/reducers/authentication';
+import { getOauth2Url, login, verifyOauth2Code } from 'app/shared/reducers/authentication';
+import { getUrlParameter } from 'react-jhipster';
 
-export interface ILoginProps extends StateProps, DispatchProps, RouteComponentProps<any> {}
+export interface ILoginProps extends StateProps, DispatchProps, RouteComponentProps<{ code: any }> {}
 
 export const Login = (props: ILoginProps) => {
-  const handleSubmit = (event, errors, { username, password, rememberMe }) => {
-    props.login(username, password, rememberMe);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useLayoutEffect(() => {
+    props.getOauth2Url();
+    const code = getUrlParameter('code', props.location.search);
+    if (code) props.verifyOauth2Code(code, rememberMe);
+  }, []);
+
+  const handleSubmit = (event, errors, { username, password, remember }) => {
+    props.login(username, password, remember);
   };
 
-  const { location, isAuthenticated } = props;
+  const { location, isAuthenticated, oauth2Url } = props;
   const { from } = (location.state as any) || { from: { pathname: '/', search: location.search } };
   if (isAuthenticated) {
     return <Redirect to={from} />;
@@ -41,7 +50,6 @@ export const Login = (props: ILoginProps) => {
                   placeholder="Nhập tên tài khoản"
                   required
                   errorMessage="Chưa nhập tên tài khoản!"
-                  autoFocus
                   data-cy="username"
                 />
                 <AvField
@@ -55,7 +63,8 @@ export const Login = (props: ILoginProps) => {
                 />
                 <AvGroup check inline>
                   <Label className="form-check-label">
-                    <AvInput type="checkbox" name="rememberMe" /> Ghi nhớ tài khoản
+                    <AvInput type="checkbox" name="rememberMe" value={rememberMe} onChange={e => setRememberMe(e.target.value)} /> Ghi nhớ
+                    tài khoản
                   </Label>
                 </AvGroup>
               </Col>
@@ -67,15 +76,14 @@ export const Login = (props: ILoginProps) => {
             </Button>
           </ModalFooter>
         </AvForm>
-        {/*<div className="mt-1">&nbsp;</div>*/}
-        {/*<Alert color="warning">*/}
-        {/*  <Link to="/reset/request" data-cy="forgetYourPasswordSelector">*/}
-        {/*    Quên mật khẩu?*/}
-        {/*  </Link>*/}
-        {/*</Alert>*/}
-        {/*<Alert color="warning">*/}
-        {/*  <span>Chưa có tài khoản?</span> <Link to="/register">Đăng ký</Link>*/}
-        {/*</Alert>*/}
+        {oauth2Url && (
+          <div className="mt-1 text-center">
+            &nbsp;
+            <Alert color="warning">
+              <a href={oauth2Url}>Đăng nhập bằng tài khoản FPT</a>
+            </Alert>
+          </div>
+        )}
       </Col>
     </Row>
   );
@@ -84,9 +92,10 @@ export const Login = (props: ILoginProps) => {
 const mapStateToProps = ({ authentication }: IRootState) => ({
   isAuthenticated: authentication.isAuthenticated,
   loginError: authentication.loginError,
+  oauth2Url: authentication.oauth2Url,
 });
 
-const mapDispatchToProps = { login };
+const mapDispatchToProps = { login, getOauth2Url, verifyOauth2Code };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

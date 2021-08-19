@@ -122,6 +122,7 @@ export const Users = (props: IUsersProps) => {
     setPaginationState({
       ...paginationState,
       itemsPerPage: size,
+      activePage: Math.min(Math.ceil(props.totalItems / size), paginationState.activePage),
     });
   };
 

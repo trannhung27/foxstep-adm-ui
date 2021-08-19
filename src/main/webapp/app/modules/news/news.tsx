@@ -121,6 +121,7 @@ export const News = (props: INewsProps) => {
     setPaginationState({
       ...paginationState,
       itemsPerPage: size,
+      activePage: Math.min(Math.ceil(props.totalItems / size), paginationState.activePage),
     });
   };
 

@@ -38,6 +38,7 @@ import { ChallengeUserDialog } from './challenge-search-user-dialog';
 import { UploadImageInput } from '../upload-image/upload-image';
 import { uploadImage } from '../upload-image/upload-image-reducer';
 import challenge from 'app/modules/challenge/challenge';
+import { uploadImageCallBack } from 'app/shared/util/editor-utils';
 
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -555,6 +556,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Editor
                       editorState={editorState}
                       onEditorStateChange={onEditorStateChange}
+                      handlePastedText={() => false}
                       wrapperStyle={{ textDecoration: 'none !important' }}
                       editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
                       toolbar={{
@@ -572,6 +574,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           'remove',
                           'history',
                         ],
+                        image: {
+                          uploadCallback: uploadImageCallBack,
+                          previewImage: true,
+                          inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                          alt: { present: true, mandatory: false },
+                        },
                       }}
                     />
                     {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}

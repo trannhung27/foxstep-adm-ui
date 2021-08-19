@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { logout } from 'app/shared/reducers/authentication';
 import { useHistory, Link } from 'react-router-dom';
+import { Storage } from 'react-jhipster';
+import { AUTH_LOGOUT_URL } from 'app/config/constants';
 
 export interface ILogoutProps extends StateProps, DispatchProps {
   idToken: string;
@@ -14,15 +16,11 @@ export const Logout = (props: ILogoutProps) => {
   const history = useHistory();
 
   useLayoutEffect(() => {
+    const logoutUrl = props.logoutUrl || Storage.local.get(AUTH_LOGOUT_URL) || Storage.session.get(AUTH_LOGOUT_URL);
     props.logout();
-    const logoutUrl = props.logoutUrl;
     if (logoutUrl) {
-      // if Keycloak, logoutUrl has protocol/openid-connect in it
-      window.location.href = logoutUrl.includes('/protocol')
-        ? logoutUrl + '?redirect_uri=' + window.location.origin
-        : logoutUrl + '?id_token_hint=' + props.idToken + '&post_logout_redirect_uri=' + window.location.origin;
-    }
-    history.push('/login');
+      window.location.href = logoutUrl;
+    } else history.push('/login');
   });
 
   return (

@@ -128,6 +128,7 @@ export const Challenge = (props: IChallengeProps) => {
     setPaginationState({
       ...paginationState,
       itemsPerPage: size,
+      activePage: Math.min(Math.ceil(props.totalItems / size), paginationState.activePage),
     });
   };
 
