@@ -36,7 +36,7 @@ export const NewsDetail = (props: INewsDetailProps) => {
           </Button>,
         ]}
       >
-        <Descriptions size="small" column={1}>
+        <Descriptions size="default" column={1}>
           <Descriptions.Item label="Người tạo">{newsEntity.user ? newsEntity.user.firstName : ''}</Descriptions.Item>
           <Descriptions.Item label="Trạng thái">
             {NEWS_STATUSES.map((status, i) =>

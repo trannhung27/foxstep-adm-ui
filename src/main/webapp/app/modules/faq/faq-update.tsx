@@ -172,7 +172,7 @@ export const FaqUpdate = (props: IFaqUpdateProps) => {
                   placeholder="Aa"
                   validate={{
                     required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
-                    maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
+                    maxLength: { value: 255, errorMessage: 'Tối đa 255 kí tự.' },
                   }}
                 />
               </AvGroup>

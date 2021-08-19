@@ -14,7 +14,7 @@ export const Login = (props: ILoginProps) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   useLayoutEffect(() => {
-    props.getOauth2Url();
+    if (!oauth2Url) props.getOauth2Url();
     const code = getUrlParameter('code', props.location.search);
     if (code) props.verifyOauth2Code(code, rememberMe);
   }, []);

@@ -30,43 +30,45 @@ export const menuItems = [
     child: [
       {
         key: 101,
-        title: 'User Management',
+        title: 'QL người dùng',
         icon: <TeamOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
         url: '/admin/user-management',
       },
-      {
-        key: 102,
-        title: 'Metrics',
-        icon: <MonitorOutlined />,
-        url: '/admin/metrics',
-      },
-      {
-        key: 103,
-        title: 'Health',
-        icon: <HeartOutlined />,
-        url: '/admin/health',
-      },
-      {
-        key: 104,
-        title: 'Configuration',
-        icon: <ControlOutlined />,
-        url: '/admin/configuration',
-      },
-      {
-        key: 105,
-        title: 'Logs',
-        icon: <CodeOutlined />,
-        url: '/admin/logs',
-      },
-      {
-        key: 106,
-        title: 'API docs',
-        icon: <ApiOutlined />,
-        url: '/admin/docs',
-      },
+      // {
+      //   key: 102,
+      //   title: 'Metrics',
+      //   icon: <MonitorOutlined />,
+      //   url: '/admin/metrics',
+      // },
+      // {
+      //   key: 103,
+      //   title: 'Health',
+      //   icon: <HeartOutlined />,
+      //   url: '/admin/health',
+      // },
+      // {
+      //   key: 104,
+      //   title: 'Configuration',
+      //   icon: <ControlOutlined />,
+      //   url: '/admin/configuration',
+      // },
+      // {
+      //   key: 105,
+      //   title: 'Logs',
+      //   icon: <CodeOutlined />,
+      //   url: '/admin/logs',
+      // },
+      // {
+      //   key: 106,
+      //   title: 'API docs',
+      //   icon: <ApiOutlined />,
+      //   url: '/admin/docs',
+      // },
       {
         key: 107,
-        title: 'Sports',
+        title: 'Quản lý bộ môn',
         icon: <TrophyOutlined />,
         isAuthenticated: true,
         isAdmin: true,
@@ -74,7 +76,7 @@ export const menuItems = [
       },
       {
         key: 108,
-        title: 'News Category',
+        title: 'Phân loại tin tức',
         icon: <ReadOutlined />,
         isAuthenticated: true,
         isAdmin: true,
@@ -82,14 +84,14 @@ export const menuItems = [
       },
       {
         key: 109,
-        title: 'Workflow',
+        title: 'Luồng duyệt',
         icon: <BranchesOutlined />,
         isAuthenticated: true,
         isAdmin: true,
         child: [
           {
             key: 1081,
-            title: 'Process Group',
+            title: 'Nhóm duyệt',
             icon: <BlockOutlined />,
             isAuthenticated: true,
             isAdmin: true,
@@ -97,7 +99,7 @@ export const menuItems = [
           },
           {
             key: 1082,
-            title: 'Process',
+            title: 'Loại yêu cầu',
             icon: <BorderOutlined />,
             isAuthenticated: true,
             isAdmin: true,
@@ -105,7 +107,7 @@ export const menuItems = [
           },
           {
             key: 1083,
-            title: 'Action Type',
+            title: 'Loại hành động',
             icon: <DingtalkOutlined />,
             isAuthenticated: true,
             isAdmin: true,
@@ -131,7 +133,7 @@ export const menuItems = [
   },
   {
     key: 4,
-    title: 'Quản lý khách hàng',
+    title: 'Danh sách khách hàng',
     icon: <TeamOutlined />,
     isAuthenticated: true,
     url: '/users',
@@ -145,16 +147,24 @@ export const menuItems = [
   },
   {
     key: 6,
-    title: 'FAQ, Hướng dẫn',
-    icon: <QuestionCircleOutlined />,
-    url: '/faqs',
+    title: 'Master Data',
+    icon: <AppstoreOutlined />,
     isAuthenticated: true,
-  },
-  {
-    key: 7,
-    title: 'Quản lý banner',
-    icon: <FireOutlined />,
-    url: '/banner',
-    isAuthenticated: true,
+    child: [
+      {
+        key: 601,
+        title: 'Quản lý banner',
+        icon: <FireOutlined />,
+        url: '/banner',
+        isAuthenticated: true,
+      },
+      {
+        key: 602,
+        title: 'FAQ, Hướng dẫn',
+        icon: <QuestionCircleOutlined />,
+        url: '/faqs',
+        isAuthenticated: true,
+      },
+    ],
   },
 ];

@@ -33,17 +33,17 @@ export const SportDeleteDialog = (props: ISportDeleteDialogProps) => {
   return (
     <Modal isOpen toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="sportDeleteDialogHeading">
-        Confirm delete operation
+        Xác nhận xóa
       </ModalHeader>
-      <ModalBody id="foxstep2AdminUiApp.sport.delete.question">Are you sure you want to delete this Sport?</ModalBody>
+      <ModalBody id="foxstep2AdminUiApp.sport.delete.question">Bạn có chắc muốn xóa bộ môn này?</ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon="ban" />
-          &nbsp; Cancel
+          &nbsp; Hủy
         </Button>
         <Button id="jhi-confirm-delete-sport" data-cy="entityConfirmDeleteButton" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
-          &nbsp; Delete
+          &nbsp; Xóa
         </Button>
       </ModalFooter>
     </Modal>

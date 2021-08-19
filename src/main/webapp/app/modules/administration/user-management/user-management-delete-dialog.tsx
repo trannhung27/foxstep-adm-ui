@@ -29,16 +29,16 @@ export const UserManagementDeleteDialog = (props: IUserManagementDeleteDialogPro
 
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>Confirm delete operation</ModalHeader>
-      <ModalBody>Are you sure you want to delete this User?</ModalBody>
+      <ModalHeader toggle={handleClose}>Xác nhận xóa</ModalHeader>
+      <ModalBody>Bạn chắc chắn muốn xóa người dùng này?</ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon="ban" />
-          &nbsp; Cancel
+          &nbsp; Hủy
         </Button>
         <Button color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
-          &nbsp; Delete
+          &nbsp; Xóa
         </Button>
       </ModalFooter>
     </Modal>

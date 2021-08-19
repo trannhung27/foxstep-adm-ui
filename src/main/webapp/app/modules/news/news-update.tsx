@@ -174,7 +174,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   placeholder="Aa"
                   validate={{
                     required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
-                    maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
+                    maxLength: { value: 255, errorMessage: 'Tối đa 255 kí tự.' },
                   }}
                 />
               </AvGroup>
@@ -190,7 +190,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                   placeholder="Aa"
                   validate={{
                     required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
-                    maxLength: { value: 1000, errorMessage: 'Tối đa 1000 ký tự.' },
+                    maxLength: { value: 1000, errorMessage: 'Tối đa 1000 kí tự.' },
                   }}
                 />
               </AvGroup>

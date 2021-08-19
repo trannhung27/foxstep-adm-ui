@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Table, Row, Badge } from 'reactstrap';
-import { TextFormat, JhiPagination, JhiItemCount, getSortState } from 'react-jhipster';
+import { Badge, Button, Row, Table } from 'reactstrap';
+import { getSortState, JhiPagination, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT, USER_STATUS } from 'app/config/constants';
@@ -10,25 +10,56 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getUsersAsAdmin, updateUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
+import { SortIcon } from 'app/shared/util/sort-icon-util';
+import { PaginationItemCount } from 'app/shared/util/pagination-item-count';
+import { PageHeader } from 'antd';
+import UserManangementFilterForm from 'app/modules/administration/user-management/user-management-filter';
 
 export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<any> {}
 
 export const UserManagement = (props: IUserManagementProps) => {
+  const overrideCriteriaWithQueryParams = () => {
+    const params = new URLSearchParams(props.location.search);
+    return {
+      'email.contains': params.get('email.contains'),
+      'firstName.contains': params.get('firstName.contains'),
+    };
+  };
+  const [criteriaState, setCriteriaState] = useState(overrideCriteriaWithQueryParams());
+
+  const handleFilter = criteria => {
+    setCriteriaState({
+      'email.contains': criteria.email.contains,
+      'firstName.contains': criteria.firstName.contains,
+    });
+  };
+
   const [pagination, setPagination] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
 
   const getUsersFromProps = () => {
-    props.getUsersAsAdmin(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
-    const endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
+    props.getUsersAsAdmin(criteriaState, pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
+
+    let endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
+    if (criteriaState['email.contains']) endURL += '&email.contains=' + criteriaState['email.contains'];
+    if (criteriaState['firstName.contains']) endURL += '&firstName.contains=' + criteriaState['firstName.contains'];
+
     if (props.location.search !== endURL) {
-      props.history.push(`${props.location.pathname}${endURL}`);
+      props.history.replace(`${props.location.pathname}${endURL}`);
     }
+  };
+
+  const resetFilter = () => {
+    setCriteriaState({
+      'email.contains': null,
+      'firstName.contains': null,
+    });
   };
 
   useEffect(() => {
     getUsersFromProps();
-  }, [pagination.activePage, pagination.order, pagination.sort]);
+  }, [criteriaState, pagination.activePage, pagination.order, pagination.sort]);
 
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
@@ -58,10 +89,6 @@ export const UserManagement = (props: IUserManagementProps) => {
       activePage: currentPage,
     });
 
-  const handleSyncList = () => {
-    getUsersFromProps();
-  };
-
   const toggleActive = (user, status) => () =>
     props.updateUser({
       ...user,
@@ -71,46 +98,39 @@ export const UserManagement = (props: IUserManagementProps) => {
   const { users, account, match, totalItems, loading } = props;
   return (
     <div>
-      <h2 id="user-management-page-heading" data-cy="userManagementPageHeading">
-        Users
-        <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh List
-          </Button>
-          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity">
-            <FontAwesomeIcon icon="plus" /> Create a new user
-          </Link>
-        </div>
-      </h2>
-      <Table responsive striped>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Quản lý người dùng" />
+      <hr />
+      <UserManangementFilterForm
+        userManagementCriteria={criteriaState}
+        handleFilter={handleFilter}
+        clear={resetFilter}
+        updating={loading}
+      />
+
+      <div className="d-flex justify-content-end p-1">
+        <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity">
+          <FontAwesomeIcon icon="plus" /> Tạo mới
+        </Link>
+      </div>
+
+      <Table responsive striped hover>
         <thead>
           <tr>
-            <th className="hand" onClick={sort('id')}>
-              ID
-              <FontAwesomeIcon icon="sort" />
-            </th>
-            <th className="hand" onClick={sort('login')}>
-              Login
-              <FontAwesomeIcon icon="sort" />
-            </th>
+            <th className="hand">STT</th>
             <th className="hand" onClick={sort('email')}>
-              Email
-              <FontAwesomeIcon icon="sort" />
+              Email <SortIcon sortBy="email" paginationState={pagination} />
             </th>
-            <th />
-            <th>Profiles</th>
-            <th className="hand" onClick={sort('createdDate')}>
-              Created Date
-              <FontAwesomeIcon icon="sort" />
-            </th>
-            <th className="hand" onClick={sort('lastModifiedBy')}>
-              Last Modified By
-              <FontAwesomeIcon icon="sort" />
+            <th className="hand" onClick={sort('firstName')}>
+              Họ tên <SortIcon sortBy="firstName" paginationState={pagination} />
             </th>
             <th id="modified-date-sort" className="hand" onClick={sort('lastModifiedDate')}>
-              Last Modified Date
-              <FontAwesomeIcon icon="sort" />
+              Ngày sửa <SortIcon sortBy="lastModifiedDate" paginationState={pagination} />
             </th>
+            <th className="hand" onClick={sort('lastModifiedBy')}>
+              Người sửa <SortIcon sortBy="lastModifiedBy" paginationState={pagination} />
+            </th>
+            <th className="hand">Nhóm quyền</th>
+            <th className="hand">Trạng thái</th>
             <th />
           </tr>
         </thead>
@@ -118,23 +138,18 @@ export const UserManagement = (props: IUserManagementProps) => {
           {users.map((user, i) => (
             <tr id={user.login} key={`user-${i}`}>
               <td>
-                <Button tag={Link} to={`${match.url}/${user.login}`} color="link" size="sm">
-                  {user.id}
-                </Button>
+                {(pagination.activePage - 1) * pagination.itemsPerPage === 0
+                  ? 1 + i
+                  : (pagination.activePage - 1) * pagination.itemsPerPage + 1 + i}
               </td>
-              <td>{user.login}</td>
               <td>{user.email}</td>
+              <td>{user.firstName}</td>
               <td>
-                {user.status === USER_STATUS.ACTIVATED ? (
-                  <Button color="success" onClick={toggleActive(user, USER_STATUS.INACTIVE)}>
-                    Activated
-                  </Button>
-                ) : (
-                  <Button color="danger" onClick={toggleActive(user, USER_STATUS.ACTIVATED)}>
-                    Deactivated
-                  </Button>
-                )}
+                {user.lastModifiedDate ? (
+                  <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
+                ) : null}
               </td>
+              <td>{user.lastModifiedBy}</td>
               <td>
                 {user.authorities
                   ? user.authorities.map((authority, j) => (
@@ -145,21 +160,23 @@ export const UserManagement = (props: IUserManagementProps) => {
                   : null}
               </td>
               <td>
-                {user.createdDate ? <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}
-              </td>
-              <td>{user.lastModifiedBy}</td>
-              <td>
-                {user.lastModifiedDate ? (
-                  <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
-                ) : null}
+                {user.status === USER_STATUS.ACTIVATED ? (
+                  <Button color="success" size="sm" onClick={toggleActive(user, USER_STATUS.INACTIVE)} block>
+                    Hoạt động
+                  </Button>
+                ) : (
+                  <Button color="danger" size="sm" onClick={toggleActive(user, USER_STATUS.ACTIVATED)} block>
+                    Không hoạt động
+                  </Button>
+                )}
               </td>
               <td className="text-right">
                 <div className="btn-group flex-btn-group-container">
                   <Button tag={Link} to={`${match.url}/${user.login}`} color="info" size="sm">
-                    <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                    <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">Xem</span>
                   </Button>
                   <Button tag={Link} to={`${match.url}/${user.login}/edit`} color="primary" size="sm">
-                    <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                    <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
                   </Button>
                   <Button
                     tag={Link}
@@ -168,7 +185,7 @@ export const UserManagement = (props: IUserManagementProps) => {
                     size="sm"
                     disabled={account.login === user.login}
                   >
-                    <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                    <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xóa</span>
                   </Button>
                 </div>
               </td>
@@ -177,11 +194,9 @@ export const UserManagement = (props: IUserManagementProps) => {
         </tbody>
       </Table>
       {props.totalItems ? (
-        <div className={users && users.length > 0 ? '' : 'd-none'}>
-          <Row className="justify-content-center">
-            <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
-          </Row>
-          <Row className="justify-content-center">
+        <div className={users && users.length > 0 ? 'px-4' : 'd-none'}>
+          <Row className="justify-content-between">
+            <PaginationItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} />
             <JhiPagination
               activePage={pagination.activePage}
               onSelect={handlePagination}

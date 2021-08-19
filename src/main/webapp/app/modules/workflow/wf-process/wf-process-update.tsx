@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { translate } from 'react-jhipster';
+import { Button, Col, Label, Row } from 'reactstrap';
+import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
-
-import { IWfProcessGroup } from 'app/shared/model/workflow/wf-process-group.model';
 import { getEntities as getWfProcessGroups } from 'app/modules/workflow/wf-process-group/wf-process-group.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './wf-process.reducer';
-import { IWfProcess } from 'app/shared/model/workflow/wf-process.model';
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
+import { createEntity, getEntity, reset, updateEntity } from './wf-process.reducer';
 import { AUTHORITIES } from 'app/config/constants';
+import { PageHeader } from 'antd';
 
 export interface IWfProcessUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -61,13 +56,8 @@ export const WfProcessUpdate = (props: IWfProcessUpdateProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="foxstep2AdminServiceApp.wfProcess.home.createOrEditLabel" data-cy="WfProcessCreateUpdateHeading">
-            Create or edit a WfProcess
-          </h2>
-        </Col>
-      </Row>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Thêm loại yêu cầu' : 'Sửa loại yêu cầu'} />
+      <hr />
       <Row className="justify-content-center">
         <Col md="8">
           {loading ? (
@@ -82,7 +72,7 @@ export const WfProcessUpdate = (props: IWfProcessUpdateProps) => {
               ) : null}
               <AvGroup>
                 <Label id="typeLabel" for="wf-process-type">
-                  Type
+                  Loại yêu cầu
                 </Label>
                 <AvField
                   id="wf-process-type"
@@ -91,8 +81,8 @@ export const WfProcessUpdate = (props: IWfProcessUpdateProps) => {
                   className="form-control"
                   name="type"
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
-                    number: { value: true, errorMessage: 'This field should be a number.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                    number: { value: true, errorMessage: 'Chỉ chấp nhận số.' },
                   }}
                 />
               </AvGroup>
@@ -107,8 +97,8 @@ export const WfProcessUpdate = (props: IWfProcessUpdateProps) => {
                   className="form-control"
                   name="status"
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
-                    number: { value: true, errorMessage: 'This field should be a number.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                    number: { value: true, errorMessage: 'Chỉ chấp nhận số.' },
                   }}
                 />
               </AvGroup>
@@ -156,12 +146,12 @@ export const WfProcessUpdate = (props: IWfProcessUpdateProps) => {
               <Button tag={Link} id="cancel-save" to="/wf-process" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">Quay lại</span>
               </Button>
               &nbsp;
               <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp; Lưu
               </Button>
             </AvForm>
           )}

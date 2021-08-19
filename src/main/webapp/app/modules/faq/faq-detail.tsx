@@ -36,7 +36,7 @@ export const FaqDetail = (props: IFaqDetailProps) => {
           </Button>,
         ]}
       >
-        <Descriptions size="small" column={1}>
+        <Descriptions size="default" column={1}>
           <Descriptions.Item label="Người tạo">{faqEntity.user ? faqEntity.user.firstName : ''}</Descriptions.Item>
           <Descriptions.Item label="Trạng thái">
             {NEWS_STATUSES.map(status =>

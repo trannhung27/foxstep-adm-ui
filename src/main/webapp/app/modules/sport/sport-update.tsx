@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { translate } from 'react-jhipster';
+import { Button, Col, Label, Row } from 'reactstrap';
+import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './sport.reducer';
-import { ISport } from 'app/shared/model/sport.model';
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
+import { createEntity, getEntity, reset, updateEntity } from './sport.reducer';
+import { PageHeader } from 'antd';
 
 export interface ISportUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -54,13 +51,8 @@ export const SportUpdate = (props: ISportUpdateProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="foxstep2AdminUiApp.sport.home.createOrEditLabel" data-cy="SportCreateUpdateHeading">
-            Create or edit a Sport
-          </h2>
-        </Col>
-      </Row>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Thêm bộ môn' : 'Sửa bộ môn'} />
+      <hr />
       <Row className="justify-content-center">
         <Col md="8">
           {loading ? (
@@ -75,7 +67,7 @@ export const SportUpdate = (props: ISportUpdateProps) => {
               ) : null}
               <AvGroup>
                 <Label id="nameLabel" for="sport-name">
-                  Name
+                  Tên bộ môn
                 </Label>
                 <AvField
                   id="sport-name"
@@ -83,20 +75,20 @@ export const SportUpdate = (props: ISportUpdateProps) => {
                   type="text"
                   name="name"
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
-                    maxLength: { value: 100, errorMessage: 'This field cannot be longer than 100 characters.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                    maxLength: { value: 100, errorMessage: 'Tối đa 100 kí tự.' },
                   }}
                 />
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/sport" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">Quay lại</span>
               </Button>
               &nbsp;
               <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp; Lưu
               </Button>
             </AvForm>
           )}
