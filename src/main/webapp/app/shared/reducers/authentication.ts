@@ -136,7 +136,7 @@ export const verifyOauth2Code: (code: string, rememberMe?: boolean) => void = (c
   if (!result.value.data.error) {
     const bearerToken = result.value.data.accessToken;
     const logoutUrl = result.value.data.logoutUrl;
-    if (bearerToken) {
+    if (bearerToken && logoutUrl) {
       if (rememberMe) {
         Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
         Storage.local.set(AUTH_LOGOUT_URL, logoutUrl);
@@ -186,18 +186,10 @@ export const clearAuthToken = () => {
 };
 
 export const logout: () => void = () => dispatch => {
-  let logoutUrl;
-  if (Storage.local.get(AUTH_LOGOUT_URL)) {
-    logoutUrl = Storage.local.get(AUTH_LOGOUT_URL);
-  }
-  if (Storage.session.get(AUTH_LOGOUT_URL)) {
-    logoutUrl = Storage.session.get(AUTH_LOGOUT_URL);
-  }
   clearAuthToken();
   dispatch({
     type: ACTION_TYPES.LOGOUT,
   });
-  if (logoutUrl) window.location.replace(logoutUrl);
 };
 
 export const clearAuthentication = messageKey => (dispatch, getState) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { Alert, Button, Col, Label, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
@@ -13,11 +13,10 @@ export interface ILoginProps extends StateProps, DispatchProps, RouteComponentPr
 export const Login = (props: ILoginProps) => {
   const [rememberMe, setRememberMe] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     props.getOauth2Url();
-
     const code = getUrlParameter('code', props.location.search);
-    if (code) props.verifyOauth2Code(code, rememberMe);
+    if (code !== null) props.verifyOauth2Code(code, rememberMe);
   }, []);
 
   const handleSubmit = (event, errors, { username, password, remember }) => {
