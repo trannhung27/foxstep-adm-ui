@@ -20,8 +20,8 @@ export const Login = (props: ILoginProps) => {
     if (code) props.verifyOauth2Code(code, rememberMe);
   }, []);
 
-  const handleSubmit = (event, errors, { username, password, rememberMe }) => {
-    props.login(username, password, rememberMe);
+  const handleSubmit = (event, errors, { username, password, remember }) => {
+    props.login(username, password, remember);
   };
 
   const { location, isAuthenticated, oauth2Url } = props;
