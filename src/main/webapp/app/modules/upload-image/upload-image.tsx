@@ -7,17 +7,21 @@ import { AvGroup, AvField } from 'availity-reactstrap-validation';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faUpload, faFileImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { convertSvg } from 'app/shared/util/editor-utils';
 
 export interface IUploadImage extends StateProps, DispatchProps {
   label: string;
   initImage: string;
   required: boolean;
+  onInvalidType: () => void;
+  onValidType: () => void;
 }
 
 export const UploadImageInput = (props: IUploadImage) => {
   const { entity, loading } = props;
   const [selectedFile, setSelectedFile] = useState(null);
   const [base64File, setBase64File] = useState('');
+  const [SVGtoPNGBase64, setSVGtoPNGBase64] = useState('');
   const uploadImageToServer = (base64Image: string) => {
     const imageEntity = {
       content: base64Image,
@@ -33,6 +37,13 @@ export const UploadImageInput = (props: IUploadImage) => {
 
   const handleChangeImage = event => {
     setSelectedFile(event.target.files[0]);
+    if (event.target.files[0] && !['image/svg+xml', 'image/png', 'image/jpg', 'image/jpeg'].includes(event.target.files[0].type)) {
+      props.onInvalidType();
+    } else {
+      props.onValidType();
+    }
+    document.createElement('canvas');
+
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
     reader.onload = function () {
@@ -53,12 +64,18 @@ export const UploadImageInput = (props: IUploadImage) => {
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onload = function () {
-      const imageBase64 = reader.result.toString().split(',')[1];
-      uploadImageToServer(imageBase64);
+      if (selectedFile && selectedFile.type === 'image/svg+xml') {
+        convertSvg(reader.result.toString(), svgImagetoPngBase64 => {
+          uploadImageToServer(svgImagetoPngBase64);
+        });
+      } else {
+        const imageBase64 = reader.result.toString().split(',')[1];
+        uploadImageToServer(imageBase64);
+      }
     };
     reader.onerror = function () {
       // eslint-disable-next-line no-console
-      console.log('there are some problems');
+      // console.log('there are some problems');
     };
   };
 
@@ -76,7 +93,7 @@ export const UploadImageInput = (props: IUploadImage) => {
             <AvField
               type="file"
               hidden
-              accept="image/png, image/gif, image/jpeg"
+              accept="image/png, image/jpg, image/jpeg"
               name="file"
               className="upload-file"
               id="uploadFile"
@@ -85,10 +102,17 @@ export const UploadImageInput = (props: IUploadImage) => {
                 required: { value: props.required, errorMessage: 'Không được để trống' },
               }}
             />
+            {selectedFile && !['image/svg+xml', 'image/png', 'image/jpg', 'image/jpeg'].includes(selectedFile.type) && (
+              <div className="invalid-feedback"> Chỉ chấp nhận svg,png,jpg,jpeg</div>
+            )}
           </Col>
         </Row>
 
-        <Button color="info" onClick={uploadHandler}>
+        <Button
+          color="info"
+          disabled={!(selectedFile && ['image/svg+xml', 'image/png', 'image/jpg', 'image/jpeg'].includes(selectedFile.type))}
+          onClick={uploadHandler}
+        >
           <FontAwesomeIcon icon={faUpload} /> Tải ảnh
         </Button>
       </AvGroup>

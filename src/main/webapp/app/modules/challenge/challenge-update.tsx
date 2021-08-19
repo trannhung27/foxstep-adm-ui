@@ -38,6 +38,7 @@ import { ChallengeUserDialog } from './challenge-search-user-dialog';
 import { UploadImageInput } from '../upload-image/upload-image';
 import { uploadImage } from '../upload-image/upload-image-reducer';
 import challenge from 'app/modules/challenge/challenge';
+import { uploadImageCallBack } from 'app/shared/util/editor-utils';
 
 export interface IChallengeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -118,6 +119,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [elevationGain, setElevationGain] = useState({ value: '100', required: false, checked: false });
   const [avgCadence, setAvgCadence] = useState({ from: '50', to: '200', required: false, checked: false });
   // const
+
+  //upload image invalid file type error
+  const [uploadInvalidType, setUploadInvalidType] = useState(false);
 
   const onEditorStateChange = editor => {
     setEditorState(editor);
@@ -289,10 +293,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
         ...values,
       };
 
-      if (isNew) {
-        props.createEntity(entity);
-      } else {
-        props.updateEntity(entity);
+      if (!uploadInvalidType) {
+        if (isNew) {
+          props.createEntity(entity);
+        } else {
+          props.updateEntity(entity);
+        }
       }
     }
   };
@@ -317,13 +323,13 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       <Row className="justify-content-right">
         <Col md="6">
           {!isNew ? (
-            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+            <h5 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
               Thay đổi thử thách
-            </h2>
+            </h5>
           ) : (
-            <h2 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
+            <h5 id="foxstep2AdminWebappApp.challenge.home.createOrEditLabel" data-cy="ChallengeCreateUpdateHeading">
               Thêm mới thử thách
-            </h2>
+            </h5>
           )}
         </Col>
       </Row>
@@ -349,8 +355,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               ) : null}
 
               <Row form>
-                <h4 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h4>
-                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle} />
+                <h6 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle} />
               </Row>
               <Collapse isOpen={isOpen}>
                 <Card>
@@ -414,6 +420,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           label="Ảnh đại diện TT: "
                           reset={props.resetUploadImage}
                           required={isNew ? true : !challengeEntity.imgUrl}
+                          onInvalidType={() => setUploadInvalidType(true)}
+                          onValidType={() => setUploadInvalidType(false)}
                         />
                         <AvField
                           hidden
@@ -548,6 +556,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     <Editor
                       editorState={editorState}
                       onEditorStateChange={onEditorStateChange}
+                      handlePastedText={() => false}
                       wrapperStyle={{ textDecoration: 'none !important' }}
                       editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
                       toolbar={{
@@ -565,6 +574,12 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           'remove',
                           'history',
                         ],
+                        image: {
+                          uploadCallback: uploadImageCallBack,
+                          previewImage: true,
+                          inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                          alt: { present: true, mandatory: false },
+                        },
                       }}
                     />
                     {editorChanged && editorError && <p className="invalid-feedback">Không được để trống.</p>}
@@ -572,8 +587,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                 </Card>
               </Collapse>
               <Row form>
-                <h4 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí&nbsp;</h4>
-                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle2} />
+                <h6 style={{ fontWeight: 'bold' }}>2. Cài đặt tiêu chí&nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle2} />
               </Row>
               <Collapse isOpen={isOpen2}>
                 <Card>
@@ -937,8 +952,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
               </Collapse>
 
               <Row form>
-                <h4 style={{ fontWeight: 'bold' }}>3. Cài đặt thành viên&nbsp;</h4>
-                <CaretDownOutlined style={{ fontSize: '20px', paddingTop: '10px', color: 'blue' }} onClick={toggle3} />
+                <h6 style={{ fontWeight: 'bold' }}>3. Cài đặt thành viên&nbsp;</h6>
+                <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle3} />
               </Row>
               <Collapse isOpen={isOpen3}>
                 <Card>

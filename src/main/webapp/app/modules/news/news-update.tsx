@@ -32,6 +32,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
   const [editorChanged, setEditorChanged] = useState(false);
   const [editorError, setEditorErrorState] = useState(false);
   const [datePublishedState, setDatePublishedState] = useState(displayDefaultDateTime());
+  const [uploadInvalidType, setUploadInvalidType] = useState(false);
 
   const onEditorStateChange = editor => {
     setEditorChanged(true);
@@ -80,10 +81,12 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
         newsCategory: newsCategories.find(it => it.id.toString() === values.newsCategoryId.toString()),
       };
 
-      if (isNew) {
-        props.createEntity(entity);
-      } else {
-        props.updateEntity(entity);
+      if (!uploadInvalidType) {
+        if (isNew) {
+          props.createEntity(entity);
+        } else {
+          props.updateEntity(entity);
+        }
       }
     }
   };
@@ -119,6 +122,8 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     initImage={isNew ? null : newsEntity.imgUrl}
                     reset={props.resetUploadImage}
                     required={isNew ? true : !newsEntity.imgUrl}
+                    onInvalidType={() => setUploadInvalidType(true)}
+                    onValidType={() => setUploadInvalidType(false)}
                   />
                   <AvField
                     hidden
@@ -197,6 +202,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                 <Editor
                   editorState={editorState}
                   onEditorStateChange={onEditorStateChange}
+                  handlePastedText={() => false}
                   wrapperStyle={{ textDecoration: 'none !important' }}
                   editorStyle={{ border: '1px gainsboro solid', borderRadius: '2px', height: '250px' }}
                   placeholder="Aa"
@@ -218,7 +224,7 @@ export const NewsUpdate = (props: INewsUpdateProps) => {
                     image: {
                       uploadCallback: uploadImageCallBack,
                       previewImage: true,
-                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg+xml',
                       alt: { present: true, mandatory: false },
                     },
                   }}
