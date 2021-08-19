@@ -134,7 +134,7 @@ export const verifyOauth2Code: (code: string, rememberMe?: boolean) => void = (c
     payload: axios.post(`${OAUTH2_VERIFY}?code=${code}&remember=${rememberMe}`),
   });
   if (!result.value.data.error) {
-    const bearerToken = result.value.data.idToken;
+    const bearerToken = result.value.data.accessToken;
     const logoutUrl = result.value.data.logoutUrl;
     if (bearerToken) {
       if (rememberMe) {
@@ -186,16 +186,18 @@ export const clearAuthToken = () => {
 };
 
 export const logout: () => void = () => dispatch => {
+  let logoutUrl;
+  if (Storage.local.get(AUTH_LOGOUT_URL)) {
+    logoutUrl = Storage.local.get(AUTH_LOGOUT_URL);
+  }
+  if (Storage.session.get(AUTH_LOGOUT_URL)) {
+    logoutUrl = Storage.session.get(AUTH_LOGOUT_URL);
+  }
   clearAuthToken();
   dispatch({
     type: ACTION_TYPES.LOGOUT,
   });
-  if (Storage.local.get(AUTH_LOGOUT_URL)) {
-    window.location.replace(Storage.local.get(AUTH_LOGOUT_URL));
-  }
-  if (Storage.session.get(AUTH_LOGOUT_URL)) {
-    window.location.replace(Storage.session.get(AUTH_LOGOUT_URL));
-  }
+  if (logoutUrl) window.location.replace(logoutUrl);
 };
 
 export const clearAuthentication = messageKey => (dispatch, getState) => {
