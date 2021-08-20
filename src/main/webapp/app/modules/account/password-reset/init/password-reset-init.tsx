@@ -38,8 +38,8 @@ export class PasswordResetInit extends React.Component<IPasswordResetInitProps> 
                 type="email"
                 validate={{
                   required: { value: true, errorMessage: 'Chưa nhập email.' },
-                  minLength: { value: 5, errorMessage: 'Ít nhất 5 ký tự.' },
-                  maxLength: { value: 254, errorMessage: 'Tối đa 50 ký tự.' },
+                  minLength: { value: 5, errorMessage: 'Ít nhất 5 kí tự.' },
+                  maxLength: { value: 254, errorMessage: 'Tối đa 50 kí tự.' },
                 }}
                 data-cy="emailResetPassword"
               />

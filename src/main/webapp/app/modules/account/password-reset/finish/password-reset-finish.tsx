@@ -40,8 +40,8 @@ export const PasswordResetFinishPage = (props: IPasswordResetFinishProps) => {
             type="password"
             validate={{
               required: { value: true, errorMessage: 'Chưa nhập mật khẩu.' },
-              minLength: { value: 4, errorMessage: 'Ít nhất 4 ký tự.' },
-              maxLength: { value: 50, errorMessage: 'Tối đa 50 ký tự.' },
+              minLength: { value: 4, errorMessage: 'Ít nhất 4 kí tự.' },
+              maxLength: { value: 50, errorMessage: 'Tối đa 50 kí tự.' },
             }}
             onChange={updatePassword}
             data-cy="resetPassword"
@@ -56,11 +56,11 @@ export const PasswordResetFinishPage = (props: IPasswordResetFinishProps) => {
               required: { value: true, errorMessage: 'Chưa nhập xác nhận mật khẩu mới.' },
               minLength: {
                 value: 4,
-                errorMessage: 'Ít nhất 4 ký tự.',
+                errorMessage: 'Ít nhất 4 kí tự.',
               },
               maxLength: {
                 value: 50,
-                errorMessage: 'Tối đa 50 ký tự.',
+                errorMessage: 'Tối đa 50 kí tự.',
               },
               match: { value: 'newPassword', errorMessage: 'Mật khẩu không khớp!' },
             }}

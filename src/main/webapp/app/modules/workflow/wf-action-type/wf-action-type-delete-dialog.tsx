@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity, deleteEntity } from './wf-action-type.reducer';
+import { deleteEntity, getEntity } from './wf-action-type.reducer';
 
 export interface IWfActionTypeDeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -33,17 +33,17 @@ export const WfActionTypeDeleteDialog = (props: IWfActionTypeDeleteDialogProps) 
   return (
     <Modal isOpen toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="wfActionTypeDeleteDialogHeading">
-        Confirm delete operation
+        Xác nhận xóa
       </ModalHeader>
-      <ModalBody id="foxstep2AdminServiceApp.wfActionType.delete.question">Are you sure you want to delete this WfActionType?</ModalBody>
+      <ModalBody id="foxstep2AdminServiceApp.wfActionType.delete.question">Bạn có chắc muốn xóa loại hành động này?</ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon="ban" />
-          &nbsp; Cancel
+          &nbsp; Hủy
         </Button>
         <Button id="jhi-confirm-delete-wfActionType" data-cy="entityConfirmDeleteButton" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
-          &nbsp; Delete
+          &nbsp; Xóa
         </Button>
       </ModalFooter>
     </Modal>

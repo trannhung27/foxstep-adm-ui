@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { translate } from 'react-jhipster';
+import { Button, Col, Label, Row } from 'reactstrap';
+import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './news-category.reducer';
-import { INewsCategory } from 'app/shared/model/news-category.model';
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
+import { createEntity, getEntity, reset, updateEntity } from './news-category.reducer';
+import { convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { PageHeader } from 'antd';
 
 export interface INewsCategoryUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -56,13 +54,8 @@ export const NewsCategoryUpdate = (props: INewsCategoryUpdateProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="foxstep2AdminUiApp.newsCategory.home.createOrEditLabel" data-cy="NewsCategoryCreateUpdateHeading">
-            Tạo hoặc sửa Loại tin tức
-          </h2>
-        </Col>
-      </Row>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Thêm loại tin tức' : 'Sửa loại tin tức'} />
+      <hr />
       <Row className="justify-content-center">
         <Col md="8">
           {loading ? (
@@ -85,8 +78,8 @@ export const NewsCategoryUpdate = (props: INewsCategoryUpdateProps) => {
                   type="text"
                   name="name"
                   validate={{
-                    required: { value: true, errorMessage: 'Không được để trống.' },
-                    maxLength: { value: 255, errorMessage: 'Tối đa 255 ký tự.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                    maxLength: { value: 255, errorMessage: 'Tối đa 255 kí tự.' },
                   }}
                 />
               </AvGroup>

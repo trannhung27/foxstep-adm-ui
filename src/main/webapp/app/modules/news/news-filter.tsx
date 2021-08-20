@@ -54,7 +54,7 @@ class NewsFilterForm extends React.Component<INewsFilterFormProps> {
                 placeholder="Aa"
                 value={newsCriteria['title.contains']}
                 validate={{
-                  maxLength: { value: 500, errorMessage: 'Tối đa 500 ký tự.' },
+                  maxLength: { value: 500, errorMessage: 'Tối đa 500 kí tự.' },
                 }}
               />
             </AvGroup>

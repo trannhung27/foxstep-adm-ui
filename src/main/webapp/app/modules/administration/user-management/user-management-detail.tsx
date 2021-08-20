@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Row, Badge } from 'reactstrap';
+import { Button, Row, Badge, Col, Table } from 'reactstrap';
 import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -9,6 +9,7 @@ import { APP_DATE_FORMAT, USER_STATUS } from 'app/config/constants';
 
 import { getUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
+import { Descriptions, PageHeader } from 'antd';
 
 export interface IUserManagementDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
 
@@ -21,51 +22,84 @@ export const UserManagementDetail = (props: IUserManagementDetailProps) => {
 
   return (
     <div>
-      <h2>
-        User [<strong>{user.login}</strong>]
-      </h2>
-      <Row size="md">
-        <dl className="jh-entity-details">
-          <dt>Login</dt>
-          <dd>
-            <span>{user.login}</span>&nbsp;
-            {user.status === USER_STATUS.ACTIVATED ? <Badge color="success">Activated</Badge> : <Badge color="danger">Deactivated</Badge>}
-          </dd>
-          <dt>First Name</dt>
-          <dd>{user.firstName}</dd>
-          <dt>Last Name</dt>
-          <dd>{user.lastName}</dd>
-          <dt>Email</dt>
-          <dd>{user.email}</dd>
-          <dt>Created By</dt>
-          <dd>{user.createdBy}</dd>
-          <dt>Created Date</dt>
-          <dd>{user.createdDate ? <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}</dd>
-          <dt>Last Modified By</dt>
-          <dd>{user.lastModifiedBy}</dd>
-          <dt>Last Modified Date</dt>
-          <dd>
-            {user.lastModifiedDate ? (
-              <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
-            ) : null}
-          </dd>
-          <dt>Profiles</dt>
-          <dd>
-            <ul className="list-unstyled">
-              {user.authorities
-                ? user.authorities.map((authority, i) => (
-                    <li key={`user-auth-${i}`}>
-                      <Badge color="info">{authority}</Badge>
-                    </li>
-                  ))
-                : null}
-            </ul>
-          </dd>
-        </dl>
+      <PageHeader
+        style={{ padding: '0 0' }}
+        className="site-page-header"
+        title="Chi tiết người dùng"
+        onBack={() => props.history.goBack()}
+      ></PageHeader>
+      <Row>
+        <Col sm="12" md="6">
+          <Table responsive striped hover>
+            <tbody>
+              <tr>
+                <td>Tên đăng nhập</td>
+                <td>{user.login}</td>
+              </tr>
+              <tr>
+                <td>Trạng thái</td>
+                <td>
+                  {user.status === USER_STATUS.ACTIVATED ? (
+                    <Badge color="success">Hoạt động</Badge>
+                  ) : (
+                    <Badge color="danger">Không hoạt động</Badge>
+                  )}
+                </td>
+              </tr>
+              <tr>
+                <td>Họ tên</td>
+                <td>{user.firstName}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{user.email}</td>
+              </tr>
+              <tr>
+                <td>Nhóm quyền</td>
+                <td>
+                  <ul className="list-unstyled">
+                    {user.authorities
+                      ? user.authorities.map((authority, i) => (
+                          <li key={`user-auth-${i}`}>
+                            <Badge color="info">{authority}</Badge>
+                          </li>
+                        ))
+                      : null}
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+        <Col sm="12" md="6">
+          <Table responsive striped hover>
+            <tbody>
+              <tr>
+                <td>Tạo bởi</td>
+                <td>{user.createdBy}</td>
+              </tr>
+              <tr>
+                <td>Thời gian tạo</td>
+                <td>
+                  {user.createdDate ? <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}
+                </td>
+              </tr>
+              <tr>
+                <td>Cập nhật bởi</td>
+                <td>{user.lastModifiedBy}</td>
+              </tr>
+              <tr>
+                <td>Thời gian cập nhật</td>
+                <td>
+                  {user.lastModifiedDate ? (
+                    <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
+                  ) : null}
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
       </Row>
-      <Button tag={Link} to="/admin/user-management" replace color="info">
-        <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
-      </Button>
     </div>
   );
 };

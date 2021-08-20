@@ -3,6 +3,7 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } 
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { IUser, defaultValue } from 'app/shared/model/user.model';
+import { ICrudGetAllWithCriteriaAction } from 'app/shared/util/entity-utils';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
@@ -78,7 +79,7 @@ export default (state: UserManagementState = initialState, action): UserManageme
         ...state,
         loading: false,
         users: action.payload.data,
-        totalItems: parseInt(action.payload.headers['x-total-count'], 10),
+        totalItems: parseInt(action.payload.headers['xTotalCount'], 10),
       };
     case SUCCESS(ACTION_TYPES.FETCH_USER):
       return {
@@ -121,8 +122,14 @@ export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
   };
 };
 
-export const getUsersAsAdmin: ICrudGetAllAction<IUser> = (page, size, sort) => {
-  const requestUrl = `${adminUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+export const getUsersAsAdmin: ICrudGetAllWithCriteriaAction<IUser> = (criteria, page, size, sort) => {
+  let criteriaParams = '?';
+  if (criteria) {
+    Object.keys(criteria).forEach(function (key, index) {
+      if (criteria[key]) criteriaParams = criteriaParams + key + '=' + criteria[key] + '&';
+    });
+  }
+  const requestUrl = `${adminUrl}${sort ? `${criteriaParams}page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS_AS_ADMIN,
     payload: axios.get<IUser>(requestUrl),

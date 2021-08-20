@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Label, Row, Col } from 'reactstrap';
-import { AvForm, AvGroup, AvInput, AvField, AvFeedback } from 'availity-reactstrap-validation';
+import { Button, Col, Label, Row } from 'reactstrap';
+import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
+import { createUser, getRoles, getUser, reset, updateUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
 import { USER_STATUS } from 'app/config/constants';
+import { PageHeader } from 'antd';
 
 export interface IUserManagementUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
 
@@ -45,11 +46,8 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h1>Create or edit a User</h1>
-        </Col>
-      </Row>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Thêm người dùng' : 'Sửa người dùng'} />
+      <hr />
       <Row className="justify-content-center">
         <Col md="8">
           {loading ? (
@@ -63,84 +61,70 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
                 </AvGroup>
               ) : null}
               <AvGroup>
-                <Label for="login">Login</Label>
+                <Label for="login">Tên đăng nhập</Label>
                 <AvField
                   type="text"
                   className="form-control"
                   name="login"
+                  placeholder={'Aa'}
                   validate={{
                     required: {
                       value: true,
-                      errorMessage: 'Your username is required.',
+                      errorMessage: 'Giá trị bắt buộc.',
                     },
                     pattern: {
                       value: '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$',
-                      errorMessage: 'Your username is invalid.',
+                      errorMessage: 'Không hợp lệ.',
                     },
                     minLength: {
                       value: 1,
-                      errorMessage: 'Your username is required to be at least 1 character.',
+                      errorMessage: 'Tối thiểu 1 kí tự.',
                     },
                     maxLength: {
                       value: 50,
-                      errorMessage: 'Your username cannot be longer than 50 characters.',
+                      errorMessage: 'Tối đa 50 kí tự.',
                     },
                   }}
                   value={user.login}
                 />
               </AvGroup>
               <AvGroup>
-                <Label for="firstName">First Name</Label>
+                <Label for="firstName">Họ tên</Label>
                 <AvField
                   type="text"
                   className="form-control"
                   name="firstName"
+                  placeholder={'Aa'}
                   validate={{
                     maxLength: {
                       value: 50,
-                      errorMessage: 'This field cannot be longer than 50 characters.',
+                      errorMessage: 'Tối đa 50 kí tự.',
                     },
                   }}
                   value={user.firstName}
                 />
               </AvGroup>
               <AvGroup>
-                <Label for="lastName">Last Name</Label>
-                <AvField
-                  type="text"
-                  className="form-control"
-                  name="lastName"
-                  validate={{
-                    maxLength: {
-                      value: 50,
-                      errorMessage: 'This field cannot be longer than 50 characters.',
-                    },
-                  }}
-                  value={user.lastName}
-                />
-                <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
-              </AvGroup>
-              <AvGroup>
                 <AvField
                   name="email"
                   label="Email"
-                  placeholder={'Your email'}
+                  placeholder={'Aa@company.com'}
                   type="email"
                   validate={{
                     required: {
                       value: true,
-                      errorMessage: 'Your email is required.',
+                      errorMessage: 'Giá trị bắt buộc.',
                     },
                     email: {
-                      errorMessage: 'Your email is invalid.',
+                      errorMessage: 'Không hợp lệ.',
                     },
                     minLength: {
                       value: 5,
-                      errorMessage: 'Your email is required to be at least 5 characters.',
+                      errorMessage: 'Tối thiểu 5 kí tự.',
                     },
                     maxLength: {
                       value: 254,
-                      errorMessage: 'Your email cannot be longer than 50 characters.',
+                      errorMessage: 'Tối đa 50 kí tự.',
                     },
                   }}
                   value={user.email}
@@ -155,13 +139,13 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
                     checked={user.status === USER_STATUS.ACTIVATED}
                     trueValue={USER_STATUS.ACTIVATED}
                     falseValue={USER_STATUS.INACTIVE}
-                    disabled={!user.id}
+                    // disabled={!user.id}
                   />{' '}
-                  Activated
+                  Hoạt động
                 </Label>
               </AvGroup>
               <AvGroup>
-                <Label for="authorities">Profiles</Label>
+                <Label for="authorities">Nhóm quyền</Label>
                 <AvInput type="select" className="form-control" name="authorities" value={user.authorities} multiple>
                   {roles.map(role => (
                     <option value={role} key={role}>
@@ -173,12 +157,12 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
               <Button tag={Link} to="/admin/user-management" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">Hủy</span>
               </Button>
               &nbsp;
               <Button color="primary" type="submit" disabled={isInvalid || updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp; Lưu
               </Button>
             </AvForm>
           )}

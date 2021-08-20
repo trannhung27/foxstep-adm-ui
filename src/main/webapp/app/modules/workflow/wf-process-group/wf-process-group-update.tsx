@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { translate } from 'react-jhipster';
+import { Button, Col, Label, Row } from 'reactstrap';
+import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './wf-process-group.reducer';
-import { IWfProcessGroup } from 'app/shared/model/workflow/wf-process-group.model';
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
+import { createEntity, getEntity, reset, updateEntity } from './wf-process-group.reducer';
+import { PageHeader } from 'antd';
 
 export interface IWfProcessGroupUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -54,13 +51,8 @@ export const WfProcessGroupUpdate = (props: IWfProcessGroupUpdateProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="foxstep2AdminServiceApp.wfProcessGroup.home.createOrEditLabel" data-cy="WfProcessGroupCreateUpdateHeading">
-            Create or edit a WfProcessGroup
-          </h2>
-        </Col>
-      </Row>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title={isNew ? 'Thêm nhóm duyệt' : 'Sửa nhóm duyệt'} />
+      <hr />
       <Row className="justify-content-center">
         <Col md="8">
           {loading ? (
@@ -75,7 +67,7 @@ export const WfProcessGroupUpdate = (props: IWfProcessGroupUpdateProps) => {
               ) : null}
               <AvGroup>
                 <Label id="nameLabel" for="wf-process-group-name">
-                  Name
+                  Tên
                 </Label>
                 <AvField
                   id="wf-process-group-name"
@@ -83,13 +75,13 @@ export const WfProcessGroupUpdate = (props: IWfProcessGroupUpdateProps) => {
                   type="text"
                   name="name"
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
                   }}
                 />
               </AvGroup>
               <AvGroup>
                 <Label id="statusLabel" for="wf-process-group-status">
-                  Status
+                  Trạng thái
                 </Label>
                 <AvField
                   id="wf-process-group-status"
@@ -98,8 +90,8 @@ export const WfProcessGroupUpdate = (props: IWfProcessGroupUpdateProps) => {
                   className="form-control"
                   name="status"
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' },
-                    number: { value: true, errorMessage: 'This field should be a number.' },
+                    required: { value: true, errorMessage: 'Giá trị bắt buộc.' },
+                    number: { value: true, errorMessage: 'Chỉ chấp nhận số.' },
                   }}
                 />
               </AvGroup>

@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Col, Row, Table } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Button, Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './wf-process.reducer';
-import { IWfProcess } from 'app/shared/model/workflow/wf-process.model';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { PageHeader } from 'antd';
 
 export interface IWfProcessProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -24,28 +22,29 @@ export const WfProcess = (props: IWfProcessProps) => {
   const { wfProcessList, match, loading } = props;
   return (
     <div>
-      <h2 id="wf-process-heading" data-cy="WfProcessHeading">
-        Wf Processes
-        <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh List
-          </Button>
-          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp; Create new Wf Process
-          </Link>
-        </div>
-      </h2>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Loại yêu cầu" />
+      <hr />
+
+      <div className="d-flex justify-content-end p-1">
+        <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+          <FontAwesomeIcon icon="sync" spin={loading} /> Làm mới
+        </Button>
+        <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+          <FontAwesomeIcon icon="plus" />
+          &nbsp; Tạo mới
+        </Link>
+      </div>
+
       <div className="table-responsive">
         {wfProcessList && wfProcessList.length > 0 ? (
-          <Table responsive>
+          <Table responsive hover striped>
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Wf Process Group</th>
-                <th>Wf Action Type</th>
+                <th>Loại yêu cầu</th>
+                <th>Trạng thái</th>
+                <th>Nhóm</th>
+                <th>Quyền duyệt</th>
                 <th />
               </tr>
             </thead>
@@ -57,7 +56,7 @@ export const WfProcess = (props: IWfProcessProps) => {
                       {wfProcess.id}
                     </Button>
                   </td>
-                  <td>{wfProcess.type}</td>
+                  <td>{wfProcess.type === 1 ? 'Tạo mới' : 'Chỉnh sửa'}</td>
                   <td>{wfProcess.status}</td>
                   <td>
                     {wfProcess.wfProcessGroup ? (
@@ -69,14 +68,11 @@ export const WfProcess = (props: IWfProcessProps) => {
                   <td>{wfProcess.authority ? wfProcess.authority.name : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${wfProcess.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                      </Button>
                       <Button tag={Link} to={`${match.url}/${wfProcess.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${wfProcess.id}/delete`} color="danger" size="sm" data-cy="entityDeleteButton">
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Xóa</span>
                       </Button>
                     </div>
                   </td>

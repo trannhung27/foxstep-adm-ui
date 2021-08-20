@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './sport.reducer';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { Descriptions, PageHeader } from 'antd';
 
 export interface ISportDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -18,28 +19,18 @@ export const SportDetail = (props: ISportDetailProps) => {
 
   const { sportEntity } = props;
   return (
-    <Row>
-      <Col md="8">
-        <h2 data-cy="sportDetailsHeading">Sport</h2>
-        <dl className="jh-entity-details">
-          <dt>
-            <span id="id">ID</span>
-          </dt>
-          <dd>{sportEntity.id}</dd>
-          <dt>
-            <span id="name">Name</span>
-          </dt>
-          <dd>{sportEntity.name}</dd>
-        </dl>
-        <Button tag={Link} to="/sport" replace color="info" data-cy="entityDetailsBackButton">
-          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
-        </Button>
-        &nbsp;
-        <Button tag={Link} to={`/sport/${sportEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-        </Button>
-      </Col>
-    </Row>
+    <div>
+      <PageHeader style={{ padding: '0 0' }} className="site-page-header" title="Chi tiết bộ môn" onBack={() => props.history.goBack()}>
+        <Descriptions size="default" column={1}>
+          <Descriptions.Item label="ID">{sportEntity.id}</Descriptions.Item>
+          <Descriptions.Item label="Tên">{sportEntity.name}</Descriptions.Item>
+        </Descriptions>
+      </PageHeader>
+
+      <Button tag={Link} to={`/sport/${sportEntity.id}/edit`} replace color="primary">
+        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
+      </Button>
+    </div>
   );
 };
 
