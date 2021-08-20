@@ -34,17 +34,12 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   const { challengeEntity } = props;
   const history = useHistory();
 
-  const compare = (a, b) => {
-    return Number(a.orderId) - Number(b.orderId);
-  };
-
   useEffect(() => {
     if (challengeEntity.challengeDistance) {
       const list = [];
       challengeEntity.challengeDistance.map((distance, index) => {
         list[index] = { value: distance.distance, orderId: distance.orderId };
       });
-      list.sort(compare);
       setChallengeDistance(list);
     }
   }, [props.challengeEntity]);

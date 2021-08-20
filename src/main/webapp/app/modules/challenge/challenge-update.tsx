@@ -436,7 +436,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     </Row>
 
                     <Row form>
-                      <Col md={3}>
+                      <Col md={6}>
                         <Row>
                           <Col md={11}>
                             <AvGroup>
@@ -466,7 +466,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         </Row>
                       </Col>
 
-                      <Col md={3}>
+                      <Col md={6}>
                         <Row className="justify-content-right">
                           <Col md={12}>
                             <AvGroup className="form-group">
@@ -479,7 +479,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                     </Row>
 
                     <Row form>
-                      <Col md={2}>
+                      <Col md={4}>
                         <AvGroup>
                           <Label id="dateStartLabel" for="challenge-dateStart">
                             Từ ngày
@@ -501,7 +501,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           />
                         </AvGroup>
                       </Col>
-                      <Col md={2}>
+                      <Col md={4}>
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateFinish">
                             Đến ngày
@@ -523,7 +523,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           )}
                         </AvGroup>
                       </Col>
-                      <Col md={2}>
+                      <Col md={4}>
                         <AvGroup>
                           <Label id="dateFinishLabel" for="challenge-dateRegisDeadline">
                             Hạn đăng ký
