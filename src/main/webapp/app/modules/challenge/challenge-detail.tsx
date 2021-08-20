@@ -17,9 +17,11 @@ import { ChallengeApproveDialog } from 'app/modules/challenge/challenge-approve-
 import { ChallengeRejectDialog } from 'app/modules/challenge/challenge-reject-dialog';
 import { ChallengeEndDialog } from 'app/modules/challenge/challenge-end-dialog';
 import { ChallengeCancelDialog } from 'app/modules/challenge/challenge-cancel-dialog';
+import { IChallengeUpdateProps } from 'app/modules/challenge/challenge-update';
 
 export interface IChallengeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
+// eslint-disable-next-line complexity
 export const ChallengeDetail = (props: IChallengeDetailProps) => {
   useEffect(() => {
     props.getEntity(props.match.params.id);
