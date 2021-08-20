@@ -34,17 +34,12 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
   const { challengeEntity } = props;
   const history = useHistory();
 
-  const compare = (a, b) => {
-    return Number(a.orderId) - Number(b.orderId);
-  };
-
   useEffect(() => {
     if (challengeEntity.challengeDistance) {
       const list = [];
       challengeEntity.challengeDistance.map((distance, index) => {
         list[index] = { value: distance.distance, orderId: distance.orderId };
       });
-      list.sort(compare);
       setChallengeDistance(list);
     }
   }, [props.challengeEntity]);
@@ -397,7 +392,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
             )
           ) : null}
 
-          {challengeEntity.gps === 1 && (
+          {challengeEntity.challengeValidity && challengeEntity.challengeValidity.gps === 1 && (
             <AvGroup inline name="isGps" className="form-group form-inline">
               <input type="checkbox" className="mr-2" checked />
               <Label>Chỉ chấp nhận các bài tập ngoài trời dùng GPS </Label>

@@ -136,6 +136,24 @@ export const getEntity: ICrudGetAction<IUsers> = id => {
   };
 };
 
+// need to udpate this method
+export const createEntity: ICrudGetAction<IUsers> = id => {
+  const requestUrl = `${apiUrl}/${id}`;
+  return {
+    type: ACTION_TYPES.FETCH_USERS,
+    payload: axios.get<IUsers>(requestUrl),
+  };
+};
+
+// need to udpate this method
+export const updateEntity: ICrudGetAction<IUsers> = id => {
+  const requestUrl = `${apiUrl}/${id}`;
+  return {
+    type: ACTION_TYPES.FETCH_USERS,
+    payload: axios.get<IUsers>(requestUrl),
+  };
+};
+
 export const lockUser: ICrudPutAction<IUserLockRequest> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USERS,
