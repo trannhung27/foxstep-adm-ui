@@ -8,81 +8,153 @@ import {
   MonitorOutlined,
   RobotOutlined,
   TeamOutlined,
-  UnorderedListOutlined,
-  DatabaseOutlined,
-  FileTextOutlined,
-} from "@ant-design/icons";
+  QuestionCircleOutlined,
+  EditOutlined,
+  ReadOutlined,
+  BranchesOutlined,
+  BlockOutlined,
+  BorderOutlined,
+  DingtalkOutlined,
+  AppstoreOutlined,
+  TrophyOutlined,
+  FireOutlined,
+} from '@ant-design/icons';
 
 export const menuItems = [
   {
-    key: 0,
-    title: "Dashboard",
-    icon: <DashboardOutlined/>,
-    url: "/"
-  },
-  {
     key: 1,
-    title: "Entities",
-    icon: <UnorderedListOutlined/>,
-    isAuthenticated: true,
-    child: [
-      {
-        key: 101,
-        title: "Category",
-        icon: <DatabaseOutlined />,
-        url: "/entity/category"
-      },
-      {
-        key: 102,
-        title: "Post",
-        icon: <FileTextOutlined />,
-        url: "/entity/post"
-      }
-    ]
-  },
-  {
-    key: 2,
-    title: "Administration",
-    icon: <RobotOutlined/>,
+    title: 'Admin',
+    icon: <RobotOutlined />,
     isAuthenticated: true,
     isAdmin: true,
     child: [
       {
-        key: 201,
-        title: "User management",
-        icon: <TeamOutlined/>,
-        url: "/admin/user-management"
+        key: 101,
+        title: 'User Management',
+        icon: <TeamOutlined />,
+        url: '/admin/user-management',
       },
       {
-        key: 202,
-        title: "Metrics",
-        icon: <MonitorOutlined/>,
-        url: "/admin/metrics"
+        key: 102,
+        title: 'Metrics',
+        icon: <MonitorOutlined />,
+        url: '/admin/metrics',
       },
       {
-        key: 203,
-        title: "Health management",
-        icon: <HeartOutlined/>,
-        url: "/admin/health"
+        key: 103,
+        title: 'Health',
+        icon: <HeartOutlined />,
+        url: '/admin/health',
       },
       {
-        key: 204,
-        title: "Configuration",
-        icon: <ControlOutlined/>,
-        url: "/admin/configuration"
+        key: 104,
+        title: 'Configuration',
+        icon: <ControlOutlined />,
+        url: '/admin/configuration',
       },
       {
-        key: 205,
-        title: "Logs",
-        icon: <CodeOutlined/>,
-        url: "/admin/logs"
+        key: 105,
+        title: 'Logs',
+        icon: <CodeOutlined />,
+        url: '/admin/logs',
       },
       {
-        key: 206,
-        title: "API",
-        icon: <ApiOutlined/>,
-        url: "/admin/docs"
+        key: 106,
+        title: 'API docs',
+        icon: <ApiOutlined />,
+        url: '/admin/docs',
       },
-    ]
+      {
+        key: 107,
+        title: 'Sports',
+        icon: <TrophyOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
+        url: '/sport',
+      },
+      {
+        key: 108,
+        title: 'News Category',
+        icon: <ReadOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
+        url: '/news-category',
+      },
+      {
+        key: 109,
+        title: 'Workflow',
+        icon: <BranchesOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
+        child: [
+          {
+            key: 1081,
+            title: 'Process Group',
+            icon: <BlockOutlined />,
+            isAuthenticated: true,
+            isAdmin: true,
+            url: '/wf-process-group',
+          },
+          {
+            key: 1082,
+            title: 'Process',
+            icon: <BorderOutlined />,
+            isAuthenticated: true,
+            isAdmin: true,
+            url: '/wf-process',
+          },
+          {
+            key: 1083,
+            title: 'Action Type',
+            icon: <DingtalkOutlined />,
+            isAuthenticated: true,
+            isAdmin: true,
+            url: '/wf-action-type',
+          },
+        ],
+      },
+    ],
   },
-]
+  {
+    key: 2,
+    title: 'Trang chủ',
+    icon: <DashboardOutlined />,
+    isAuthenticated: true,
+    url: '/',
+  },
+  {
+    key: 3,
+    title: 'Quản lý thử thách',
+    icon: <AppstoreOutlined />,
+    url: '/challenges',
+    isAuthenticated: true,
+  },
+  {
+    key: 4,
+    title: 'Quản lý khách hàng',
+    icon: <TeamOutlined />,
+    isAuthenticated: true,
+    url: '/users',
+  },
+  {
+    key: 5,
+    title: 'Quản lý tin tức',
+    icon: <EditOutlined />,
+    url: '/news',
+    isAuthenticated: true,
+  },
+  {
+    key: 6,
+    title: 'FAQ, Hướng dẫn',
+    icon: <QuestionCircleOutlined />,
+    url: '/faqs',
+    isAuthenticated: true,
+  },
+  {
+    key: 7,
+    title: 'Quản lý banner',
+    icon: <FireOutlined />,
+    url: '/banner',
+    isAuthenticated: true,
+  },
+];

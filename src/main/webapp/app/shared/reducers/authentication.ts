@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Storage } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { AUTH_API_URL, USER_STATUS } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -18,7 +19,6 @@ const initialState = {
   isAuthenticated: false,
   loginSuccess: false,
   loginError: false, // Errors returned from server side
-  showModalLogin: false,
   account: {} as any,
   errorMessage: (null as unknown) as string, // Errors returned from server side
   redirectMessage: (null as unknown) as string,
@@ -43,7 +43,6 @@ export default (state: AuthenticationState = initialState, action): Authenticati
       return {
         ...initialState,
         errorMessage: action.payload,
-        showModalLogin: true,
         loginError: true,
       };
     case FAILURE(ACTION_TYPES.GET_SESSION):
@@ -52,7 +51,6 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         loading: false,
         isAuthenticated: false,
         sessionHasBeenFetched: true,
-        showModalLogin: true,
         errorMessage: action.payload,
       };
     case SUCCESS(ACTION_TYPES.LOGIN):
@@ -60,16 +58,14 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         ...state,
         loading: false,
         loginError: false,
-        showModalLogin: false,
         loginSuccess: true,
       };
     case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
-        showModalLogin: true,
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION): {
-      const isAuthenticated = action.payload && action.payload.data && action.payload.data.activated;
+      const isAuthenticated = action.payload && action.payload.data && action.payload.data.status === USER_STATUS.ACTIVATED;
       return {
         ...state,
         isAuthenticated,
@@ -81,14 +77,12 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
-        showModalLogin: true,
         redirectMessage: action.message,
       };
     case ACTION_TYPES.CLEAR_AUTH:
       return {
         ...state,
         loading: false,
-        showModalLogin: true,
         isAuthenticated: false,
       };
     default:
@@ -111,18 +105,19 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
 ) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
-    payload: axios.post('api/authenticate', { username, password, rememberMe }),
+    payload: axios.post(AUTH_API_URL, { username, password, rememberMe }),
   });
-  const bearerToken = result.value.headers.authorization;
-  if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
-    const jwt = bearerToken.slice(7, bearerToken.length);
-    if (rememberMe) {
-      Storage.local.set(AUTH_TOKEN_KEY, jwt);
-    } else {
-      Storage.session.set(AUTH_TOKEN_KEY, jwt);
+  if (!result.value.data.error) {
+    const bearerToken = result.value.data.idToken;
+    if (bearerToken) {
+      if (rememberMe) {
+        Storage.local.set(AUTH_TOKEN_KEY, bearerToken);
+      } else {
+        Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+      }
     }
+    await dispatch(getSession());
   }
-  await dispatch(getSession());
 };
 
 export const clearAuthToken = () => {

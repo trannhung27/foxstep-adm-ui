@@ -1,10 +1,13 @@
+import { USER_STATUS } from 'app/config/constants';
+
+/*AdminUser model*/
 export interface IUser {
   id?: any;
   login?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
-  activated?: boolean;
+  status?: number;
   langKey?: string;
   authorities?: any[];
   createdBy?: string;
@@ -20,7 +23,7 @@ export const defaultValue: Readonly<IUser> = {
   firstName: '',
   lastName: '',
   email: '',
-  activated: true,
+  status: USER_STATUS.ACTIVATED,
   langKey: '',
   authorities: [],
   createdBy: '',

@@ -31,21 +31,21 @@ export const PrivateRouteComponent = ({
     );
 
   const renderRedirect = props => {
-    if (!sessionHasBeenFetched) {
-      return <div></div>;
-    } else {
-      return isAuthenticated ? (
-        checkAuthorities(props)
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/login',
-            search: props.location.search,
-            state: { from: props.location },
-          }}
-        />
-      );
-    }
+    // if (!sessionHasBeenFetched) {
+    //   return <div></div>;
+    // } else {
+    return isAuthenticated ? (
+      checkAuthorities(props)
+    ) : (
+      <Redirect
+        to={{
+          pathname: '/login',
+          search: props.location.search,
+          state: { from: props.location },
+        }}
+      />
+    );
+    // }
   };
 
   if (!Component) throw new Error(`A component needs to be specified for private route for path ${(rest as any).path}`);

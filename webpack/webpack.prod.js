@@ -10,15 +10,17 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
+const AUTH_URL = 'http://foxstep-api.fpt.net/auth/api/adm/authenticate';
+const API_URL = 'http://foxstep-api.fpt.net/adm/';
 
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
+module.exports = webpackMerge(commonConfig({ env: ENV, api_url: API_URL, auth_url: AUTH_URL }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
   entry: {
     main: './src/main/webapp/app/index',
   },
   output: {
-    path: utils.root('target/classes/static/'),
+    path: utils.root('static/'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[name].[hash].chunk.js',
   },

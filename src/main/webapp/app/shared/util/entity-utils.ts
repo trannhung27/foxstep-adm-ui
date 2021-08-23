@@ -1,5 +1,9 @@
 import pick from 'lodash/pick';
 import { IPaginationBaseState } from 'react-jhipster';
+import { IPayload, IPayloadResult } from 'react-jhipster/src/type/redux-action.type';
+import { IWfRequest } from 'app/shared/model/workflow/wf-request.model';
+import { IWfResponse } from 'app/shared/model/workflow/wf-response.model';
+import { IUploadImageResponse } from 'app/shared/model/upload-image/upload-image-response';
 
 /**
  * Removes fields with an 'id' field that equals ''.
@@ -35,3 +39,23 @@ export const overridePaginationStateWithQueryParams = (paginationBaseState: IPag
   }
   return paginationBaseState;
 };
+
+export type ICrudGetAllWithCriteriaAction<T> = (
+  criteria?: any,
+  page?: number,
+  size?: number,
+  sort?: string
+) => IPayload<T> | ((dispatch: any) => IPayload<T>);
+
+export type ICrudPutActionWithCallback<T> = (data?: T, callbackEntity?: any) => IPayload<T> | IPayloadResult<T>;
+
+export type ICrudGetWithParam<T> = (searchValue?: any) => IPayload<T> | ((dispatch: any) => IPayload<T>);
+
+export type ICrudPutActionRequest<IWfRequest> = (
+  challengeId?: number,
+  entity?: IWfRequest
+) => IPayload<IWfResponse> | ((dispatch: any) => IPayload<IWfResponse>);
+
+export type ICrudPutImageRequest<IUploadImageRequest> = (
+  entity?: IUploadImageRequest
+) => IPayload<IUploadImageResponse> | ((dispatch: any) => IPayload<IUploadImageResponse>);

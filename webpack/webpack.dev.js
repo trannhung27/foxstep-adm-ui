@@ -11,14 +11,17 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
+const AUTH_URL = 'http://foxstep-api-dev.fpt.net/auth/api/adm/authenticate';
+const API_URL = 'http://foxstep-api-dev.fpt.net/adm';
+// const API_URL = 'http://localhost:9003/adm/';
 
 module.exports = options =>
-  webpackMerge(commonConfig({ env: ENV }), {
+  webpackMerge(commonConfig({ env: ENV, api_url: API_URL, auth_url: AUTH_URL }), {
     devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
     mode: ENV,
     entry: ['./src/main/webapp/app/index'],
     output: {
-      path: utils.root('target/classes/static/'),
+      path: utils.root('static/'),
       filename: 'app/[name].bundle.js',
       chunkFilename: 'app/[id].chunk.js',
     },
@@ -44,11 +47,11 @@ module.exports = options =>
     devServer: {
       stats: options.stats,
       hot: true,
-      contentBase: './target/classes/static/',
+      contentBase: './static/',
       proxy: [
         {
           context: ['/api', '/services', '/management', '/swagger-resources', '/v2/api-docs', '/v3/api-docs', '/h2-console', '/auth'],
-          target: `http${options.tls ? 's' : ''}://localhost:8080`,
+          target: API_URL,
           secure: false,
           changeOrigin: options.tls,
         },

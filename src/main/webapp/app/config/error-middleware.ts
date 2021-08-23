@@ -1,7 +1,7 @@
 import { isPromise } from 'react-jhipster';
 
 const getErrorMessage = errorData => {
-  let message = errorData.message;
+  let message = errorData.error;
   if (errorData.fieldErrors) {
     errorData.fieldErrors.forEach(fErr => {
       message += `\nfield: ${fErr.field},  Object: ${fErr.objectName}, message: ${fErr.message}\n`;
@@ -25,11 +25,9 @@ export default () => next => action => {
   if (process.env.NODE_ENV === 'development') {
     // Dispatch initial pending promise, but catch any errors
     return next(action).catch(error => {
-      console.error(`${action.type} caught at middleware with reason: ${JSON.stringify(error.message)}.`);
-      if (error && error.response && error.response.data) {
-        const message = getErrorMessage(error.response.data);
-        console.error(`Actual cause: ${message}`);
-      }
+      if (error.message || error.data.error)
+        console.error(`${action.type} caught at middleware with reason: ${JSON.stringify(error.message || error.data.error)}.`);
+      if (error && error.response && error.response.data) console.error(`Actual cause: ${getErrorMessage(error.response.data)}`);
 
       return Promise.reject(error);
     });

@@ -5,7 +5,7 @@ import { Button, Table, Row, Badge } from 'reactstrap';
 import { TextFormat, JhiPagination, JhiItemCount, getSortState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, USER_STATUS } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getUsersAsAdmin, updateUser } from './user-management.reducer';
@@ -62,10 +62,10 @@ export const UserManagement = (props: IUserManagementProps) => {
     getUsersFromProps();
   };
 
-  const toggleActive = user => () =>
+  const toggleActive = (user, status) => () =>
     props.updateUser({
       ...user,
-      activated: !user.activated,
+      status,
     });
 
   const { users, account, match, totalItems, loading } = props;
@@ -125,12 +125,12 @@ export const UserManagement = (props: IUserManagementProps) => {
               <td>{user.login}</td>
               <td>{user.email}</td>
               <td>
-                {user.activated ? (
-                  <Button color="success" onClick={toggleActive(user)}>
+                {user.status === USER_STATUS.ACTIVATED ? (
+                  <Button color="success" onClick={toggleActive(user, USER_STATUS.INACTIVE)}>
                     Activated
                   </Button>
                 ) : (
-                  <Button color="danger" onClick={toggleActive(user)}>
+                  <Button color="danger" onClick={toggleActive(user, USER_STATUS.ACTIVATED)}>
                     Deactivated
                   </Button>
                 )}

@@ -1,3 +1,5 @@
+import './login.scss';
+
 import React from 'react';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Alert, Row, Col } from 'reactstrap';
@@ -68,7 +70,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
               </Link>
             </Alert>
             <Alert color="warning">
-              <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
+              <span>You don&apos;t have an account yet?</span> <Link to="/register">Register a new account</Link>
             </Alert>
           </ModalBody>
           <ModalFooter>

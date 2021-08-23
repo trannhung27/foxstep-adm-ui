@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
+import { USER_STATUS } from 'app/config/constants';
 
 export interface IUserManagementUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
 
@@ -147,7 +148,16 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
               </AvGroup>
               <AvGroup check>
                 <Label>
-                  <AvInput type="checkbox" name="activated" value={user.activated} checked={user.activated} disabled={!user.id} /> Activated
+                  <AvInput
+                    type="checkbox"
+                    name="status"
+                    value={user.status}
+                    checked={user.status === USER_STATUS.ACTIVATED}
+                    trueValue={USER_STATUS.ACTIVATED}
+                    falseValue={USER_STATUS.INACTIVE}
+                    disabled={!user.id}
+                  />{' '}
+                  Activated
                 </Label>
               </AvGroup>
               <AvGroup>
