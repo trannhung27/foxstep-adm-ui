@@ -25,6 +25,7 @@ export const USER_STATUS = {
 export const APP_USER_STATUS = [
   { id: 1, name: 'Hoạt động' },
   { id: 0, name: 'Chưa kích hoạt' },
+  { id: -2, name: 'Đã bị khóa' },
 ];
 
 export const APP_USER_GENDER = [
