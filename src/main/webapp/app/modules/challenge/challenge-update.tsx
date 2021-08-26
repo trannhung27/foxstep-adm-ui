@@ -53,7 +53,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [showModal, setShowModal] = useState(false);
   const [isGps, setIsGps] = useState(0);
 
-  const [isOrganization, setIsOrganization] = useState(-1);
+  const [isOrganization, setIsOrganization] = useState(0);
 
   const [userIdCreated, setUserIdCreated] = useState(0);
   const [emailUser, setEmailUser] = useState('');
@@ -241,6 +241,10 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       });
       setTeamList(list);
     }
+
+    if (challengeEntity.challengeType && !isNew) {
+      setIsOrganization(challengeEntity.challengeType);
+    }
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
@@ -377,9 +381,8 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               required: { value: true, errorMessage: 'Không được bỏ trống' },
                             }}
                           >
-                            <option value="-1"></option>
-                            <option value="1">Cá nhân</option>
                             <option value="0">Ban tổ chức</option>
+                            <option value="1">Cá nhân</option>
                           </AvField>
                         </AvGroup>
                       </Col>
