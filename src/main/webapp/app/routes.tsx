@@ -23,6 +23,7 @@ import WfActionType from 'app/modules/workflow/wf-action-type';
 import WfProcess from 'app/modules/workflow/wf-process';
 import Sport from 'app/modules/sport';
 import Banner from 'app/modules/banner';
+import { Certificate } from 'app/modules/certificate/certificate';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
@@ -56,6 +57,7 @@ const Routes = () => (
       <PrivateRoute path="/challenges" component={Challenge} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <PrivateRoute path="/faqs" component={Faqs} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <PrivateRoute path="/banner" component={Banner} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
+      <PrivateRoute path="/certificate" component={Certificate} hasAnyAuthorities={[AUTHORITIES.ADMIN.name, AUTHORITIES.USER.name]} />
       <ErrorBoundaryRoute path="*" component={PageNotFound} />
     </Switch>
   </div>
