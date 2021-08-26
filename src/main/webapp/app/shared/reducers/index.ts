@@ -26,6 +26,7 @@ import uploadImage, { UploadImageState } from 'app/modules/upload-image/upload-i
 import sport, { SportState } from 'app/modules/sport/sport.reducer';
 import banner, { BannerState } from 'app/modules/banner/banner.reducer';
 import challengeParticipant, { JoinChallengeRequestState } from 'app/modules/challenge/challenge-participants/cp-reducer';
+import certificate, { CertificateState } from 'app/modules/certificate/certificate.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -53,6 +54,7 @@ export interface IRootState {
   readonly sport: SportState;
   readonly banner: BannerState;
   readonly challengeParticipant: JoinChallengeRequestState;
+  readonly certificate: CertificateState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -81,6 +83,7 @@ const rootReducer = combineReducers<IRootState>({
   sport,
   banner,
   challengeParticipant,
+  certificate,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

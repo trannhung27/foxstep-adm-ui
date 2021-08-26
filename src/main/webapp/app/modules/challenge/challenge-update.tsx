@@ -373,7 +373,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             id="challenge_type"
                             type="select"
                             name="challengeType"
-                            value={challengeEntity.challengeType ? challengeEntity.challengeType.toString() : '-1'}
+                            value={challengeEntity.challengeType ? challengeEntity.challengeType.toString() : '0'}
                             onChange={event => {
                               event.target.value === '1' ? setIsOrganization(1) : event.target.value === '0' ? setIsOrganization(0) : {};
                             }}
