@@ -351,13 +351,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
             <p>Loading...</p>
           ) : (
             <AvForm model={isNew ? {} : updatedEntity} onSubmit={saveEntity}>
-              {!isNew ? (
-                <AvGroup>
-                  <Label for="challenge-id">ID</Label>
-                  <AvInput id="challenge-id" type="text" className="form-control" name="id" value={challengeEntity.id} required readOnly />
-                </AvGroup>
-              ) : null}
-
               <Row form>
                 <h6 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h6>
                 <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle} />
@@ -391,14 +384,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                         {isOrganization === 1 ? (
                           <AvGroup className="form-group form-inline">
                             <Label style={{ marginRight: '10px' }}>Cá nhân tổ chức</Label>
-                            <AvField
-                              disabled
-                              id="challenge-userIdCreated"
-                              data-cy="challenge_type"
-                              type="string"
-                              name="userEmail"
-                              value={emailUser}
-                            />
+                            <AvField disabled id="challenge-userIdCreated" data-cy="challenge_type" name="userEmail" value={emailUser} />
                             <AvInput hidden name="userIdCreated" value={userIdCreated} />
                             <Button onClick={() => setShowModal(true)} replace color="primary">
                               <span className="d-none d-md-inline">Tìm</span>
@@ -487,7 +473,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <Label id="dateStartLabel" for="challenge-dateStart">
                             Từ ngày
                           </Label>
-                          <AvInput
+                          <AvField
                             id="challenge-dateStart"
                             data-cy="dateStart"
                             type="datetime-local"
@@ -509,7 +495,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <Label id="dateFinishLabel" for="challenge-dateFinish">
                             Đến ngày
                           </Label>
-                          <AvInput
+                          <AvField
                             id="challenge-dateFinish"
                             data-cy="dateFinish"
                             type="datetime-local"
@@ -531,7 +517,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <Label id="dateFinishLabel" for="challenge-dateRegisDeadline">
                             Hạn đăng ký
                           </Label>
-                          <AvInput
+                          <AvField
                             id="challenge-dateRegisDeadline"
                             data-cy="dateRegisDeadline"
                             type="datetime-local"
@@ -881,7 +867,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               min: { value: avgCadence.from, errorMessage: 'Giá trị đến không thể nhỏ hơn giá trị từ' },
                             }}
                           />
-                          <text> &nbsp; (bước/phút)</text>
+                          <Label> &nbsp; (bước/phút)</Label>
                         </AvGroup>
                       </Col>
                     </Row>

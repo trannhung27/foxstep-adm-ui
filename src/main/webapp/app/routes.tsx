@@ -23,7 +23,7 @@ import WfActionType from 'app/modules/workflow/wf-action-type';
 import WfProcess from 'app/modules/workflow/wf-process';
 import Sport from 'app/modules/sport';
 import Banner from 'app/modules/banner';
-import { Certificate } from 'app/modules/certificate/certificate';
+import Certificate from 'app/modules/certificate';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),

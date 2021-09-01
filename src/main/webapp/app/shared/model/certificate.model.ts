@@ -9,6 +9,8 @@ export interface ICertificate {
   signature?: number;
   distance?: number;
   textCompletion?: number;
+  frame?: string;
+  signatureDisplay?: string;
 }
 
 export const defaultValue: Readonly<ICertificate> = {};
