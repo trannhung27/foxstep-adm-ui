@@ -2,11 +2,7 @@ import './home.scss';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Alert, Col, Row, Space } from 'antd';
-
-import { Link } from 'react-router-dom';
-
-import config, { SERVER_API_URL } from 'app/config/constants';
+import { Alert, Col, Row } from 'antd';
 
 export type IHomeProp = StateProps;
 
@@ -19,35 +15,9 @@ export const Home = (props: IHomeProp) => {
       </Col>
       <Col span={12}>
         <h2>Hệ thống quản trị FoxSteps</h2>
-        <p className="lead">Version: {config.VERSION}</p>
-        <p className="lead">Server: {SERVER_API_URL}</p>
-        {account && account.login ? (
-          <div>
-            <Alert type="success" message={'Xin chào ' + account.login + '.'} />
-          </div>
-        ) : (
-          <div>
-            <Alert
-              type="warning"
-              message="Đăng nhập bằng tài khoản: admin/admin hoặc user/user"
-              action={
-                <Space>
-                  <Link to="/login">Đăng nhập</Link>
-                </Space>
-              }
-            />
-
-            <Alert
-              type="warning"
-              message="Đăng ký tài khoản mới"
-              action={
-                <Space>
-                  <Link to="/register">Đăng ký</Link>
-                </Space>
-              }
-            />
-          </div>
-        )}
+        <div>
+          <Alert type="success" message={'Xin chào ' + account.firstName || account.login + '.'} />
+        </div>
       </Col>
     </Row>
   );
