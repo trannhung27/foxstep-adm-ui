@@ -31,7 +31,7 @@ export const ParticipantUpdate = (props: IParticipantUpdateProps) => {
   }, [props.updateSuccess]);
 
   const handleClose = () => {
-    props.history.push(`/challenges/${currentMatch.params.challengesId}/participants`);
+    props.history.goBack();
   };
 
   const saveEntity = (event, errors, values) => {

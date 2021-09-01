@@ -53,7 +53,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
       <Col md="12">
         {challengeEntity.status === ChallengeStatuses[0].id || challengeEntity.status === ChallengeStatuses[4].id ? (
           <>
-            <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} replace color="primary">
+            <Button tag={Link} to={`/challenges/${challengeEntity.id}/edit`} color="primary">
               <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Sửa</span>
             </Button>
             &nbsp;
@@ -61,7 +61,7 @@ export const ChallengeDetail = (props: IChallengeDetailProps) => {
         ) : null}
         {[ChallengeStatuses[1].id, ChallengeStatuses[2].id, ChallengeStatuses[3].id].includes(challengeEntity.status) && (
           <>
-            <Button tag={Link} to={`/challenges/${challengeEntity.id}/participants`} replace color="primary">
+            <Button tag={Link} to={`/challenges/${challengeEntity.id}/participants`} color="primary">
               <span className="d-none d-md-inline">Danh sách thành viên</span>
             </Button>
             &nbsp;
