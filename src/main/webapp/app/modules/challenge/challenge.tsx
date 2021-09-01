@@ -153,16 +153,16 @@ export const Challenge = (props: IChallengeProps) => {
 
       <hr style={{ backgroundColor: 'DodgerBlue', height: '2px' }} />
       <div className="table-responsive">
+        <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>
+          <Col sm="2">
+            <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+              <FontAwesomeIcon icon="plus" />
+              <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
+            </Button>
+          </Col>
+        </PageSizePicker>
         {challengeList && challengeList.length > 0 ? (
           <div>
-            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>
-              <Col sm="2">
-                <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
-                  <FontAwesomeIcon icon="plus" />
-                  <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
-                </Button>
-              </Col>
-            </PageSizePicker>
             <Table responsive>
               <thead>
                 <tr>

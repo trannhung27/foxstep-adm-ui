@@ -347,13 +347,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
             <p>Loading...</p>
           ) : (
             <AvForm model={isNew ? {} : updatedEntity} onSubmit={saveEntity}>
-              {!isNew ? (
-                <AvGroup>
-                  <Label for="challenge-id">ID</Label>
-                  <AvInput id="challenge-id" type="text" className="form-control" name="id" value={challengeEntity.id} required readOnly />
-                </AvGroup>
-              ) : null}
-
               <Row form>
                 <h6 style={{ fontWeight: 'bold' }}>1. Thông tin chung &nbsp;</h6>
                 <CaretDownOutlined style={{ fontSize: '16px', paddingTop: '6px', color: 'blue' }} onClick={toggle} />
@@ -484,7 +477,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <Label id="dateStartLabel" for="challenge-dateStart">
                             Từ ngày
                           </Label>
-                          <AvInput
+                          <AvField
                             id="challenge-dateStart"
                             data-cy="dateStart"
                             type="datetime-local"
@@ -506,7 +499,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <Label id="dateFinishLabel" for="challenge-dateFinish">
                             Đến ngày
                           </Label>
-                          <AvInput
+                          <AvField
                             id="challenge-dateFinish"
                             data-cy="dateFinish"
                             type="datetime-local"
@@ -528,7 +521,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                           <Label id="dateFinishLabel" for="challenge-dateRegisDeadline">
                             Hạn đăng ký
                           </Label>
-                          <AvInput
+                          <AvField
                             id="challenge-dateRegisDeadline"
                             data-cy="dateRegisDeadline"
                             type="datetime-local"
