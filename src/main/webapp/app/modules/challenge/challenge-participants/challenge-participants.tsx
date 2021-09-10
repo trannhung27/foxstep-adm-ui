@@ -198,6 +198,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                           <Button
                             tag={Link}
                             to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/remove`}
+                            replace
                             color="danger"
                           >
                             <FontAwesomeIcon icon={faTimes} />
@@ -208,6 +209,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                               <Button
                                 tag={Link}
                                 to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/reject`}
+                                replace
                                 color="secondary"
                               >
                                 <FontAwesomeIcon icon={faTimes} />
@@ -217,6 +219,7 @@ export const ChallengeParticipants = (props: IChallengeParticipantsProps) => {
                               <Button
                                 tag={Link}
                                 to={`/challenges/${currentMatch.params.challengesId}/participants/${participant.challengeUserId}/approve`}
+                                replace
                                 color="danger"
                               >
                                 <FontAwesomeIcon icon={faCheck} />

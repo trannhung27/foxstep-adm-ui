@@ -18,6 +18,7 @@ import {
   AppstoreOutlined,
   TrophyOutlined,
   FireOutlined,
+  FileUnknownOutlined,
 } from '@ant-design/icons';
 
 export const menuItems = [
@@ -76,6 +77,14 @@ export const menuItems = [
       },
       {
         key: 108,
+        title: 'Quản lý điều khoản',
+        icon: <FileUnknownOutlined />,
+        isAuthenticated: true,
+        isAdmin: true,
+        url: '/cfg-rule-content',
+      },
+      {
+        key: 109,
         title: 'Phân loại tin tức',
         icon: <ReadOutlined />,
         isAuthenticated: true,
@@ -83,14 +92,14 @@ export const menuItems = [
         url: '/news-category',
       },
       {
-        key: 109,
+        key: 110,
         title: 'Luồng duyệt',
         icon: <BranchesOutlined />,
         isAuthenticated: true,
         isAdmin: true,
         child: [
           {
-            key: 1081,
+            key: 1101,
             title: 'Nhóm duyệt',
             icon: <BlockOutlined />,
             isAuthenticated: true,
@@ -98,7 +107,7 @@ export const menuItems = [
             url: '/wf-process-group',
           },
           {
-            key: 1082,
+            key: 1102,
             title: 'Loại yêu cầu',
             icon: <BorderOutlined />,
             isAuthenticated: true,
@@ -106,7 +115,7 @@ export const menuItems = [
             url: '/wf-process',
           },
           {
-            key: 1083,
+            key: 1103,
             title: 'Loại hành động',
             icon: <DingtalkOutlined />,
             isAuthenticated: true,

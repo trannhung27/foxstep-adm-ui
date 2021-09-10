@@ -20,7 +20,7 @@ export const ParticipantRejectDialog = (props: IParticipantRejectDialogProps) =>
   });
 
   const handleClose = () => {
-    props.history.goBack();
+    props.history.push(`/challenges/${currentMatch.params.challengesId}/participants`);
   };
 
   useEffect(() => {

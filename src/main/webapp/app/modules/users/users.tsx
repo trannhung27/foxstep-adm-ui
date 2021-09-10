@@ -136,14 +136,14 @@ export const Users = (props: IUsersProps) => {
       <div className="table-responsive pt-2">
         {usersList && usersList.length > 0 ? (
           <div>
-            {/*<PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>*/}
-            {/*<Col sm="2">*/}
-            {/*  <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>*/}
-            {/*    <FontAwesomeIcon icon="plus" />*/}
-            {/*    <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>*/}
-            {/*  </Button>*/}
-            {/*</Col>*/}
-            {/*</PageSizePicker>*/}
+            <PageSizePicker pageSize={paginationState.itemsPerPage} handleSelect={handlePageSize}>
+              <Col sm="2">
+                <Button id="jh-create-entity" tag={Link} to={`${match.url}/new`} color="primary" block>
+                  <FontAwesomeIcon icon="plus" />
+                  <span className="d-sm-none d-md-none d-lg-inline">&nbsp; Tạo mới</span>
+                </Button>
+              </Col>
+            </PageSizePicker>
             <Table responsive hover striped>
               <thead>
                 <tr>

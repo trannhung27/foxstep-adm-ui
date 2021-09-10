@@ -53,7 +53,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
   const [showModal, setShowModal] = useState(false);
   const [isGps, setIsGps] = useState(0);
 
-  const [isOrganization, setIsOrganization] = useState(0);
+  const [isOrganization, setIsOrganization] = useState(-1);
 
   const [userIdCreated, setUserIdCreated] = useState(0);
   const [emailUser, setEmailUser] = useState('');
@@ -241,10 +241,6 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
       });
       setTeamList(list);
     }
-
-    if (challengeEntity.challengeType && !isNew) {
-      setIsOrganization(challengeEntity.challengeType);
-    }
   }, [challengeEntity]);
 
   const saveEntity = (event, errors, values) => {
@@ -373,7 +369,7 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                             id="challenge_type"
                             type="select"
                             name="challengeType"
-                            value={challengeEntity.challengeType ? challengeEntity.challengeType.toString() : '0'}
+                            value={challengeEntity.challengeType ? challengeEntity.challengeType.toString() : '-1'}
                             onChange={event => {
                               event.target.value === '1' ? setIsOrganization(1) : event.target.value === '0' ? setIsOrganization(0) : {};
                             }}
@@ -381,8 +377,9 @@ export const ChallengeUpdate = (props: IChallengeUpdateProps) => {
                               required: { value: true, errorMessage: 'Không được bỏ trống' },
                             }}
                           >
-                            <option value="0">Ban tổ chức</option>
+                            <option value="-1"></option>
                             <option value="1">Cá nhân</option>
+                            <option value="0">Ban tổ chức</option>
                           </AvField>
                         </AvGroup>
                       </Col>
